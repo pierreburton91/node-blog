@@ -1,0 +1,28 @@
+{
+  "name": "node-blog",
+  "version": "0.0.0",
+  "description": "Node based blogging CMS",
+  "main": "index.js",
+  "scripts": {
+  	"start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pierreburton91/node-blog.git"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "cms",
+    "blog",
+    "ejs",
+    "fs",
+    "json"
+  ],
+  "author": "Pierre Burton",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pierreburton91/node-blog/issues"
+  },
+  "homepage": "https://github.com/pierreburton91/node-blog#readme"
+}
