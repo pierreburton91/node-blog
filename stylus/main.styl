@@ -1,2 +1,149 @@
+$headlines = sans-serif
+$body = sans-serif
+$white = #ffffff
+$dark = #333333
+$light-dark = #eeeeee
+$dash-accent = #FF1744
+$dash-accent-darker = #cc0029
+
+*
+	box-sizing border-box
+	transition all 0.1s ease-out
+	
 body
-	background-color: #fafafa
+	background-color $light-dark
+	min-height 100vh
+	margin 0
+	padding 0
+	font-family $body
+	position relative
+	font-size 14px
+
+
+/* Dashboard styles */
+.dash__hero
+	float left
+	position relative
+	width 100%
+	height 300px
+	background-position center
+	background-size cover
+	background-repeat no-repeat
+	position relative
+	background-image url('https://unsplash.it/1920/300/?blur')
+	& .hero-profile-pic
+		width 140px
+		height 140px
+		margin-top 60px
+		margin-left auto
+		margin-right auto
+		margin-bottom 20px
+		border-radius 140px
+		border 2px solid $white
+		background-color $light-dark
+		background-repeat no-repeat
+		background-size cover
+		background-position center
+		background-image url('https://robohash.org/devtestuser.jpg?size=140x140&set=set2')
+		box-shadow 0 8px 20px rgba(0,0,0,0.1)
+	& .hero-profile-name
+		width 100%
+		font-size 20px
+		color $white
+	    letter-spacing 1px
+	    text-align center
+	    font-weight 700
+	    text-shadow 0 2px 5px rgba(0,0,0,0.5)
+.dash__controls
+	float left
+	position relative
+	width 100%
+	height calc(100vh - 300px)
+.controls-toolbar
+	background-color $white
+	width 100%
+	padding 12px
+	float left
+	position relative
+.toolbar-panels
+	float left
+	position relative
+	width auto
+	margin-right 16px
+	&::after
+		content ''
+		position absolute
+		right 0
+		top calc(50% - 15px)
+		display block
+		width 1px
+		height 30px
+		background-color $dark
+		float right
+	& .toolbar-buttons
+		opacity 0.6
+		&:hover
+		&.active
+			background-color transparent
+			opacity 1
+		&.active::after
+		&:hover::after
+			content ''
+			height 4px
+			width 100%
+			left 0
+			bottom -12px
+			background-color $dash-accent
+			position absolute
+			display block
+		& .fa
+			margin-right 8px
+	& .toolbar-buttons
+		padding 0 12px
+.toolbar-actions
+	float left
+	width auto
+	position relative
+.toolbar-buttons
+.toolbar-fab
+	float left
+	position relative
+	background-image none
+	background-color transparent
+	border none
+	outline none
+	cursor pointer
+	font-family $body
+	color $dark
+	font-size 16px
+	margin-right 16px
+	min-width 40px
+	height 40px
+	line-height 40px
+	text-align center
+	border-radius 2px
+	&:hover
+		background-color $light-dark
+.toolbar-fab
+	background-color $dash-accent
+	padding 0 12px
+	color $white
+	box-shadow 0 2px 5px rgba(0,0,0,0.2)
+	&::after
+		content 'Write new'
+		display block
+		margin-left 8px
+		float right
+	&:hover
+		background-color $dash-accent-darker
+	/* position absolute
+	right -60px
+	top -24px
+	height 48px
+	width 48px
+	line-height 50px
+	font-size 20px
+	color #ffffff
+	text-align center
+	border-radius 50px
+	box-shadow 0 2px 2px rgba(0,0,0,0.3) */	

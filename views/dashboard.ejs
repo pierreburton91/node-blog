@@ -27,10 +27,70 @@
     <meta property="og:url" content="">
     <meta property="og:image" content="">
     <meta property="og:description" content="">
+    <script src="https://use.fontawesome.com/973262919d.js"></script>
     <link rel="stylesheet" href="styles/styles.css">
 </head>
 <body>
-	<%= title %><br><%= message %>
-	<a href="<%= link2 %>"><%= link %></a>
+	<div class="dash__hero">
+        <div class="hero-profile-pic"></div>
+        <div class="hero-profile-name">Jane Doe</div>   
+    </div>
+    <div class="dash__controls">
+        <div class="controls-toolbar">
+            <div class="toolbar-panels">
+                <button id="panel-posts" class="toolbar-buttons active"><i class="fa fa-newspaper-o" aria-hidden="true"></i>Articles</button>
+                <button id="panel-subscribers" class="toolbar-buttons"><i class="fa fa-users" aria-hidden="true"></i>Subscribers</button>
+            </div>
+            <div id="posts-actions" class="toolbar-actions">
+                <a href="api/edit-post" title="Edit" class="toolbar-buttons"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                <a href="api/delete-post" title="Delete" class="toolbar-buttons"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                <a href="api/write-post" title="Write" class="toolbar-fab"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+            </div>
+            <div id="subscribers-actions" class="toolbar-actions" style="display: none;">
+                <a href="api/export-contacts" title="Export" class="toolbar-buttons"><i class="fa fa-external-link" aria-hidden="true"></i></a>
+                <a href="api/delete-contacts" title="Delete" class="toolbar-buttons"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+            </div>
+        </div>
+        <table class="dash-table" id="dashboard-posts">
+            <thead>
+                <tr>
+                    <td><label><input type="checkbox" name="test"/><i class="fa fa-check" aria-hidden="true"></i></label></td>
+                    <th>Test</th>
+                    <th>TestTest</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><label><input type="checkbox" name="test"/><i class="fa fa-check" aria-hidden="true"></i></label></td>
+                    <td>Test</td>
+                    <td>TestTest</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3">Test</td>
+                </tr>
+            </tfoot>
+        </table>
+        <table class="dash-table" id="dashboard-subscribers" style="display: none;">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
 </body>
 </html>
