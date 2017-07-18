@@ -65,6 +65,7 @@ body
 	padding 12px
 	float left
 	position relative
+	box-shadow 0 5px 10px rgba(0,0,0,0.08)
 .toolbar-panels
 	float left
 	position relative
@@ -146,4 +147,56 @@ body
 	color #ffffff
 	text-align center
 	border-radius 50px
-	box-shadow 0 2px 2px rgba(0,0,0,0.3) */	
+	box-shadow 0 2px 2px rgba(0,0,0,0.3) */
+.dash-table
+	width 100%
+	table-layout fixed
+	border-collapse collapse
+	& thead
+		text-align left
+		color $dark
+		text-transform uppercase
+		font-weight 700
+		letter-spacing 1px
+		& tr
+			background-color $white
+			border-bottom 2px solid rgba(0,0,0,0.04)
+			& *:nth-child(2)
+				width 25%
+	& tr td:first-child
+		width 45px
+		& label
+			width 20px
+			height 20px
+			display block
+			background-color $white
+			border 1px solid rgba(0,0,0,0.2)
+			border-radius 50px
+			padding 0 2px
+			line-height 18px
+			cursor pointer
+			& input
+				display none
+			& input + .fa
+				display none
+			& input:checked + .fa
+				display inline-block
+	& tbody
+		& tr:nth-child(odd)
+			background-color #fafafa
+		& tr:nth-child(even)
+			background-color $white
+		& tr:hover
+			background-color $light-dark
+	& td, th
+		padding 12px
+		text-overflow ellipsis
+		overflow hidden
+	& tfoot
+		color $white
+		text-align right
+		& tr
+			background-color $dash-accent
+			& td
+				padding 6px 12px
+				font-size 12px
