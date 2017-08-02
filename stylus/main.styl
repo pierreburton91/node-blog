@@ -20,7 +20,11 @@ body
 	font-size 14px
 
 
-/* Dashboard styles */
+/*======================================= 
+#										#
+#			DASHBOARD STYLES			#
+#										#
+#=======================================*/
 .dash__hero
 	float left
 	position relative
@@ -122,9 +126,15 @@ body
 	height 40px
 	line-height 40px
 	text-align center
+	text-decoration none
 	border-radius 2px
 	&:hover
 		background-color $light-dark
+	&:disabled
+		cursor default
+		opacity 0.5
+		&:hover
+			background-color transparent
 .toolbar-fab
 	background-color $dash-accent
 	padding 0 12px

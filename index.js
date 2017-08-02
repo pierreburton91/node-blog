@@ -9,11 +9,11 @@ app.use(express.static('public'));
 
 /* Routes */
 app.get('/', function (req, res) {
-	res.render('dashboard', { title: 'Hey', message: 'Hello there!', link: 'Go to test', link2: 'test'})
+	res.render('dashboard', { title: 'Hey', message: 'Hello there!', link: 'Go to test', link2: 'test'});
 });
 
-app.get('/test', function (req, res) {
-	res.render('dashboard', { title: 'Oh', message: 'This is the test page', link: 'Go to root', link2: '/' })
+app.get('/write-post', function (req, res) {
+	res.render('editor');
 });
 
 

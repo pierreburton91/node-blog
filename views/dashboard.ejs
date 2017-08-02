@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
     <!-- <meta http-equiv="x-ua-compatible" content="ie=edge"> -->
-    <title><%= message %></title>
+    <title>Your Blog's Dashboard</title>
     <meta name="description" content="">
     <meta name="author" content="Pierre Burton">
     <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, user-scalable=no, maximum-scale=1.0, width=device-width">
@@ -27,7 +27,6 @@
     <meta property="og:url" content="">
     <meta property="og:image" content="">
     <meta property="og:description" content="">
-    <script src="https://use.fontawesome.com/973262919d.js"></script>
     <link rel="stylesheet" href="styles/styles.css">
 </head>
 <body>
@@ -38,23 +37,23 @@
     <div class="dash__controls">
         <div class="controls-toolbar">
             <div class="toolbar-panels">
-                <button id="panel-posts" class="toolbar-buttons active"><i class="fa fa-newspaper-o" aria-hidden="true"></i>Articles</button>
-                <button id="panel-subscribers" class="toolbar-buttons"><i class="fa fa-users" aria-hidden="true"></i>Subscribers</button>
+                <button id="panel-posts" class="toolbar-buttons active" onclick="handleTabClick()"><i class="fa fa-newspaper-o" aria-hidden="true"></i>Articles</button>
+                <button id="panel-subscribers" class="toolbar-buttons" onclick="handleTabClick()"><i class="fa fa-users" aria-hidden="true"></i>Subscribers</button>
             </div>
             <div id="posts-actions" class="toolbar-actions">
-                <a href="api/edit-post" title="Edit" class="toolbar-buttons"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                <a href="api/delete-post" title="Delete" class="toolbar-buttons"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                <a href="api/write-post" title="Write" class="toolbar-fab"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                <button id="edit-post" title="Edit" class="toolbar-buttons" onclick="handleActionClick()" disabled="true"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                <button id="delete-post" title="Delete" class="toolbar-buttons" disabled="true"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                <a href="write-post" title="Write" class="toolbar-fab"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
             </div>
             <div id="subscribers-actions" class="toolbar-actions" style="display: none;">
-                <a href="api/export-contacts" title="Export" class="toolbar-buttons"><i class="fa fa-external-link" aria-hidden="true"></i></a>
-                <a href="api/delete-contacts" title="Delete" class="toolbar-buttons"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                <button id="export-contacts" title="Export" class="toolbar-buttons"><i class="fa fa-external-link" aria-hidden="true"></i></button>
+                <button id="delete-contacts" title="Delete" class="toolbar-buttons" disabled="true"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
             </div>
         </div>
         <table class="dash-table" id="dashboard-posts">
             <thead>
                 <tr>
-                    <td><label><input type="checkbox" name="test"/><i class="fa fa-check" aria-hidden="true"></i></label></td>
+                    <td><label><input type="checkbox" onchange="checkAll(),handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
                     <th>Title</th>
                     <th>Category</th>
                     <th>Date published</th>
@@ -66,7 +65,7 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><label><input type="checkbox" name="test"/><i class="fa fa-check" aria-hidden="true"></i></label></td>
+                    <td><label><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
                     <td>Test</td>
                     <td>TestTest</td>
                     <td>Test</td>
@@ -76,7 +75,7 @@
                     <td>TestTest</td>
                 </tr>
                 <tr>
-                    <td><label><input type="checkbox" name="test"/><i class="fa fa-check" aria-hidden="true"></i></label></td>
+                    <td><label><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
                     <td>Test</td>
                     <td>TestTest</td>
                     <td>Test</td>
@@ -86,7 +85,7 @@
                     <td>TestTest</td>
                 </tr>
                 <tr>
-                    <td><label><input type="checkbox" name="test"/><i class="fa fa-check" aria-hidden="true"></i></label></td>
+                    <td><label><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
                     <td>Test</td>
                     <td>TestTest</td>
                     <td>Test</td>
@@ -105,22 +104,133 @@
         <table class="dash-table" id="dashboard-subscribers" style="display: none;">
             <thead>
                 <tr>
-                    <th></th>
-                    <th></th>
+                    <td><label><input type="checkbox" onchange="checkAll(),handleBoxCheck()"/><i class="fa fa-check" aria-hidden="true"></i></label></td>
+                    <th>EMail</th>
+                    <th>Firstname</th>
+                    <th>Lastname</th>
+                    <th>Date registred</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td></td>
-                    <td></td>
+                    <td><label><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
+                    <td>Subscriber</td>
+                    <td>Subscriber</td>
+                    <td>Subscriber</td>
+                    <td>Subscriber</td>
+                </tr>
+                <tr>
+                    <td><label><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
+                    <td>Subscriber</td>
+                    <td>SubscriberSubscriber</td>
+                    <td>Subscriber</td>
+                    <td>SubscriberSubscriber</td>
+                </tr>
+                <tr>
+                    <td><label><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
+                    <td>Subscriber</td>
+                    <td>SubscriberSubscriber</td>
+                    <td>Subscriber</td>
+                    <td>SubscriberSubscriber</td>
                 </tr>
             </tbody>
             <tfoot>
                 <tr>
-                    <td></td>
+                    <td colspan="5">Subscriber</td>
                 </tr>
             </tfoot>
         </table>
     </div>
+<script type="text/javascript">
+    function handleTabClick() {
+        var target = event.currentTarget,
+            articlesButton = document.querySelector('#panel-posts'),
+            subscribersButton = document.querySelector('#panel-subscribers'),
+            articlesActions = document.querySelector('#posts-actions'),
+            subscribersActions = document.querySelector('#subscribers-actions'),
+            articlesTable = document.querySelector('#dashboard-posts'),
+            subscribersTable = document.querySelector('#dashboard-subscribers');
+
+        if (target.id == "panel-posts") {
+            if (articlesButton.classList.contains('active')) {
+                return false;
+            }
+            else {
+                subscribersTable.style.display = "none";
+                articlesTable.style.display = "table";
+                subscribersActions.style.display = "none";
+                articlesActions.style.display = "block";
+                var inputs = subscribersTable.querySelectorAll('input[type="checkbox"]');
+                for (i = 0; i < inputs.length; i++) {
+                    inputs[i].checked = false;
+                }  
+                subscribersButton.classList.remove('active');
+                articlesButton.classList.add('active');
+            }
+        }
+        else {
+            if (subscribersButton.classList.contains('active')) {
+                return false;
+            }
+            else {
+                articlesTable.style.display = "none";
+                subscribersTable.style.display = "table";
+                articlesActions.style.display = "none";
+                subscribersActions.style.display = "block";
+                var inputs = articlesTable.querySelectorAll('input[type="checkbox"]');
+                for (i = 0; i < inputs.length; i++) {
+                    inputs[i].checked = false;
+                } 
+                articlesButton.classList.remove('active');
+                subscribersButton.classList.add('active');
+            }
+        }
+    }
+
+    function checkAll() {
+        var target = event.target,
+            parentTable = target.closest('table'),
+            inputs = document.querySelectorAll('#'+parentTable.id+' input[type="checkbox"]');
+
+        for (i = 1; i < inputs.length; i++) {
+            if (target.checked) {
+                inputs[i].checked = true;
+            }
+            else {
+                inputs[i].checked = false;
+            }
+        }        
+    }
+
+    function handleBoxCheck() {
+        var checkboxes = document.querySelectorAll('input[type="checkbox"]'),
+            isChecked = Array.prototype.slice.call(checkboxes).some(function(x) {return x.checked}),
+            checkedOnes = Array.prototype.slice.call(checkboxes).filter(function(x) {return x.checked}),
+            editPostButton = document.querySelector('#edit-post'),
+            deletePostButton = document.querySelector('#delete-post'),
+            exportContactButton = document.querySelector('#export-contacts'),
+            deleteContactButton = document.querySelector('#delete-contacts');
+
+        if (checkedOnes.length == 0) {
+            editPostButton.disabled = true;
+            deletePostButton.disabled = true;
+            exportContactButton.disabled = false;
+            deleteContactButton.disabled = true;
+        }
+        else if (checkedOnes.length == 1) {
+            editPostButton.disabled = false;
+            deletePostButton.disabled = false;
+            exportContactButton.disabled = false;
+            deleteContactButton.disabled = false;
+        }
+        else {
+            editPostButton.disabled = true;
+            deletePostButton.disabled = false;
+            exportContactButton.disabled = false;
+            deleteContactButton.disabled = false;
+        }
+    }
+</script>
+<script src="https://use.fontawesome.com/973262919d.js"></script>
 </body>
 </html>
