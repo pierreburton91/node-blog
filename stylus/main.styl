@@ -9,6 +9,7 @@ $dash-accent-darker = #cc0029
 *
 	box-sizing border-box
 	transition all 0.1s ease-out
+	outline none
 	
 body
 	background-color $light-dark
@@ -210,3 +211,91 @@ body
 			& td
 				padding 6px 12px
 				font-size 12px
+
+
+/*======================================= 
+#										#
+#			  EDITOR STYLES				#
+#										#
+#=======================================*/
+
+.container
+	width 1024px
+	margin 0 calc(50% - 512px)
+	background-color $white
+	float left
+	padding 12px
+h1
+	position relative
+	color $dark
+	font-weight 400
+	padding-bottom 0.67em
+	&::after
+		content ''
+		display block
+		position absolute
+		left 0
+		bottom 0
+		height 1px
+		width 100%
+		background-color $light-dark
+label
+	float left
+	width 100%
+	min-height 72px
+	margin-bottom 12px
+	position relative
+	font-size 16px
+	& .fixed-label
+		position absolute
+		pointer-events none
+		left 0
+		top 0
+	& .float-label
+		position absolute
+		pointer-events none
+		left 0
+		top 0
+		transform-origin left top 0px
+	& .inputs
+		min-height 72px
+		width 100%
+		padding 0
+		border none
+		font-size inherit
+		font-family inherit
+		background-color transparent
+		background-image none
+		& + .float-label
+			color #999999
+			transform translateY(28px) scale(1)
+		&:focus
+			&+ .float-label
+				color $dash-accent
+				transform translateY(0) scale(0.78)
+		&:valid
+			& + .float-label
+				color $dash-accent
+				transform translateY(0) scale(0.78)
+	& .hint
+		position absolute
+		font-size 12px
+		left 0
+		bottom 0
+.editor-toolbar
+	padding 0
+	border none
+	border-radius 0
+	& a
+		border none
+		color $dark !important
+		&:hover
+			border none
+			background-color $light-dark
+.CodeMirror
+	padding 12px 0
+	border none
+.editor-preview
+	padding 12px 0
+.editor-statusbar
+	padding 12px 0
