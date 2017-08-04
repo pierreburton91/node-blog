@@ -32,36 +32,51 @@
 </head>
 <body>
 <div class="container">
-    <h1>Create new post</h1>
-    <label>
+    <h1>New post</h1>
+    <label class="labeled">
         <input type="text" class="inputs" name="post-title" required/>
-        <span class="float-label">Your post's title</span>
+        <span class="float-label">Your title</span>
+        <div class="bottom-line"></div>
+        <div class="bottom-line-active"></div>
     </label>
-    <label>
+    <label class="labeled">
         <textarea class="inputs" placeholder="Your story..."></textarea>
+        <div class="bottom-line"></div>
+        <div class="bottom-line-active"></div>
     </label>
-    <h3>Some information about your post</h3>
-    <label>
+    <h3>About your post</h3>
+    <label class="labeled">
         <input type="text" name="about" class="inputs" required/>
         <span class="float-label">What is your post about ?</span>
+        <div class="bottom-line"></div>
+        <div class="bottom-line-active"></div>
     </label>
-    <label>
+    <label class="labeled">
         <input type="text" name="about-link" class="inputs" required/>
         <span class="float-label">Can you provide a link ?</span>
+        <div class="bottom-line"></div>
+        <div class="bottom-line-active"></div>
     </label>
-    <label>
-        <select class="inputs">
+    <label class="labeled">
+        <select class="inputs" required>
+            <option selected value></option>
             <option>Value1</option>
             <option>Value2</option>
             <option>Value3</option>
         </select>
-        <span class="fixed-label">Category</span>
+        <span class="float-label">Category</span>
+        <div class="bottom-line"></div>
+        <div class="bottom-line-active"></div>
     </label>
-    <label>
+    <label class="labeled">
         <input type="text" name="tags" class="inputs" required/>
         <span class="float-label">Tags</span>
+        <div class="bottom-line"></div>
+        <div class="bottom-line-active"></div>
         <span class="hint">Separate tags with a coma</span>
     </label>
+    <button class="button submit">Publish</button>
+    <button class="button borderless">Back</button>
 </div>
 <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 <script type="text/javascript">

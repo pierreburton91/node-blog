@@ -1,5 +1,6 @@
-$headlines = sans-serif
-$body = sans-serif
+@import url('https://fonts.googleapis.com/css?family=Poppins:300,400,700');
+
+$body = 'Poppins', sans-serif
 $white = #ffffff
 $dark = #333333
 $light-dark = #eeeeee
@@ -12,7 +13,6 @@ $dash-accent-darker = #cc0029
 	outline none
 	
 body
-	background-color $light-dark
 	min-height 100vh
 	margin 0
 	padding 0
@@ -64,6 +64,7 @@ body
 	position relative
 	width 100%
 	height calc(100vh - 300px)
+	background-color $light-dark
 .controls-toolbar
 	background-color $white
 	width 100%
@@ -220,26 +221,28 @@ body
 #=======================================*/
 
 .container
-	width 1024px
-	margin 0 calc(50% - 512px)
+	width 100%
+	max-width 1024px
+	margin 0 auto
 	background-color $white
-	float left
 	padding 12px
+	overflow hidden
 h1
 	position relative
 	color $dark
 	font-weight 400
 	padding-bottom 0.67em
-	&::after
-		content ''
-		display block
-		position absolute
-		left 0
-		bottom 0
-		height 1px
-		width 100%
-		background-color $light-dark
-label
+	letter-spacing 1px
+	// &::after
+	// 	content ''
+	// 	display block
+	// 	position absolute
+	// 	left 0
+	// 	bottom 0
+	// 	height 1px
+	// 	width 100%
+	// 	background-color $light-dark
+.labeled
 	float left
 	width 100%
 	min-height 72px
@@ -251,12 +254,33 @@ label
 		pointer-events none
 		left 0
 		top 0
+		color $dash-accent
+		transform-origin left top 0px
+		transform translateY(0) scale(0.78)
 	& .float-label
 		position absolute
 		pointer-events none
 		left 0
 		top 0
 		transform-origin left top 0px
+	& .bottom-line
+		display block
+		position absolute
+		width 100%
+		height 2px
+		background-color $light-dark
+		bottom 14px
+		left 0
+	& .bottom-line-active
+		display block
+		position absolute
+		width 100%
+		height 2px
+		background-color $dash-accent
+		bottom 14px
+		left 0
+		transform-origin center
+		transform scaleX(0)
 	& .inputs
 		min-height 72px
 		width 100%
@@ -270,9 +294,14 @@ label
 			color #999999
 			transform translateY(28px) scale(1)
 		&:focus
-			&+ .float-label
+			& + .float-label
 				color $dash-accent
 				transform translateY(0) scale(0.78)
+				& + .bottom-line + .bottom-line-active
+					transform scaleX(1)
+			& + .fixed-label
+				& + .bottom-line + .bottom-line-active
+					transform scaleX(1)
 		&:valid
 			& + .float-label
 				color $dash-accent
@@ -281,7 +310,7 @@ label
 		position absolute
 		font-size 12px
 		left 0
-		bottom 0
+		bottom -8px
 .editor-toolbar
 	padding 0
 	border none
@@ -298,4 +327,40 @@ label
 .editor-preview
 	padding 12px 0
 .editor-statusbar
-	padding 12px 0
+	display none
+h3
+	float left
+	color $dark
+	letter-spacing 1px
+	font-weight 400
+.button
+	background-color $dash-accent
+	padding 0 12px
+	color $white
+	box-shadow 0 2px 5px rgba(0,0,0,0.2)
+	float left
+	position relative
+	background-image none
+	border none
+	outline none
+	cursor pointer
+	font-family $body
+	font-size 16px
+	margin-right 16px
+	min-width 124px
+	height 40px
+	line-height 40px
+	text-align center
+	text-decoration none
+	border-radius 2px
+	margin-top 16px
+	&:hover
+		background-color $dash-accent-darker
+	&.submit
+		float right
+		margin-right 0
+	&.borderless
+		color $dash-accent
+		background-color $white
+		&:hover
+			background-color $light-dark
