@@ -227,12 +227,65 @@ body
 	background-color $white
 	padding 12px
 	overflow hidden
-h1
+.button
+	background-color $dash-accent
+	padding 0 12px
+	color $white
+	box-shadow 0 2px 5px rgba(0,0,0,0.2)
+	float left
 	position relative
-	color $dark
-	font-weight 400
-	padding-bottom 0.67em
-	letter-spacing 1px
+	background-image none
+	border none
+	outline none
+	cursor pointer
+	font-family $body
+	font-size 16px
+	margin-right 16px
+	min-width 124px
+	height 40px
+	line-height 40px
+	text-align center
+	text-decoration none
+	border-radius 2px
+	margin-top 16px
+	&:hover
+		background-color $dash-accent-darker
+	&.borderless
+		color $dash-accent
+		background-color $white
+		&:hover
+			background-color $light-dark
+.header
+	float left
+	width 100%
+	border-bottom 1px solid rgba(0,0,0,0.1)
+	margin-bottom 16px
+	& h1
+		position relative
+		color $dark
+		font-weight 400
+		letter-spacing 1px
+		font-size 1.2em
+		line-height 40px
+		margin 0
+		float left
+	& .editor-actions
+		float right
+		& .button
+			box-shadow none
+			background-color transparent
+			margin-top 0
+			&.submit
+				font-weight 700
+				color $dash-accent
+				margin-right 0
+				&:hover
+					color $dash-accent-darker
+			&.cancel
+				color $dark
+				font-weight 300
+				&:hover
+					color $dash-accent
 	// &::after
 	// 	content ''
 	// 	display block
@@ -245,7 +298,6 @@ h1
 .labeled
 	float left
 	width 100%
-	min-height 72px
 	margin-bottom 12px
 	position relative
 	font-size 16px
@@ -290,6 +342,10 @@ h1
 		font-family inherit
 		background-color transparent
 		background-image none
+		color $dark
+		&.heading
+			font-size 2.5em
+			font-weight 700
 		& + .float-label
 			color #999999
 			transform translateY(28px) scale(1)
@@ -330,37 +386,10 @@ h1
 	display none
 h3
 	float left
+	width 100%
 	color $dark
 	letter-spacing 1px
 	font-weight 400
-.button
-	background-color $dash-accent
-	padding 0 12px
-	color $white
-	box-shadow 0 2px 5px rgba(0,0,0,0.2)
-	float left
-	position relative
-	background-image none
-	border none
-	outline none
-	cursor pointer
-	font-family $body
-	font-size 16px
-	margin-right 16px
-	min-width 124px
-	height 40px
-	line-height 40px
-	text-align center
-	text-decoration none
-	border-radius 2px
-	margin-top 16px
-	&:hover
-		background-color $dash-accent-darker
-	&.submit
-		float right
-		margin-right 0
-	&.borderless
-		color $dash-accent
-		background-color $white
-		&:hover
-			background-color $light-dark
+	padding-top 32px
+	border-top 1px solid rgba(0,0,0,0.1)
+	

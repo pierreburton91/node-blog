@@ -32,17 +32,18 @@
 </head>
 <body>
 <div class="container">
-    <h1>New post</h1>
+    <div class="header">
+        <h1><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Write a new blog post</h1>
+        <div class="editor-actions">
+            <button class="button cancel">Cancel</button>
+            <button class="button submit">Publish</button>
+        </div>
+    </div>
     <label class="labeled">
-        <input type="text" class="inputs" name="post-title" required/>
-        <span class="float-label">Your title</span>
-        <div class="bottom-line"></div>
-        <div class="bottom-line-active"></div>
+        <input type="text" class="inputs heading" name="post-title" placeholder="Your title" required/>
     </label>
     <label class="labeled">
         <textarea class="inputs" placeholder="Your story..."></textarea>
-        <div class="bottom-line"></div>
-        <div class="bottom-line-active"></div>
     </label>
     <h3>About your post</h3>
     <label class="labeled">
@@ -75,8 +76,6 @@
         <div class="bottom-line-active"></div>
         <span class="hint">Separate tags with a coma</span>
     </label>
-    <button class="button submit">Publish</button>
-    <button class="button borderless">Back</button>
 </div>
 <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 <script type="text/javascript">
