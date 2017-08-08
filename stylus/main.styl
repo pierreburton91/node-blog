@@ -315,6 +315,9 @@ body
 		left 0
 		top 0
 		transform-origin left top 0px
+		background-color $white
+		width 100%
+		text-align left
 	& .bottom-line
 		display block
 		position absolute
@@ -348,7 +351,7 @@ body
 			font-weight 700
 		& + .float-label
 			color #999999
-			transform translateY(28px) scale(1)
+			transform translateY(23px) scale(1)
 		&:focus
 			& + .float-label
 				color $dash-accent
@@ -380,6 +383,7 @@ body
 .CodeMirror
 	padding 12px 0
 	border none
+	z-index inherit
 .editor-preview
 	padding 12px 0
 .editor-statusbar
@@ -392,4 +396,68 @@ h3
 	font-weight 400
 	padding-top 32px
 	border-top 1px solid rgba(0,0,0,0.1)
-	
+.upload
+	display block
+	& .upload-overlay
+		position absolute
+		display block
+		top 0
+		left 0
+		right 0
+		bottom 0
+		background-color rgba(0,0,0,0.3)
+	& .upload-modal
+		position fixed
+		width 600px
+		top 25%
+		left calc(50vw - 300px)
+		background-color $white
+		box-shadow 0 5px 20px rgba(0,0,0,0.3)
+		text-align center
+		padding 32px
+		border-radius 4px
+		& .dragndrop
+			display block
+			float left
+			width 100%
+			border 2px dashed rgba(0,0,0,0.1)
+			border-radius 8px
+			cursor pointer
+			background-color #fafafa
+			& input
+				display none
+			& i
+				font-size 5em
+				width 100%
+				color #999999
+				margin 2rem 0 0 0
+			& p
+				font-weight 700
+				font-size 2em
+				line-height 1.8rem
+				margin 2rem 0 2rem 0
+				color $dark
+				& span
+					font-size 1.2rem
+					font-weight 400
+			&:hover
+				opacity 0.8
+				& i
+					transform scale(1.05)
+					color $dash-accent
+				& p
+					transform scale(0.95)
+			&.dragover
+				opacity 0.8
+				& i
+					transform scale(1.05)
+					color $dash-accent
+				& p
+					transform scale(0.95)
+		& p
+			float left
+			width 100%
+			font-size 1em
+			color $dark
+			font-size 1.5em
+			margin 1rem 0 0 0

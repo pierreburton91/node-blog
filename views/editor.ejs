@@ -77,9 +77,61 @@
         <span class="hint">Separate tags with a coma</span>
     </label>
 </div>
+<div class="upload">
+    <div class="upload-overlay"></div>
+    <div class="upload-modal">
+        <label class="dragndrop">
+            <input type="file" name="upload-file" accept="image/*">
+            <i class="fa fa-picture-o" aria-hidden="true"></i>
+            <p>Drag and drop or click here<br><span>to upload your image</span></p>
+        </label>
+        <p>or</p>
+        <label class="labeled">
+            <input type="text" name="file-link" class="inputs" placeholder="http://example.com/image.png" required/>
+            <span class="float-label">Provide a link</span>
+            <div class="bottom-line"></div>
+            <div class="bottom-line-active"></div>
+        </label>
+    </div>
+</div>
 <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 <script type="text/javascript">
-    var simplemde = new SimpleMDE();
+    var simplemde = new SimpleMDE({
+        spellChecker: false,
+        forceSync: false,
+        toolbar: ["bold", "italic", "heading-2", "heading-3", "|", "quote", "unordered-list", "ordered-list", "|", "link", {
+            name: "Image",
+            action: function uploadImage() {
+                test();
+            },
+            className: "fa fa-picture-o",
+            title: "Insert Image"
+        }, "|", "preview", "side-by-side", "fullscreen"]
+    });
+
+    var upload = document.querySelector('input[name="upload-file"]'),
+        dropzone = document.querySelector('.dragndrop');
+
+    upload.addEventListener('change', function() {
+    });
+
+    dropzone.addEventListener("dragover", function( event ) {
+        event.preventDefault();
+        dropzone.classList.add("dragover");
+    }, false);
+    dropzone.addEventListener("dragleave", function( event ) {
+        event.preventDefault();
+        dropzone.classList.remove("dragover");
+    }, false);
+
+    document.addEventListener('drop', function(event) {
+        event.preventDefault();
+        console.log(event.dataTransfer.files[0]);
+    });
+
+    function test() {
+        simplemde.drawImage();
+    }
 </script>
 </body>
 </html>
