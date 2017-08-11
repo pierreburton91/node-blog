@@ -6,6 +6,7 @@ $dark = #333333
 $light-dark = #eeeeee
 $dash-accent = #FF1744
 $dash-accent-darker = #cc0029
+$dash-accent-lighter = #ff8099
 
 *
 	box-sizing border-box
@@ -20,6 +21,11 @@ body
 	position relative
 	font-size 14px
 
+a
+	text-decoration none
+	color $dash-accent
+	&:hover
+		color $dash-accent-lighter
 
 /*======================================= 
 #										#
@@ -255,6 +261,15 @@ body
 		background-color $white
 		&:hover
 			background-color $light-dark
+		&:disabled
+			color $light-dark
+			box-shadow none
+			cursor default
+	&:disabled
+		cursor default
+		background-color $light-dark
+		color $dark
+		box-shadow none
 .header
 	float left
 	width 100%
@@ -269,23 +284,27 @@ body
 		line-height 40px
 		margin 0
 		float left
-	& .editor-actions
-		float right
-		& .button
-			box-shadow none
-			background-color transparent
-			margin-top 0
-			&.submit
-				font-weight 700
+	& .button
+		box-shadow none
+		background-color transparent
+		margin-top 0
+		color $dash-accent
+		&.submit
+			font-weight 700
+			color $dash-accent
+			margin-right 0
+			&:hover
+				color $dash-accent-darker
+		&.cancel
+			color $dark
+			font-weight 300
+			&:hover
 				color $dash-accent
-				margin-right 0
-				&:hover
-					color $dash-accent-darker
-			&.cancel
-				color $dark
-				font-weight 300
-				&:hover
-					color $dash-accent
+.editor-actions
+	float right
+	& .button:last-child
+		margin-right 0
+	
 	// &::after
 	// 	content ''
 	// 	display block
@@ -380,10 +399,14 @@ body
 		&:hover
 			border none
 			background-color $light-dark
+		&.active
+			color $dash-accent !important
 .CodeMirror
 	padding 12px 0
 	border none
 	z-index inherit
+	&.CodeMirror-fullscreen
+		z-index 10
 .editor-preview
 	padding 12px 0
 .editor-statusbar
@@ -397,7 +420,7 @@ h3
 	padding-top 32px
 	border-top 1px solid rgba(0,0,0,0.1)
 .upload
-	display block
+	display none
 	& .upload-overlay
 		position absolute
 		display block
@@ -406,6 +429,7 @@ h3
 		right 0
 		bottom 0
 		background-color rgba(0,0,0,0.3)
+		z-index 20
 	& .upload-modal
 		position fixed
 		width 600px
@@ -416,6 +440,7 @@ h3
 		text-align center
 		padding 32px
 		border-radius 4px
+		z-index 21
 		& .dragndrop
 			display block
 			float left
@@ -461,3 +486,19 @@ h3
 			color $dark
 			font-size 1.5em
 			margin 1rem 0 0 0
+	& .upload-preview
+		display none
+		& .image-preview
+			display block
+			float left
+			width 100%
+			height 250px
+			margin-bottom 1em
+			overflow hidden
+			& img
+				max-height 100%
+				max-width 100%
+		& a
+			float left
+			width 100%
+			margin-bottom 12px

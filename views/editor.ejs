@@ -80,58 +80,206 @@
 <div class="upload">
     <div class="upload-overlay"></div>
     <div class="upload-modal">
-        <label class="dragndrop">
-            <input type="file" name="upload-file" accept="image/*">
-            <i class="fa fa-picture-o" aria-hidden="true"></i>
-            <p>Drag and drop or click here<br><span>to upload your image</span></p>
-        </label>
-        <p>or</p>
-        <label class="labeled">
-            <input type="text" name="file-link" class="inputs" placeholder="http://example.com/image.png" required/>
-            <span class="float-label">Provide a link</span>
-            <div class="bottom-line"></div>
-            <div class="bottom-line-active"></div>
-        </label>
+        <div id="upload-form">
+            <label class="dragndrop">
+                <input type="file" name="upload-file" accept="image/*">
+                <i class="fa fa-picture-o" aria-hidden="true"></i>
+                <p>Drag and drop or click here<br><span>to upload your image</span></p>
+            </label>
+            <p>or</p>
+            <label class="labeled">
+                <input type="text" name="file-link" class="inputs" placeholder="http://example.com/image.png" required/>
+                <span class="float-label">Provide a link</span>
+                <div class="bottom-line"></div>
+                <div class="bottom-line-active"></div>
+            </label>
+        </div>
+        <div class="upload-preview">
+            <div class="image-preview">
+                <img id="previewed" src="" />
+            </div>
+            <a href="#" id="cancel-upload">Cancel and add another image</a>
+        </div>
+        <div class="editor-actions">
+            <button id="upload-close" class="button borderless">Close</button>
+            <button id="upload-confirm" class="button" disabled="true">Add picture</button>
+        </div>
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 <script type="text/javascript">
-    var simplemde = new SimpleMDE({
+    var uploadView = document.querySelector('.upload'),
+        uploadForm = document.querySelector('#upload-form'),
+        uploadInput = document.querySelector('input[name="upload-file"]'),
+        dropZone = document.querySelector('.dragndrop'),
+        fileLink = document.querySelector('input[name="file-link"'),
+        uploadPreviewContainer = document.querySelector('.upload-preview'),
+        uploadPreview = document.querySelector('#previewed'),
+        imagePreviewContainer = document.querySelector('.image-preview'),
+        cancelPreviewButton = document.querySelector('#cancel-upload'),
+        cancelUploadButton = document.querySelector('#upload-close'),
+        uploadButton = document.querySelector('#upload-confirm'),
+        simplemde = new SimpleMDE({
         spellChecker: false,
         forceSync: false,
         toolbar: ["bold", "italic", "heading-2", "heading-3", "|", "quote", "unordered-list", "ordered-list", "|", "link", {
             name: "Image",
-            action: function uploadImage() {
-                test();
+            action: function uploadImage(editor) {
+
+                uploadView.style.display = "block";
+
+                var promise = new Promise(function(resolve, reject) {
+
+                    function handleUpload(event) {
+                        uploadInput.removeEventListener('change', handleUpload);
+                        dropZone.removeEventListener('drop', handleUpload);
+                        cancelUploadButton.removeEventListener('click', closeUploadView);
+                        resolve(event);
+                    }
+                    function closeUploadView() {
+                        uploadInput.removeEventListener('change', handleUpload);
+                        dropZone.removeEventListener('drop', handleUpload);
+                        cancelUploadButton.removeEventListener('click', closeUploadView);
+                        reject()
+                    }
+                    uploadInput.addEventListener('change', handleUpload);
+                    dropZone.addEventListener('drop', handleUpload);
+                    cancelUploadButton.addEventListener('click', closeUploadView);
+
+                });
+
+                promise.then(function(event) {
+                    if (event.type == "change") {
+                        var file = uploadInput.files[0];
+                        
+                        uploadForm.style.display = "none";
+                        uploadPreviewContainer.style.display = "block";
+                        uploadButton.disabled = false;
+
+                        return new Promise(function(resolve, reject) {
+                            function confirmUpload() {
+                                uploadButton.removeEventListener('click', confirmUpload);
+                                cancelPreviewButton.removeEventListener('click', cancelAndChange);
+                                cancelUploadButton.removeEventListener('click', closeUploadView);
+                                resolve(file);
+                            }
+                            function cancelAndChange() {
+                                cancelPreviewButton.removeEventListener('click', cancelAndChange);
+                                uploadButton.removeEventListener('click', confirmUpload);
+                                cancelUploadButton.removeEventListener('click', closeUploadView);
+                                reject(true);
+                            }
+                            function closeUploadView() {
+                                cancelPreviewButton.removeEventListener('click', cancelAndChange);
+                                uploadButton.removeEventListener('click', confirmUpload);
+                                cancelUploadButton.removeEventListener('click', closeUploadView);
+                                reject(false)
+                            }
+
+                            readURL(uploadInput);
+                            uploadButton.addEventListener('click', confirmUpload);
+                            cancelPreviewButton.addEventListener('click', cancelAndChange);
+                            cancelUploadButton.addEventListener('click', closeUploadView);
+                        });
+                        
+                    }
+                    else {
+                        event.preventDefault();
+                        event.stopPropagation();
+
+                        var file = event.dataTransfer.files[0];
+                        
+                        dropZone.classList.remove("dragover");
+                        uploadForm.style.display = "none";
+                        uploadPreviewContainer.style.display = "block";
+                        uploadButton.disabled = false;
+
+                        return new Promise(function(resolve, reject) {
+                            function confirmUpload() {
+                                uploadButton.removeEventListener('click', confirmUpload);
+                                cancelPreviewButton.removeEventListener('click', cancelAndChange);
+                                cancelUploadButton.removeEventListener('click', closeUploadView);
+                                resolve(file);
+                            }
+                            function cancelAndChange() {
+                                cancelPreviewButton.removeEventListener('click', cancelAndChange);
+                                uploadButton.removeEventListener('click', confirmUpload);
+                                cancelUploadButton.removeEventListener('click', closeUploadView);
+                                reject(true);
+                            }
+                            function closeUploadView() {
+                                cancelPreviewButton.removeEventListener('click', cancelAndChange);
+                                uploadButton.removeEventListener('click', confirmUpload);
+                                cancelUploadButton.removeEventListener('click', closeUploadView);
+                                reject(false)
+                            }
+
+                            readURL(event);
+                            uploadButton.addEventListener('click', confirmUpload);
+                            cancelPreviewButton.addEventListener('click', cancelAndChange);
+                            cancelUploadButton.addEventListener('click', closeUploadView);
+                        });
+                    }
+                }, function(err) {
+                    uploadView.style.display = "none";
+                    throw err;
+                }).then(function(result){
+                    uploadView.style.display = "none";
+                    editor.options.insertTexts.image[0] = "![]";
+                    editor.options.insertTexts.image[1] = "(images/"+result+")";
+                    simplemde.drawImage();
+                }, function(err) {
+                    uploadButton.disabled = true;
+                    uploadForm.style.display = "block";
+                    uploadPreviewContainer.style.display = "none";
+                    if(err) {
+                        uploadImage();
+                    }
+                    else {
+                        uploadView.style.display = "none";
+                    }
+                });
             },
             className: "fa fa-picture-o",
             title: "Insert Image"
         }, "|", "preview", "side-by-side", "fullscreen"]
     });
 
-    var upload = document.querySelector('input[name="upload-file"]'),
-        dropzone = document.querySelector('.dragndrop');
-
-    upload.addEventListener('change', function() {
-    });
-
-    dropzone.addEventListener("dragover", function( event ) {
+    dropZone.addEventListener("dragover", function( event ) {
         event.preventDefault();
-        dropzone.classList.add("dragover");
+        event.stopPropagation();
+        dropZone.classList.add("dragover");
     }, false);
-    dropzone.addEventListener("dragleave", function( event ) {
+    dropZone.addEventListener("dragleave", function( event ) {
         event.preventDefault();
-        dropzone.classList.remove("dragover");
+        event.stopPropagation();
+        dropZone.classList.remove("dragover");
     }, false);
 
-    document.addEventListener('drop', function(event) {
-        event.preventDefault();
-        console.log(event.dataTransfer.files[0]);
-    });
-
-    function test() {
-        simplemde.drawImage();
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            
+            reader.onload = function (e) {
+                uploadPreview.setAttribute('src', e.target.result);
+            }
+            
+            reader.readAsDataURL(input.files[0]);
+        }
+        if (input.dataTransfer && input.dataTransfer.files[0]) {
+            var reader = new FileReader();
+            
+            reader.onload = function (e) {
+                uploadPreview.setAttribute('src', e.target.result);
+            }
+            
+            reader.readAsDataURL(input.dataTransfer.files[0]);
+        }
     }
+
+    fileLink.addEventListener('blur', function(e) {
+        console.log(e.target.value);
+    })
 </script>
 </body>
 </html>
