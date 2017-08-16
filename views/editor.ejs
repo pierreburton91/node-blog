@@ -122,6 +122,7 @@
         simplemde = new SimpleMDE({
         spellChecker: false,
         forceSync: false,
+        insertTexts: {link: ["[text to display](http://...)",""]},
         toolbar: ["bold", "italic", "heading-2", "heading-3", "|", "quote", "unordered-list", "ordered-list", "|", "link", {
             name: "Image",
             action: function uploadImage(editor) {
@@ -133,19 +134,22 @@
                     function handleUpload(event) {
                         uploadInput.removeEventListener('change', handleUpload);
                         dropZone.removeEventListener('drop', handleUpload);
+                        fileLink.removeEventListener('keyup', handleUploadDebounced);
                         cancelUploadButton.removeEventListener('click', closeUploadView);
                         resolve(event);
                     }
                     function closeUploadView() {
                         uploadInput.removeEventListener('change', handleUpload);
                         dropZone.removeEventListener('drop', handleUpload);
+                        fileLink.removeEventListener('keyup', handleUploadDebounced);
                         cancelUploadButton.removeEventListener('click', closeUploadView);
                         reject()
                     }
                     uploadInput.addEventListener('change', handleUpload);
                     dropZone.addEventListener('drop', handleUpload);
+                    var handleUploadDebounced = debounce(handleUpload, 2000);
+                    fileLink.addEventListener('keyup', handleUploadDebounced);
                     cancelUploadButton.addEventListener('click', closeUploadView);
-
                 });
 
                 promise.then(function(event) {
@@ -183,7 +187,7 @@
                         });
                         
                     }
-                    else {
+                    else if (event.type == "drop") {
                         event.preventDefault();
                         event.stopPropagation();
 
@@ -220,18 +224,69 @@
                             cancelUploadButton.addEventListener('click', closeUploadView);
                         });
                     }
+                    else if (event.type == "keyup") {
+                        var link = event.target.value;
+
+                        uploadForm.style.display = "none";
+                        uploadPreviewContainer.style.display = "block";
+                        uploadButton.disabled = false;
+
+                        return new Promise(function(resolve, reject) {
+                            function confirmUpload() {
+                                uploadButton.removeEventListener('click', confirmUpload);
+                                cancelPreviewButton.removeEventListener('click', cancelAndChange);
+                                cancelUploadButton.removeEventListener('click', closeUploadView);
+                                resolve(link);
+                            }
+                            function cancelAndChange() {
+                                cancelPreviewButton.removeEventListener('click', cancelAndChange);
+                                uploadButton.removeEventListener('click', confirmUpload);
+                                cancelUploadButton.removeEventListener('click', closeUploadView);
+                                reject(true);
+                            }
+                            function closeUploadView() {
+                                cancelPreviewButton.removeEventListener('click', cancelAndChange);
+                                uploadButton.removeEventListener('click', confirmUpload);
+                                cancelUploadButton.removeEventListener('click', closeUploadView);
+                                reject(false)
+                            }
+
+                            readURL(link);
+                            uploadButton.addEventListener('click', confirmUpload);
+                            cancelPreviewButton.addEventListener('click', cancelAndChange);
+                            cancelUploadButton.addEventListener('click', closeUploadView);
+                        });
+                    }
                 }, function(err) {
                     uploadView.style.display = "none";
+                    uploadButton.disabled = true;
+                    fileLink.value = "";
+                    uploadInput.value = "";
+                    uploadForm.style.display = "block";
+                    uploadPreviewContainer.style.display = "none";
                     throw err;
                 }).then(function(result){
                     uploadView.style.display = "none";
-                    editor.options.insertTexts.image[0] = "![]";
-                    editor.options.insertTexts.image[1] = "(images/"+result+")";
-                    simplemde.drawImage();
-                }, function(err) {
                     uploadButton.disabled = true;
+                    fileLink.value = "";
+                    uploadInput.value = "";
                     uploadForm.style.display = "block";
                     uploadPreviewContainer.style.display = "none";
+                    if (result.indexOf("/") != -1) {
+                        editor.options.insertTexts.image[0] = "![]("+result+")";
+                    }
+                    else {
+                        editor.options.insertTexts.image[0] = "![](images/"+result+")";
+                    }
+                    editor.options.insertTexts.image[1] = "";
+                    simplemde.drawImage();
+                }, function(err) {
+                    uploadView.style.display = "none";
+                    uploadForm.style.display = "block";
+                    uploadPreviewContainer.style.display = "none";
+                    fileLink.value = "";
+                    uploadInput.value = "";
+                    uploadButton.disabled = true;
                     if(err) {
                         uploadImage();
                     }
@@ -242,7 +297,7 @@
             },
             className: "fa fa-picture-o",
             title: "Insert Image"
-        }, "|", "preview", "side-by-side", "fullscreen"]
+        }, "|", "preview", "side-by-side", "fullscreen", "|", "guide"]
     });
 
     dropZone.addEventListener("dragover", function( event ) {
@@ -266,7 +321,7 @@
             
             reader.readAsDataURL(input.files[0]);
         }
-        if (input.dataTransfer && input.dataTransfer.files[0]) {
+        else if (input.dataTransfer && input.dataTransfer.files[0]) {
             var reader = new FileReader();
             
             reader.onload = function (e) {
@@ -275,11 +330,44 @@
             
             reader.readAsDataURL(input.dataTransfer.files[0]);
         }
+        else {
+            uploadPreview.setAttribute('src', input);
+        }
     }
 
-    fileLink.addEventListener('blur', function(e) {
-        console.log(e.target.value);
-    })
+
+    /**
+     * Retourne une fonction qui, tant qu'elle continue à être invoquée,
+     * ne sera pas exécutée. La fonction ne sera exécutée que lorsque
+     * l'on cessera de l'appeler pendant plus de N millisecondes.
+     * Si le paramètre `immediate` vaut vrai, alors la fonction 
+     * sera exécutée au premier appel au lieu du dernier.
+     * Paramètres :
+     *  - func : la fonction à `debouncer`
+     *  - wait : le nombre de millisecondes (N) à attendre avant 
+     *           d'appeler func()
+     *  - immediate (optionnel) : Appeler func() à la première invocation
+     *                            au lieu de la dernière (Faux par défaut)
+     *  - context (optionnel) : le contexte dans lequel appeler func()
+     *                          (this par défaut)
+     */
+    function debounce(func, wait, immediate, context) {
+        var result;
+        var timeout = null;
+        return function() {
+            var ctx = context || this, args = arguments;
+            var later = function() {
+                timeout = null;
+                if (!immediate) result = func.apply(ctx, args);
+            };
+            var callNow = immediate && !timeout;
+            // Tant que la fonction est appelée, on reset le timeout.
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+            if (callNow) result = func.apply(ctx, args);
+            return result;
+        };
+    }
 </script>
 </body>
 </html>
