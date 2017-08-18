@@ -366,12 +366,16 @@ a
 		background-color transparent
 		background-image none
 		color $dark
+		transition none
 		&.heading
 			font-size 2.5em
 			font-weight 700
 		& + .float-label
 			color #999999
 			transform translateY(23px) scale(1)
+			&.active
+				color $dash-accent
+				transform translateY(0) scale(0.78)
 		&:focus
 			& + .float-label
 				color $dash-accent
@@ -390,6 +394,13 @@ a
 		font-size 12px
 		left 0
 		bottom -8px
+.tags
+	background-color $dash-accent
+	padding 4px 12px
+	margin-right 8px
+	border-radius 6px
+	color $white
+	font-size 0.9em
 .editor-toolbar
 	padding 0
 	border none

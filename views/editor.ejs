@@ -74,7 +74,7 @@
         <span class="float-label">Tags</span>
         <div class="bottom-line"></div>
         <div class="bottom-line-active"></div>
-        <span class="hint">Separate tags with a coma</span>
+        <span class="hint">Separate tags with a coma. Up to 5 tags.</span>
     </label>
 </div>
 <div class="upload">
@@ -297,8 +297,11 @@
             },
             className: "fa fa-picture-o",
             title: "Insert Image"
-        }, "|", "preview", "side-by-side", "fullscreen", "|", "guide"]
-    });
+            }, "|", "preview", "side-by-side", "fullscreen", "|", "guide"]
+        }),
+        tagsInput = document.querySelector('input[name="tags"'),
+        tagsContainer = tagsInput.closest('.labeled'),
+        tags = [];
 
     dropZone.addEventListener("dragover", function( event ) {
         event.preventDefault();
@@ -335,7 +338,6 @@
         }
     }
 
-
     /**
      * Retourne une fonction qui, tant qu'elle continue à être invoquée,
      * ne sera pas exécutée. La fonction ne sera exécutée que lorsque
@@ -368,6 +370,61 @@
             return result;
         };
     }
+
+    /* Closest polyfill */
+    if (window.Element && !Element.prototype.closest) {
+        Element.prototype.closest = 
+        function(s) {
+            var matches = (this.document || this.ownerDocument).querySelectorAll(s),
+                    i,
+                    el = this;
+            do {
+                i = matches.length;
+                while (--i >= 0 && matches.item(i) !== el) {};
+            } while ((i < 0) && (el = el.parentElement)); 
+                return el;
+        };
+    }
+
+
+    tagsInput.addEventListener('keyup', function(e) {
+        if (e.keyCode == 188) {
+            var inputValue = e.target.value,
+                tag = inputValue.substring(0, inputValue.length - 1),
+                tagBox = document.createElement('span'),
+                tagBoxText = document.createTextNode(tag),
+                offset = 0;
+
+            tagsInput.value = "";
+            if (!document.querySelector('input[name="tags"] + .float-label').classList.contains("active")) {
+                document.querySelector('input[name="tags"] + .float-label').classList.add("active");
+            }
+            tags.push(tag);
+            tagBox.classList.add('tags');
+            tagBox.appendChild(tagBoxText);
+            tagsContainer.insertBefore(tagBox, tagsInput);
+
+            var tagBoxGroup = document.querySelectorAll('.tags');
+
+            for(var i=0 ; i < tagBoxGroup.length ; i++) {
+                offset += tagBoxGroup[i].offsetWidth + 9;
+                tagsInput.style.width = "calc(100% - "+ offset +"px)";
+            }
+        }
+        else {
+            return false;
+        }
+    });
+    tagsInput.addEventListener('keydown', function(e) {
+        if (e.keyCode == 8 && tagsInput.value == "") {
+            var tagBoxGroup = document.querySelectorAll('.tags'),
+                lastItem = tagBoxGroup.length;
+            if (tagBoxGroup.length > 0) {
+                tagsContainer.removeChild(tagsContainer.childNodes[lastItem]);
+                tags.pop();
+            }
+        }
+    })
 </script>
 </body>
 </html>
