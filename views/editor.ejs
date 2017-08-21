@@ -35,8 +35,8 @@
     <div class="header">
         <h1><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Write a new blog post</h1>
         <div class="editor-actions">
-            <button class="button cancel">Cancel</button>
-            <button class="button submit">Publish</button>
+            <button onclick="goBack()" class="button cancel">Cancel</button>
+            <button onclick="submit()" id="publish" class="button submit">Publish</button>
         </div>
     </div>
     <label class="labeled">
@@ -121,7 +121,7 @@
         uploadButton = document.querySelector('#upload-confirm'),
         simplemde = new SimpleMDE({
         spellChecker: false,
-        forceSync: false,
+        forceSync: true,
         insertTexts: {link: ["[text to display](http://...)",""]},
         toolbar: ["bold", "italic", "heading-2", "heading-3", "|", "quote", "unordered-list", "ordered-list", "|", "link", {
             name: "Image",
@@ -386,9 +386,17 @@
         };
     }
 
-
+    /* Add tags and resize the input when hitting the coma
+    prevents writting new tags if 5 tags are already there
+    prevents a bug where writting a single coma cause the layout to break */
     tagsInput.addEventListener('keyup', function(e) {
-        if (e.keyCode == 188) {
+        if (tags.length == 5 && e.keyCode == 188) {
+            return false;
+        }
+        else if (e.target.value == ",") {
+            tagsInput.value = "";
+        }
+        else if (e.keyCode == 188) {
             var inputValue = e.target.value,
                 tag = inputValue.substring(0, inputValue.length - 1),
                 tagBox = document.createElement('span'),
@@ -411,10 +419,10 @@
                 tagsInput.style.width = "calc(100% - "+ offset +"px)";
             }
         }
-        else {
-            return false;
-        }
     });
+
+    /* Removes last tag on hitting return if input is empty
+    and prevents writting new tags if 5 tags are already there */
     tagsInput.addEventListener('keydown', function(e) {
         if (e.keyCode == 8 && tagsInput.value == "") {
             var tagBoxGroup = document.querySelectorAll('.tags'),
@@ -423,8 +431,39 @@
                 tagsContainer.removeChild(tagsContainer.childNodes[lastItem]);
                 tags.pop();
             }
+            if (tagBoxGroup.length == 1) {
+                document.querySelector('input[name="tags"] + .float-label').classList.remove("active");
+            }
         }
-    })
+        else if (tags.length == 5 && e.keyCode != 8) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    });
+
+    /* Removes tags on click */
+    tagsContainer.addEventListener('click', function(e){
+        if(e.target && e.target.matches(".tags")) {
+            var tagBoxGroup = document.querySelectorAll('.tags'),
+                currentItem = e.target.innerHTML,
+                tagToDelete = tags.indexOf(currentItem);
+
+            tagsContainer.removeChild(tagsContainer.childNodes[tagToDelete + 1]);
+            tags.splice(tagToDelete, 1);
+            if(tags.length == 0) {
+                document.querySelector('input[name="tags"] + .float-label').classList.remove("active");
+            }
+        }
+    });
+
+    function goBack() {
+        var title = document.querySelector('input[name="post-title"'),
+            articleBody = document.querySelector('textarea');
+
+        if (title.value != "" || articleBody.value != "") {
+            console.log(title.value, articleBody.value);
+        }
+    }
 </script>
 </body>
 </html>
