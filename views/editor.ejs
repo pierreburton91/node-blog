@@ -93,10 +93,12 @@
                 <div class="bottom-line"></div>
                 <div class="bottom-line-active"></div>
             </label>
+            <span>Accepted files are images .jpeg, .png or .gif, max 2Mo.</span>
         </div>
         <div class="upload-preview">
             <div class="image-preview">
                 <img id="previewed" src="" />
+                <span class="preview-error"></span>
             </div>
             <a href="#" id="cancel-upload">Cancel and add another image</a>
         </div>
@@ -116,9 +118,11 @@
         uploadPreviewContainer = document.querySelector('.upload-preview'),
         uploadPreview = document.querySelector('#previewed'),
         imagePreviewContainer = document.querySelector('.image-preview'),
+        previewError = document.querySelector('.preview-error'),
         cancelPreviewButton = document.querySelector('#cancel-upload'),
         cancelUploadButton = document.querySelector('#upload-close'),
         uploadButton = document.querySelector('#upload-confirm'),
+        acceptedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"],
         simplemde = new SimpleMDE({
         spellChecker: false,
         forceSync: true,
@@ -155,17 +159,50 @@
                 promise.then(function(event) {
                     if (event.type == "change") {
                         var file = uploadInput.files[0];
-                        
+
                         uploadForm.style.display = "none";
                         uploadPreviewContainer.style.display = "block";
-                        uploadButton.disabled = false;
+
+                        if (acceptedTypes.indexOf(file.type) != -1 && file.size <= 2097152) {
+                            uploadButton.disabled = false;
+                            readURL(uploadInput);
+                        }
+                        else if (acceptedTypes.indexOf(file.type) == -1) {
+                            var errorMessage = "The file you are trying to import is not a valid image file.";
+
+                            previewError.innerHTML = errorMessage;
+                            previewError.style.display = "block";
+                        }
+                        else if (file.size > 2097152) {
+                            var errorMessage = "The file you are trying to import weights more than 2Mo.";
+
+                            previewError.innerHTML = errorMessage;
+                            previewError.style.display = "block";
+                        }
 
                         return new Promise(function(resolve, reject) {
                             function confirmUpload() {
                                 uploadButton.removeEventListener('click', confirmUpload);
                                 cancelPreviewButton.removeEventListener('click', cancelAndChange);
                                 cancelUploadButton.removeEventListener('click', closeUploadView);
-                                resolve(file);
+
+                                var xhr = new XMLHttpRequest();
+                                xhr.onreadystatechange = function() {
+                                    if (this.readyState == 4) {
+                                        if (this.status == 200) {
+                                            console.log(this.responseText);
+                                            resolve(file.name);
+                                        }
+                                        else {
+                                            console.log(this.status, this.statusText, this.getAllResponseHeaders());
+                                            reject(false);
+                                        }
+                                    }
+                                }
+                                xhr.open("POST", "/api/upload-image", true);
+                                xhr.setRequestHeader("Content-Type", "multipart/form-data");
+                                xhr.send(file);
+                                
                             }
                             function cancelAndChange() {
                                 cancelPreviewButton.removeEventListener('click', cancelAndChange);
@@ -180,7 +217,6 @@
                                 reject(false)
                             }
 
-                            readURL(uploadInput);
                             uploadButton.addEventListener('click', confirmUpload);
                             cancelPreviewButton.addEventListener('click', cancelAndChange);
                             cancelUploadButton.addEventListener('click', closeUploadView);
@@ -196,7 +232,23 @@
                         dropZone.classList.remove("dragover");
                         uploadForm.style.display = "none";
                         uploadPreviewContainer.style.display = "block";
-                        uploadButton.disabled = false;
+
+                        if (acceptedTypes.indexOf(file.type) != -1 && file.size <= 2097152) {
+                            uploadButton.disabled = false;
+                            readURL(event);
+                        }
+                        else if (acceptedTypes.indexOf(file.type) == -1) {
+                            var errorMessage = "The file you are trying to import is not a valid image file.";
+
+                            previewError.innerHTML = errorMessage;
+                            previewError.style.display = "block";
+                        }
+                        else if (file.size > 2097152) {
+                            var errorMessage = "The file you are trying to import weights more than 2Mo.";
+
+                            previewError.innerHTML = errorMessage;
+                            previewError.style.display = "block";
+                        }
 
                         return new Promise(function(resolve, reject) {
                             function confirmUpload() {
@@ -218,7 +270,6 @@
                                 reject(false)
                             }
 
-                            readURL(event);
                             uploadButton.addEventListener('click', confirmUpload);
                             cancelPreviewButton.addEventListener('click', cancelAndChange);
                             cancelUploadButton.addEventListener('click', closeUploadView);
@@ -229,7 +280,17 @@
 
                         uploadForm.style.display = "none";
                         uploadPreviewContainer.style.display = "block";
-                        uploadButton.disabled = false;
+                        
+                        if (link.match(/\.(jpeg|jpg|gif|png)$/) != null) {
+                            uploadButton.disabled = false;
+                            readURL(link);
+                        }
+                        else if (link.match(/\.(jpeg|jpg|gif|png)$/) == null) {
+                            var errorMessage = "The link you provided is not pointing to an image or couldn't be verified.";
+
+                            previewError.innerHTML = errorMessage;
+                            previewError.style.display = "block";
+                        }
 
                         return new Promise(function(resolve, reject) {
                             function confirmUpload() {
@@ -251,7 +312,6 @@
                                 reject(false)
                             }
 
-                            readURL(link);
                             uploadButton.addEventListener('click', confirmUpload);
                             cancelPreviewButton.addEventListener('click', cancelAndChange);
                             cancelUploadButton.addEventListener('click', closeUploadView);
@@ -284,6 +344,7 @@
                     uploadView.style.display = "none";
                     uploadForm.style.display = "block";
                     uploadPreviewContainer.style.display = "none";
+                    previewError.style.display = "none";
                     fileLink.value = "";
                     uploadInput.value = "";
                     uploadButton.disabled = true;
@@ -461,7 +522,17 @@
             articleBody = document.querySelector('textarea');
 
         if (title.value != "" || articleBody.value != "") {
-            console.log(title.value, articleBody.value);
+            var confirm = window.confirm("Are your sure ? All your work will be lost.");
+            console.log(simplemde.options.previewRender(articleBody.value));
+            if (confirm == true) {
+                window.location.href = "/";
+            }
+            else {
+                return false;
+            }
+        }
+        else {
+            window.location.href = "/";
         }
     }
 </script>

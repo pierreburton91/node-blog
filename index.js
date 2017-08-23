@@ -16,6 +16,11 @@ app.get('/write-post', function (req, res) {
 	res.render('editor');
 });
 
+app.post('/api/upload-image', function(req, res) {
+	console.log(req);
+	res.send("ok");
+});
+
 
 
 /* 3, 2, 1, Launch ! */

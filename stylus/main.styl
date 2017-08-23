@@ -3,10 +3,11 @@
 $body = 'Poppins', sans-serif
 $white = #ffffff
 $dark = #333333
+$medium-dark = #999999
 $light-dark = #eeeeee
 $dash-accent = #FF1744
-$dash-accent-darker = #cc0029
-$dash-accent-lighter = #ff8099
+$dash-accent-darker = #F50031
+$dash-accent-lighter = #FF476C
 
 *
 	box-sizing border-box
@@ -371,7 +372,7 @@ a
 			font-size 2.5em
 			font-weight 700
 		& + .float-label
-			color #999999
+			color $medium-dark
 			transform translateY(23px) scale(1)
 			&.active
 				color $dash-accent
@@ -469,7 +470,7 @@ h3
 			& i
 				font-size 5em
 				width 100%
-				color #999999
+				color $medium-dark
 				margin 2rem 0 0 0
 			& p
 				font-weight 700
@@ -513,6 +514,11 @@ h3
 			& img
 				max-height 100%
 				max-width 100%
+			& span
+				color #999
+				font-size 1.2em
+				margin-top 4rem
+				display none
 		& a
 			float left
 			width 100%
