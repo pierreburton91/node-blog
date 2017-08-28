@@ -186,12 +186,16 @@
                                 cancelPreviewButton.removeEventListener('click', cancelAndChange);
                                 cancelUploadButton.removeEventListener('click', closeUploadView);
 
-                                var xhr = new XMLHttpRequest();
+                                var formData = new FormData(),
+                                    xhr = new XMLHttpRequest();
+
+                                formData.append('file', file);
                                 xhr.onreadystatechange = function() {
                                     if (this.readyState == 4) {
                                         if (this.status == 200) {
-                                            console.log(this.responseText);
-                                            resolve(file.name);
+                                            var response = JSON.parse(this.responseText),
+                                                imageLink = response.data.link;
+                                            resolve(imageLink);
                                         }
                                         else {
                                             console.log(this.status, this.statusText, this.getAllResponseHeaders());
@@ -200,8 +204,7 @@
                                     }
                                 }
                                 xhr.open("POST", "/api/upload-image", true);
-                                xhr.setRequestHeader("Content-Type", "multipart/form-data");
-                                xhr.send(file);
+                                xhr.send(formData);
                                 
                             }
                             function cancelAndChange() {
@@ -255,7 +258,26 @@
                                 uploadButton.removeEventListener('click', confirmUpload);
                                 cancelPreviewButton.removeEventListener('click', cancelAndChange);
                                 cancelUploadButton.removeEventListener('click', closeUploadView);
-                                resolve(file);
+                                
+                                var formData = new FormData(),
+                                    xhr = new XMLHttpRequest();
+
+                                formData.append('file', file);
+                                xhr.onreadystatechange = function() {
+                                    if (this.readyState == 4) {
+                                        if (this.status == 200) {
+                                            var response = JSON.parse(this.responseText),
+                                                imageLink = response.data.link;
+                                            resolve(imageLink);
+                                        }
+                                        else {
+                                            console.log(this.status, this.statusText, this.getAllResponseHeaders());
+                                            reject(false);
+                                        }
+                                    }
+                                }
+                                xhr.open("POST", "/api/upload-image", true);
+                                xhr.send(formData);
                             }
                             function cancelAndChange() {
                                 cancelPreviewButton.removeEventListener('click', cancelAndChange);
@@ -332,13 +354,10 @@
                     uploadInput.value = "";
                     uploadForm.style.display = "block";
                     uploadPreviewContainer.style.display = "none";
-                    if (result.indexOf("/") != -1) {
-                        editor.options.insertTexts.image[0] = "![]("+result+")";
-                    }
-                    else {
-                        editor.options.insertTexts.image[0] = "![](images/"+result+")";
-                    }
+
+                    editor.options.insertTexts.image[0] = "![]("+result+")";
                     editor.options.insertTexts.image[1] = "";
+
                     simplemde.drawImage();
                 }, function(err) {
                     uploadView.style.display = "none";

@@ -1,5 +1,10 @@
 const express = require('express');
+const multer = require('multer');
+const http = require('https');
+const request = require('request');
+const upload = multer();
 const app = express();
+const imgurID = "c6a8ce7a6f9c704";
 
 /* Middlewares */
 app.set('view engine', 'ejs');
@@ -16,9 +21,23 @@ app.get('/write-post', function (req, res) {
 	res.render('editor');
 });
 
-app.post('/api/upload-image', function(req, res) {
-	console.log(req);
-	res.send("ok");
+app.post('/api/upload-image', upload.single('file'), function(req, res) {
+	var file = req.file;
+	var imgurUploadOptions = {
+		"method": "POST",
+	  	"url": "https://api.imgur.com/3/image",
+	  	"formData": {"image": file.buffer.toString('base64')},
+	  	"headers": {
+	    	"authorization": "Client-ID "+ imgurID +""
+	  	}
+	};
+	request(imgurUploadOptions, function(error, response, body) {
+		if (error) {
+			res.send(error);
+			return;
+		}
+  		res.send(body);
+	});
 });
 
 
