@@ -6,8 +6,8 @@ $dark = #333333
 $medium-dark = #999999
 $light-dark = #eeeeee
 $dash-accent = #FF1744
-$dash-accent-darker = #F50031
-$dash-accent-lighter = #FF476C
+$dash-accent-darker = #A30021
+$dash-accent-lighter = #FF99AD
 
 *
 	box-sizing border-box
@@ -211,6 +211,7 @@ a
 	& td, th
 		padding 12px
 		text-overflow ellipsis
+		text-align left
 		overflow hidden
 	& tfoot
 		color $white
@@ -358,9 +359,8 @@ a
 		transform-origin center
 		transform scaleX(0)
 	& .inputs
-		min-height 72px
+		padding 24px 0
 		width 100%
-		padding 0
 		border none
 		font-size inherit
 		font-family inherit
@@ -371,6 +371,7 @@ a
 		&.heading
 			font-size 2.5em
 			font-weight 700
+			padding 8px 0
 		& + .float-label
 			color $medium-dark
 			transform translateY(23px) scale(1)

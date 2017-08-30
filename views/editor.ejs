@@ -110,6 +110,21 @@
 </div>
 <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 <script type="text/javascript">
+    /* Closest polyfill */
+    if (window.Element && !Element.prototype.closest) {
+        Element.prototype.closest = 
+        function(s) {
+            var matches = (this.document || this.ownerDocument).querySelectorAll(s),
+                    i,
+                    el = this;
+            do {
+                i = matches.length;
+                while (--i >= 0 && matches.item(i) !== el) {};
+            } while ((i < 0) && (el = el.parentElement)); 
+                return el;
+        };
+    }
+
     var uploadView = document.querySelector('.upload'),
         uploadForm = document.querySelector('#upload-form'),
         uploadInput = document.querySelector('input[name="upload-file"]'),
@@ -451,21 +466,6 @@
         };
     }
 
-    /* Closest polyfill */
-    if (window.Element && !Element.prototype.closest) {
-        Element.prototype.closest = 
-        function(s) {
-            var matches = (this.document || this.ownerDocument).querySelectorAll(s),
-                    i,
-                    el = this;
-            do {
-                i = matches.length;
-                while (--i >= 0 && matches.item(i) !== el) {};
-            } while ((i < 0) && (el = el.parentElement)); 
-                return el;
-        };
-    }
-
     /* Add tags and resize the input when hitting the coma
     prevents writting new tags if 5 tags are already there
     prevents a bug where writting a single coma cause the layout to break */
@@ -523,7 +523,7 @@
 
     /* Removes tags on click */
     tagsContainer.addEventListener('click', function(e){
-        if(e.target && e.target.matches(".tags")) {
+        if(e.target && e.target.classList.contains("tags")) {
             var tagBoxGroup = document.querySelectorAll('.tags'),
                 currentItem = e.target.innerHTML,
                 tagToDelete = tags.indexOf(currentItem);
