@@ -28,6 +28,56 @@ a
 	&:hover
 		color $dash-accent-lighter
 
+
+/*======================================= 
+#										#
+#			LOGIN STYLES				#
+#										#
+#=======================================*/
+.login-form
+	padding 16px
+	margin 64px auto 0 auto
+	width 100%
+	max-width 360px
+	overflow hidden
+	border 1px solid rgba(0,0,0,0.1);
+	& .checkbox
+			width 20px
+			height 20px
+			display block
+			background-color $white
+			border 1px solid rgba(0,0,0,0.2)
+			border-radius 50px
+			padding 0 2px
+			line-height 18px
+			cursor pointer
+			float left
+			margin-top 3px
+			margin-right 8px
+			& input
+				display none
+			& input + .fa
+				display none
+			& input:checked + .fa
+				display inline-block
+.login-header
+	float left
+	width 100%
+	margin-bottom 16px
+	& h1
+		position relative
+		color $dark
+		font-weight 400
+		letter-spacing 1px
+		font-size 2em
+		line-height 40px
+		margin 0
+	& h2
+		margin 0.5em 0 1em 0
+		font-size 1rem
+		font-weight 400
+		color $medium-dark
+
 /*======================================= 
 #										#
 #			DASHBOARD STYLES			#
@@ -273,7 +323,7 @@ a
 		background-color $light-dark
 		color $dark
 		box-shadow none
-.header
+.editor-header
 	float left
 	width 100%
 	border-bottom 1px solid rgba(0,0,0,0.1)
@@ -303,7 +353,7 @@ a
 			font-weight 300
 			&:hover
 				color $dash-accent
-.editor-actions
+.button-f-right
 	float right
 	& .button:last-child
 		margin-right 0
@@ -323,6 +373,7 @@ a
 	margin-bottom 12px
 	position relative
 	font-size 16px
+	color $dark
 	& .fixed-label
 		position absolute
 		pointer-events none
@@ -358,7 +409,7 @@ a
 		left 0
 		transform-origin center
 		transform scaleX(0)
-	& .inputs
+	& .inputs:not([type="checkbox"])
 		padding 24px 0
 		width 100%
 		border none

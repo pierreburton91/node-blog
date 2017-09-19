@@ -3,12 +3,16 @@ const multer = require('multer');
 const http = require('https');
 const request = require('request');
 const upload = multer();
+const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 const app = express();
 const imgurID = "c6a8ce7a6f9c704";
 
 /* Middlewares */
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
+app.use(bodyParser.json()); // for parsing application/json
 
 
 
@@ -17,8 +21,18 @@ app.get('/', function (req, res) {
 	res.render('dashboard', { title: 'Hey', message: 'Hello there!', link: 'Go to test', link2: 'test'});
 });
 
+app.get('/login', function (req, res) {
+	res.render('login');
+});
+
 app.get('/write-post', function (req, res) {
 	res.render('editor');
+});
+
+app.post('/api/check-credentials', function(req, res) {
+	var credentials = req.body;
+
+	res.send(credentials);
 });
 
 app.post('/api/upload-image', upload.single('file'), function(req, res) {
