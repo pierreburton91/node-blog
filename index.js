@@ -57,6 +57,6 @@ app.post('/api/upload-image', upload.single('file'), function(req, res) {
 
 
 /* 3, 2, 1, Launch ! */
-app.listen(3000, function() {
+app.listen(process.env.PORT || 3000, function() {
 	console.log('App is up and running on 3000!');
 })
