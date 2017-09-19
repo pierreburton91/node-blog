@@ -4,7 +4,8 @@
   "description": "Node based blogging CMS",
   "main": "index.js",
   "scripts": {
-    "start": "gulp start"
+    "start": "node index.js",
+    "build": "gulp start"
   },
   "repository": {
     "type": "git",
