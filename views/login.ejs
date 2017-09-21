@@ -84,6 +84,30 @@
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(JSON.stringify(data));
     }
+
+    function displayNotification() {
+        // Create the HTML string
+        var element = '<div class="notification"><div class="notification-content"></div><div class="notification-close"><i class="fa fa-close"></i></div></div>',
+            body = document.querySelector('body');
+        // append HTML string to body
+        body.insertAdjacentHTML('beforeend', element);
+
+        var note = document.querySelector(".notification"), // your notification-up element
+            closeButton = document.querySelector(".notification-close"), // your close button
+            noteContent = document.querySelector(".notification-content"), // your content text for the notification-up
+            toMove = noteWidth + 20, // defines the total amount of pixels to move through "close" button
+            contentText = "The super content of the dead for your notification-up !"; // content text
+
+        // your text to display
+        noteContent.innerHTML = contentText;
+
+        // click event on close button
+        closeButton.addEventListener("click", function() {
+        
+            // remove the notification-up from the DOM
+            body.removeChild(note);
+        });
+    };
 </script>
 <script src="https://use.fontawesome.com/973262919d.js"></script>
 </body>
