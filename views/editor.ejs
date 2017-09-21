@@ -102,27 +102,19 @@
             </div>
             <a href="#" id="cancel-upload">Cancel and add another image</a>
         </div>
-        <div class="editor-actions">
+        <div class="button-f-right">
             <button id="upload-close" class="button borderless">Close</button>
             <button id="upload-confirm" class="button" disabled="true">Add picture</button>
         </div>
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+<script type="text/javascript" src="scripts/closest-polyfill.js"></script>
+<script type="text/javascript" src="scripts/promise-polyfill.min.js"></script>
 <script type="text/javascript">
-    /* Closest polyfill */
-    if (window.Element && !Element.prototype.closest) {
-        Element.prototype.closest = 
-        function(s) {
-            var matches = (this.document || this.ownerDocument).querySelectorAll(s),
-                    i,
-                    el = this;
-            do {
-                i = matches.length;
-                while (--i >= 0 && matches.item(i) !== el) {};
-            } while ((i < 0) && (el = el.parentElement)); 
-                return el;
-        };
+    
+    if (!window.Promise) {
+      window.Promise = Promise;
     }
 
     var uploadView = document.querySelector('.upload'),

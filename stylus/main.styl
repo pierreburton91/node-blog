@@ -9,6 +9,13 @@ $dash-accent = #FF1744
 $dash-accent-darker = #A30021
 $dash-accent-lighter = #FF99AD
 
+
+/*======================================= 
+#										#
+#			SHARED STYLES				#
+#										#
+#=======================================*/
+
 *
 	box-sizing border-box
 	transition all 0.1s ease-out
@@ -28,7 +35,146 @@ a
 	&:hover
 		color $dash-accent-lighter
 
+.container
+	width 100%
+	max-width 1024px
+	margin 0 auto
+	background-color $white
+	padding 12px
+	overflow hidden
+	
+.button
+	background-color $dash-accent
+	padding 0 12px
+	color $white
+	box-shadow 0 2px 5px rgba(0,0,0,0.2)
+	float left
+	position relative
+	background-image none
+	border none
+	outline none
+	cursor pointer
+	font-family $body
+	font-size 16px
+	margin-right 16px
+	min-width 124px
+	height 40px
+	line-height 40px
+	text-align center
+	text-decoration none
+	border-radius 2px
+	margin-top 16px
+	&:hover
+		background-color $dash-accent-darker
+	&.borderless
+		color $dash-accent
+		background-color $white
+		&:hover
+			background-color $light-dark
+		&:disabled
+			color $light-dark
+			box-shadow none
+			cursor default
+	&:disabled
+		cursor default
+		background-color $light-dark
+		color $dark
+		box-shadow none
+		
+.labeled
+	float left
+	width 100%
+	margin-bottom 12px
+	position relative
+	font-size 16px
+	color $dark
+	& .float-label
+		position absolute
+		pointer-events none
+		left 0
+		top 0
+		transform-origin left top 0px
+		background-color $white
+		width 100%
+		text-align left
+	& .bottom-line
+		display block
+		position absolute
+		width 100%
+		height 2px
+		background-color $light-dark
+		bottom 14px
+		left 0
+	& .bottom-line-active
+		display block
+		position absolute
+		width 100%
+		height 2px
+		background-color $dash-accent
+		bottom 14px
+		left 0
+		transform-origin center
+		transform scaleX(0)
+	& .inputs:not([type="checkbox"]):not([type="radio"]):not([type="button"]):not([type="submit"]):not([type="reset"])
+		padding 24px 0
+		width 100%
+		border none
+		font-size inherit
+		font-family inherit
+		background-color transparent
+		background-image none
+		color $dark
+		transition none
+		&.heading
+			font-size 2.5em
+			font-weight 700
+			padding 8px 0
+		& + .float-label
+			color $medium-dark
+			transform translateY(23px) scale(1)
+			&.active
+				color $dash-accent
+				transform translateY(0) scale(0.78)
+		&:focus
+			& + .float-label
+				color $dash-accent
+				transform translateY(0) scale(0.78)
+				& + .bottom-line + .bottom-line-active
+					transform scaleX(1)
+			& + .fixed-label
+				& + .bottom-line + .bottom-line-active
+					transform scaleX(1)
+		&:valid
+			& + .float-label
+				color $dash-accent
+				transform translateY(0) scale(0.78)
+	& .hint
+		position absolute
+		font-size 12px
+		left 0
+		bottom -8px
+			
+.checker
+	width 20px
+	height 20px
+	display block
+	background-color $white
+	border 1px solid rgba(0,0,0,0.2)
+	border-radius 50px
+	padding 0 2px
+	line-height 18px
+	cursor pointer
+	& input
+		display none
+	& input + .fa
+		display none
+	& input:checked + .fa
+		display inline-block
 
+.button-f-right
+	float right
+	& .button:last-child
+		margin-right 0
 /*======================================= 
 #										#
 #			LOGIN STYLES				#
@@ -41,25 +187,10 @@ a
 	max-width 360px
 	overflow hidden
 	border 1px solid rgba(0,0,0,0.1);
-	& .checkbox
-			width 20px
-			height 20px
-			display block
-			background-color $white
-			border 1px solid rgba(0,0,0,0.2)
-			border-radius 50px
-			padding 0 2px
-			line-height 18px
-			cursor pointer
-			float left
-			margin-top 3px
-			margin-right 8px
-			& input
-				display none
-			& input + .fa
-				display none
-			& input:checked + .fa
-				display inline-block
+	& .checker
+		float left
+		margin-top 3px
+		margin-right 8px
 .login-header
 	float left
 	width 100%
@@ -235,22 +366,6 @@ a
 				width 25%
 	& tr td:first-child
 		width 45px
-		& label
-			width 20px
-			height 20px
-			display block
-			background-color $white
-			border 1px solid rgba(0,0,0,0.2)
-			border-radius 50px
-			padding 0 2px
-			line-height 18px
-			cursor pointer
-			& input
-				display none
-			& input + .fa
-				display none
-			& input:checked + .fa
-				display inline-block
 	& tbody
 		& tr:nth-child(odd)
 			background-color #fafafa
@@ -279,50 +394,6 @@ a
 #										#
 #=======================================*/
 
-.container
-	width 100%
-	max-width 1024px
-	margin 0 auto
-	background-color $white
-	padding 12px
-	overflow hidden
-.button
-	background-color $dash-accent
-	padding 0 12px
-	color $white
-	box-shadow 0 2px 5px rgba(0,0,0,0.2)
-	float left
-	position relative
-	background-image none
-	border none
-	outline none
-	cursor pointer
-	font-family $body
-	font-size 16px
-	margin-right 16px
-	min-width 124px
-	height 40px
-	line-height 40px
-	text-align center
-	text-decoration none
-	border-radius 2px
-	margin-top 16px
-	&:hover
-		background-color $dash-accent-darker
-	&.borderless
-		color $dash-accent
-		background-color $white
-		&:hover
-			background-color $light-dark
-		&:disabled
-			color $light-dark
-			box-shadow none
-			cursor default
-	&:disabled
-		cursor default
-		background-color $light-dark
-		color $dark
-		box-shadow none
 .editor-header
 	float left
 	width 100%
@@ -353,100 +424,7 @@ a
 			font-weight 300
 			&:hover
 				color $dash-accent
-.button-f-right
-	float right
-	& .button:last-child
-		margin-right 0
-	
-	// &::after
-	// 	content ''
-	// 	display block
-	// 	position absolute
-	// 	left 0
-	// 	bottom 0
-	// 	height 1px
-	// 	width 100%
-	// 	background-color $light-dark
-.labeled
-	float left
-	width 100%
-	margin-bottom 12px
-	position relative
-	font-size 16px
-	color $dark
-	& .fixed-label
-		position absolute
-		pointer-events none
-		left 0
-		top 0
-		color $dash-accent
-		transform-origin left top 0px
-		transform translateY(0) scale(0.78)
-	& .float-label
-		position absolute
-		pointer-events none
-		left 0
-		top 0
-		transform-origin left top 0px
-		background-color $white
-		width 100%
-		text-align left
-	& .bottom-line
-		display block
-		position absolute
-		width 100%
-		height 2px
-		background-color $light-dark
-		bottom 14px
-		left 0
-	& .bottom-line-active
-		display block
-		position absolute
-		width 100%
-		height 2px
-		background-color $dash-accent
-		bottom 14px
-		left 0
-		transform-origin center
-		transform scaleX(0)
-	& .inputs:not([type="checkbox"])
-		padding 24px 0
-		width 100%
-		border none
-		font-size inherit
-		font-family inherit
-		background-color transparent
-		background-image none
-		color $dark
-		transition none
-		&.heading
-			font-size 2.5em
-			font-weight 700
-			padding 8px 0
-		& + .float-label
-			color $medium-dark
-			transform translateY(23px) scale(1)
-			&.active
-				color $dash-accent
-				transform translateY(0) scale(0.78)
-		&:focus
-			& + .float-label
-				color $dash-accent
-				transform translateY(0) scale(0.78)
-				& + .bottom-line + .bottom-line-active
-					transform scaleX(1)
-			& + .fixed-label
-				& + .bottom-line + .bottom-line-active
-					transform scaleX(1)
-		&:valid
-			& + .float-label
-				color $dash-accent
-				transform translateY(0) scale(0.78)
-	& .hint
-		position absolute
-		font-size 12px
-		left 0
-		bottom -8px
+
 .tags
 	background-color $dash-accent
 	padding 4px 12px

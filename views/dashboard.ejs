@@ -53,7 +53,7 @@
         <table class="dash-table" id="dashboard-posts">
             <thead>
                 <tr>
-                    <td><label><input type="checkbox" onchange="checkAll(),handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
+                    <td><label class="checker"><input type="checkbox" onchange="checkAll(),handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
                     <th>Title</th>
                     <th>Category</th>
                     <th>Date published</th>
@@ -65,7 +65,7 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><label><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
+                    <td><label class="checker"><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
                     <td>Test</td>
                     <td>TestTest</td>
                     <td>Test</td>
@@ -75,7 +75,7 @@
                     <td>TestTest</td>
                 </tr>
                 <tr>
-                    <td><label><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
+                    <td><label class="checker"><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
                     <td>Test</td>
                     <td>TestTest</td>
                     <td>Test</td>
@@ -85,7 +85,7 @@
                     <td>TestTest</td>
                 </tr>
                 <tr>
-                    <td><label><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
+                    <td><label class="checker"><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
                     <td>Test</td>
                     <td>TestTest</td>
                     <td>Test</td>
@@ -104,7 +104,7 @@
         <table class="dash-table" id="dashboard-subscribers" style="display: none;">
             <thead>
                 <tr>
-                    <td><label><input type="checkbox" onchange="checkAll(),handleBoxCheck()"/><i class="fa fa-check" aria-hidden="true"></i></label></td>
+                    <td><label class="checker"><input type="checkbox" onchange="checkAll(),handleBoxCheck()"/><i class="fa fa-check" aria-hidden="true"></i></label></td>
                     <th>EMail</th>
                     <th>Firstname</th>
                     <th>Lastname</th>
@@ -113,21 +113,21 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><label><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
+                    <td><label class="checker"><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
                     <td>Subscriber</td>
                     <td>Subscriber</td>
                     <td>Subscriber</td>
                     <td>Subscriber</td>
                 </tr>
                 <tr>
-                    <td><label><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
+                    <td><label class="checker"><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
                     <td>Subscriber</td>
                     <td>SubscriberSubscriber</td>
                     <td>Subscriber</td>
                     <td>SubscriberSubscriber</td>
                 </tr>
                 <tr>
-                    <td><label><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
+                    <td><label class="checker"><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
                     <td>Subscriber</td>
                     <td>SubscriberSubscriber</td>
                     <td>Subscriber</td>
@@ -141,21 +141,8 @@
             </tfoot>
         </table>
     </div>
+<script type="text/javascript" src="scripts/closest-polyfill.js"></script>
 <script type="text/javascript">
-    /* Closest polyfill */
-    if (window.Element && !Element.prototype.closest) {
-        Element.prototype.closest = 
-        function(s) {
-            var matches = (this.document || this.ownerDocument).querySelectorAll(s),
-                    i,
-                    el = this;
-            do {
-                i = matches.length;
-                while (--i >= 0 && matches.item(i) !== el) {};
-            } while ((i < 0) && (el = el.parentElement)); 
-                return el;
-        };
-    }
 
     function handleTabClick() {
         var target = event.currentTarget,
