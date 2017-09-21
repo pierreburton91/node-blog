@@ -30,7 +30,7 @@
     <link rel="stylesheet" href="styles/styles.css" type="text/css">
 </head>
 <body>
-	<div class="container">
+	<div class="container-flex">
         <div class="login-form">
             <div class="login-header">
                 <h1>Hey stranger !</h1>
@@ -73,7 +73,7 @@
             if (this.readyState == 4) {
                 if (this.status == 200) {
                     var response = this.responseText;
-                    console.log(response);
+                    console.log(response == "true");
                 }
                 else {
                     console.log(this.status, this.statusText, this.getAllResponseHeaders());

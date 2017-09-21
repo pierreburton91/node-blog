@@ -6,8 +6,9 @@ const upload = multer();
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-const app = express();
 const imgurID = "c6a8ce7a6f9c704";
+const app = express();
+
 
 /* Middlewares */
 app.set('view engine', 'ejs');
@@ -32,7 +33,7 @@ app.get('/write-post', function (req, res) {
 app.post('/api/check-credentials', function(req, res) {
 	var credentials = req.body;
 
-	res.send(credentials);
+	res.send(true);
 });
 
 app.post('/api/upload-image', upload.single('file'), function(req, res) {

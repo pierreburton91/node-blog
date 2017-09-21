@@ -42,6 +42,15 @@ a
 	background-color $white
 	padding 12px
 	overflow hidden
+
+.container-flex
+	display flex
+	flex-flow column nowrap
+	justify-content center
+	align-items center
+	width 100%
+	height 100vh
+	overflow hidden
 	
 .button
 	background-color $dash-accent
@@ -182,7 +191,6 @@ a
 #=======================================*/
 .login-form
 	padding 16px
-	margin 64px auto 0 auto
 	width 100%
 	max-width 360px
 	overflow hidden
@@ -191,23 +199,23 @@ a
 		float left
 		margin-top 3px
 		margin-right 8px
-.login-header
-	float left
-	width 100%
-	margin-bottom 16px
-	& h1
-		position relative
-		color $dark
-		font-weight 400
-		letter-spacing 1px
-		font-size 2em
-		line-height 40px
-		margin 0
-	& h2
-		margin 0.5em 0 1em 0
-		font-size 1rem
-		font-weight 400
-		color $medium-dark
+	& .login-header
+		float left
+		width 100%
+		margin-bottom 16px
+		& h1
+			position relative
+			color $dark
+			font-weight 400
+			letter-spacing 1px
+			font-size 2em
+			line-height 40px
+			margin 0
+		& h2
+			margin 0.5em 0 1em 0
+			font-size 1rem
+			font-weight 400
+			color $medium-dark
 
 /*======================================= 
 #										#
