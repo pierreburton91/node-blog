@@ -37,13 +37,13 @@
                 <h2>Please log in so we know who you are.</h2>
             </div>
             <label class="labeled">
-                <input type="text" name="username" class="inputs" id="user" required/>
+                <input type="text" name="Username" class="inputs" id="user" required/>
                 <span class="float-label">Username</span>
                 <div class="bottom-line"></div>
                 <div class="bottom-line-active"></div>
             </label>
             <label class="labeled">
-                <input type="password" name="password" class="inputs" id="password" required/>
+                <input type="password" name="Password" class="inputs" id="password" required/>
                 <span class="float-label">Password</span>
                 <div class="bottom-line"></div>
                 <div class="bottom-line-active"></div>
@@ -60,54 +60,53 @@
             </div>
         </div>   
     </div>
+<script type="text/javascript" src="scripts/utilities.js"></script>
 <script type="text/javascript">
     function login() {
-        var user = document.querySelector("#user").value,
-            password = document.querySelector("#password").value,
+        var user = document.querySelector("#user"),
+            password = document.querySelector("#password"),
             toSave = document.querySelector("#save").checked,
-            data = {"username": user, "password": password, "toSave": toSave};
+            data = {"username": user.value, "password": password.value, "toSave": toSave};
 
-        var xhr = new XMLHttpRequest();
-
-        xhr.onreadystatechange = function() {
-            if (this.readyState == 4) {
-                if (this.status == 200) {
-                    var response = this.responseText;
-                    console.log(response == "true");
-                }
-                else {
-                    console.log(this.status, this.statusText, this.getAllResponseHeaders());
+        if (user.value == "" || password.value == "") {
+            if (user.value == "") {
+                user.focus();
+            }
+            if (password.value == "") {
+                if (user.value != "") {
+                    password.focus();
                 }
             }
+
+            var popUpInfos = {"type": "error", "form": "login", "reason": "empty"};
+            displayPop(popUpInfos);
         }
-        xhr.open("POST", "/api/check-credentials", true);
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.send(JSON.stringify(data));
-    }
+        else {
+            var xhr = new XMLHttpRequest();
 
-    function displayNotification() {
-        // Create the HTML string
-        var element = '<div class="notification"><div class="notification-content"></div><div class="notification-close"><i class="fa fa-close"></i></div></div>',
-            body = document.querySelector('body');
-        // append HTML string to body
-        body.insertAdjacentHTML('beforeend', element);
-
-        var note = document.querySelector(".notification"), // your notification-up element
-            closeButton = document.querySelector(".notification-close"), // your close button
-            noteContent = document.querySelector(".notification-content"), // your content text for the notification-up
-            toMove = noteWidth + 20, // defines the total amount of pixels to move through "close" button
-            contentText = "The super content of the dead for your notification-up !"; // content text
-
-        // your text to display
-        noteContent.innerHTML = contentText;
-
-        // click event on close button
-        closeButton.addEventListener("click", function() {
+            xhr.onreadystatechange = function() {
+                if (this.readyState == 4) {
+                    if (this.status == 200) {
+                        var response = this.responseText;
+                        if(response == "true") {
+                            window.location.href = "/";
+                        }
+                        else {
+                            var popUpInfos = {"type": "error", "form": "login", "reason": "wrong"};
+                            displayPop(popUpInfos);
+                        }
+                    }
+                    else {
+                        console.log(this.status, this.statusText, this.getAllResponseHeaders());
+                    }
+                }
+            }
+            xhr.open("POST", "/api/check-credentials", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.send(JSON.stringify(data));
+        }
         
-            // remove the notification-up from the DOM
-            body.removeChild(note);
-        });
-    };
+    }
 </script>
 <script src="https://use.fontawesome.com/973262919d.js"></script>
 </body>
