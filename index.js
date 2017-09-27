@@ -19,7 +19,7 @@ app.use(bodyParser.json()); // for parsing application/json
 
 /* Routes */
 app.get('/', function (req, res) {
-	res.render('dashboard', { title: 'Hey', message: 'Hello there!', link: 'Go to test', link2: 'test'});
+	res.render('dashboard', {articles: []});
 });
 
 app.get('/login', function (req, res) {
@@ -59,5 +59,5 @@ app.post('/api/upload-image', upload.single('file'), function(req, res) {
 
 /* 3, 2, 1, Launch ! */
 app.listen(process.env.PORT || 3000, function() {
-	console.log('App is up and running on 3000!');
+	console.log('App is up and running!');
 })
