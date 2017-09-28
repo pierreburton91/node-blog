@@ -3,7 +3,7 @@ Custom CMS based on a NodeJS backend.
 
 
 ### Install and run dev environment
-```Batchfile
+```
 git clone https://github.com/pierreburton91/node-blog.git
 
 cd node-blog
