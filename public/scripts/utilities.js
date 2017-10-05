@@ -75,11 +75,14 @@ function displayPop(content) {
                 contentText = "Invalid Username and Password combination !";
                 break;
             default:
-                contentText = "Something went wrong...";
+                contentText = content.reason;
         }
     }
     else if (content.form == "register") {
         contentText = "The super content of the dead for your pop-up !"; 
+    }
+    else if (content.form == "image-upload") {
+        contentText = content.reason;
     }
 
     // your text to display
@@ -100,5 +103,300 @@ function displayPop(content) {
         setTimeout(function() {
             body.removeChild(popUpContainer);
         }, 300);
+    });
+}
+
+// File reader for image pre-render
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        
+        reader.onload = function (e) {
+            uploadPreview.setAttribute('src', e.target.result);
+        }
+        
+        reader.readAsDataURL(input.files[0]);
+    }
+    else if (input.dataTransfer && input.dataTransfer.files[0]) {
+        var reader = new FileReader();
+        
+        reader.onload = function (e) {
+            uploadPreview.setAttribute('src', e.target.result);
+        }
+        
+        reader.readAsDataURL(input.dataTransfer.files[0]);
+    }
+    else {
+        uploadPreview.setAttribute('src', input);
+    }
+}
+
+// Upload image handler
+function uploadImage() {
+    var htmlString = '<div class="upload"><div class="upload-overlay"></div><div class="upload-modal"><div id="upload-form"><label class="dragndrop"><input type="file" name="upload-file" accept="image/*"><i class="fa fa-picture-o" aria-hidden="true"></i><p>Drag and drop or click here<br><span>to upload your image</span></p></label><p>or</p><label class="labeled"><input type="text" name="file-link" class="inputs" placeholder="http://example.com/image.png" required/><span class="float-label">Provide a link</span><div class="bottom-line"></div><div class="bottom-line-active"></div></label><span>Accepted files are images .jpeg, .png or .gif, max 2Mo.</span></div><div class="upload-preview"><div class="image-preview"><img id="previewed" src="" /><span class="preview-error"></span></div><a href="#" id="cancel-upload">Cancel and add another image</a></div><div class="button-f-right"><button id="upload-close" class="button borderless">Close</button><button id="upload-confirm" class="button" disabled="true">Add picture</button></div></div></div>',
+        uploadView = document.querySelector('.upload'),
+        uploadForm = document.querySelector('#upload-form'),
+        uploadInput = document.querySelector('input[name="upload-file"]'),
+        dropZone = document.querySelector('.dragndrop'),
+        fileLink = document.querySelector('input[name="file-link"'),
+        uploadPreviewContainer = document.querySelector('.upload-preview'),
+        uploadPreview = document.querySelector('#previewed'),
+        imagePreviewContainer = document.querySelector('.image-preview'),
+        previewError = document.querySelector('.preview-error'),
+        cancelPreviewButton = document.querySelector('#cancel-upload'),
+        cancelUploadButton = document.querySelector('#upload-close'),
+        uploadButton = document.querySelector('#upload-confirm'),
+        acceptedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
+    
+    uploadView.style.display = "block";
+
+    var promise = new Promise(function(resolve, reject) {
+
+        function handleUpload(event) {
+            uploadInput.removeEventListener('change', handleUpload);
+            dropZone.removeEventListener('drop', handleUpload);
+            fileLink.removeEventListener('keyup', handleUploadDebounced);
+            cancelUploadButton.removeEventListener('click', closeUploadView);
+            resolve(event);
+        }
+        function closeUploadView() {
+            uploadInput.removeEventListener('change', handleUpload);
+            dropZone.removeEventListener('drop', handleUpload);
+            fileLink.removeEventListener('keyup', handleUploadDebounced);
+            cancelUploadButton.removeEventListener('click', closeUploadView);
+            reject()
+        }
+        uploadInput.addEventListener('change', handleUpload);
+        dropZone.addEventListener('drop', handleUpload);
+        var handleUploadDebounced = debounce(handleUpload, 2000);
+        fileLink.addEventListener('keyup', handleUploadDebounced);
+        cancelUploadButton.addEventListener('click', closeUploadView);
+    });
+
+    promise.then(function(event) {
+        if (event.type == "change") {
+            var file = uploadInput.files[0];
+
+            uploadForm.style.display = "none";
+            uploadPreviewContainer.style.display = "block";
+
+            if (acceptedTypes.indexOf(file.type) != -1 && file.size <= 2097152) {
+                uploadButton.disabled = false;
+                readURL(uploadInput);
+            }
+            else if (acceptedTypes.indexOf(file.type) == -1) {
+                var errorMessage = "The file you are trying to import is not a valid image file.";
+
+                previewError.innerHTML = errorMessage;
+                previewError.style.display = "block";
+            }
+            else if (file.size > 2097152) {
+                var errorMessage = "The file you are trying to import weights more than 2Mo.";
+
+                previewError.innerHTML = errorMessage;
+                previewError.style.display = "block";
+            }
+
+            return new Promise(function(resolve, reject) {
+                function confirmUpload() {
+                    uploadButton.removeEventListener('click', confirmUpload);
+                    cancelPreviewButton.removeEventListener('click', cancelAndChange);
+                    cancelUploadButton.removeEventListener('click', closeUploadView);
+
+                    var formData = new FormData(),
+                        xhr = new XMLHttpRequest();
+
+                    formData.append('file', file);
+                    xhr.onreadystatechange = function() {
+                        if (this.readyState == 4) {
+                            if (this.status == 200) {
+                                var response = JSON.parse(this.responseText),
+                                    imageLink = response.data.link;
+                                resolve(imageLink);
+                            }
+                            else {
+                                console.log(this.status, this.statusText, this.getAllResponseHeaders());
+                                var popUpInfos = {"type": "error", "form": "image-upload", "reason": this.status + " - " + this.statusText };
+                                displayPop(popUpInfos);
+                                reject(false);
+                            }
+                        }
+                    }
+                    xhr.open("POST", "/api/upload-image", true);
+                    xhr.send(formData);
+                    
+                }
+                function cancelAndChange() {
+                    cancelPreviewButton.removeEventListener('click', cancelAndChange);
+                    uploadButton.removeEventListener('click', confirmUpload);
+                    cancelUploadButton.removeEventListener('click', closeUploadView);
+                    reject(true);
+                }
+                function closeUploadView() {
+                    cancelPreviewButton.removeEventListener('click', cancelAndChange);
+                    uploadButton.removeEventListener('click', confirmUpload);
+                    cancelUploadButton.removeEventListener('click', closeUploadView);
+                    reject(false)
+                }
+
+                uploadButton.addEventListener('click', confirmUpload);
+                cancelPreviewButton.addEventListener('click', cancelAndChange);
+                cancelUploadButton.addEventListener('click', closeUploadView);
+            });
+            
+        }
+        else if (event.type == "drop") {
+            event.preventDefault();
+            event.stopPropagation();
+
+            var file = event.dataTransfer.files[0];
+            
+            dropZone.classList.remove("dragover");
+            uploadForm.style.display = "none";
+            uploadPreviewContainer.style.display = "block";
+
+            if (acceptedTypes.indexOf(file.type) != -1 && file.size <= 2097152) {
+                uploadButton.disabled = false;
+                readURL(event);
+            }
+            else if (acceptedTypes.indexOf(file.type) == -1) {
+                var errorMessage = "The file you are trying to import is not a valid image file.";
+
+                previewError.innerHTML = errorMessage;
+                previewError.style.display = "block";
+            }
+            else if (file.size > 2097152) {
+                var errorMessage = "The file you are trying to import weights more than 2Mo.";
+
+                previewError.innerHTML = errorMessage;
+                previewError.style.display = "block";
+            }
+
+            return new Promise(function(resolve, reject) {
+                function confirmUpload() {
+                    uploadButton.removeEventListener('click', confirmUpload);
+                    cancelPreviewButton.removeEventListener('click', cancelAndChange);
+                    cancelUploadButton.removeEventListener('click', closeUploadView);
+                    
+                    var formData = new FormData(),
+                        xhr = new XMLHttpRequest();
+
+                    formData.append('file', file);
+                    xhr.onreadystatechange = function() {
+                        if (this.readyState == 4) {
+                            if (this.status == 200) {
+                                var response = JSON.parse(this.responseText),
+                                    imageLink = response.data.link;
+                                resolve(imageLink);
+                            }
+                            else {
+                                console.log(this.status, this.statusText, this.getAllResponseHeaders());
+                                var popUpInfos = {"type": "error", "form": "image-upload", "reason": this.status + " - " + this.statusText };
+                                displayPop(popUpInfos);
+                                reject(false);
+                            }
+                        }
+                    }
+                    xhr.open("POST", "/api/upload-image", true);
+                    xhr.send(formData);
+                }
+                function cancelAndChange() {
+                    cancelPreviewButton.removeEventListener('click', cancelAndChange);
+                    uploadButton.removeEventListener('click', confirmUpload);
+                    cancelUploadButton.removeEventListener('click', closeUploadView);
+                    reject(true);
+                }
+                function closeUploadView() {
+                    cancelPreviewButton.removeEventListener('click', cancelAndChange);
+                    uploadButton.removeEventListener('click', confirmUpload);
+                    cancelUploadButton.removeEventListener('click', closeUploadView);
+                    reject(false)
+                }
+
+                uploadButton.addEventListener('click', confirmUpload);
+                cancelPreviewButton.addEventListener('click', cancelAndChange);
+                cancelUploadButton.addEventListener('click', closeUploadView);
+            });
+        }
+        else if (event.type == "keyup") {
+            var link = event.target.value;
+
+            uploadForm.style.display = "none";
+            uploadPreviewContainer.style.display = "block";
+            
+            if (link.match(/\.(jpeg|jpg|gif|png)$/) != null) {
+                uploadButton.disabled = false;
+                readURL(link);
+            }
+            else if (link.match(/\.(jpeg|jpg|gif|png)$/) == null) {
+                var errorMessage = "The link you provided is not pointing to an image or couldn't be verified.";
+
+                previewError.innerHTML = errorMessage;
+                previewError.style.display = "block";
+            }
+
+            return new Promise(function(resolve, reject) {
+                function confirmUpload() {
+                    uploadButton.removeEventListener('click', confirmUpload);
+                    cancelPreviewButton.removeEventListener('click', cancelAndChange);
+                    cancelUploadButton.removeEventListener('click', closeUploadView);
+                    resolve(link);
+                }
+                function cancelAndChange() {
+                    cancelPreviewButton.removeEventListener('click', cancelAndChange);
+                    uploadButton.removeEventListener('click', confirmUpload);
+                    cancelUploadButton.removeEventListener('click', closeUploadView);
+                    reject(true);
+                }
+                function closeUploadView() {
+                    cancelPreviewButton.removeEventListener('click', cancelAndChange);
+                    uploadButton.removeEventListener('click', confirmUpload);
+                    cancelUploadButton.removeEventListener('click', closeUploadView);
+                    reject(false)
+                }
+
+                uploadButton.addEventListener('click', confirmUpload);
+                cancelPreviewButton.addEventListener('click', cancelAndChange);
+                cancelUploadButton.addEventListener('click', closeUploadView);
+            });
+        }
+    }, function(err) {
+        uploadView.style.display = "none";
+        uploadButton.disabled = true;
+        fileLink.value = "";
+        uploadInput.value = "";
+        uploadForm.style.display = "block";
+        uploadPreviewContainer.style.display = "none";
+        
+        var popUpInfos = {"type": "error", "form": "image-upload", "reason": "Something went wrong..." };
+        displayPop(popUpInfos);
+
+        throw err;
+        
+    }).then(function(result){
+        uploadView.style.display = "none";
+        uploadButton.disabled = true;
+        fileLink.value = "";
+        uploadInput.value = "";
+        uploadForm.style.display = "block";
+        uploadPreviewContainer.style.display = "none";
+
+        //All this mess for this !
+        return result;
+
+    }, function(err) {
+        uploadView.style.display = "none";
+        uploadForm.style.display = "block";
+        uploadPreviewContainer.style.display = "none";
+        previewError.style.display = "none";
+        fileLink.value = "";
+        uploadInput.value = "";
+        uploadButton.disabled = true;
+        if(err) {
+            uploadImage();
+        }
+        else {
+            uploadView.style.display = "none";
+        }
     });
 }

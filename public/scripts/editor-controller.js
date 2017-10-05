@@ -22,7 +22,7 @@ var uploadView = document.querySelector('.upload'),
     insertTexts: {link: ["[text to display](http://...)",""]},
     toolbar: ["bold", "italic", "heading-2", "heading-3", "|", "quote", "unordered-list", "ordered-list", "|", "link", {
         name: "Image",
-        action: function uploadImage(editor) {
+        action: function uploadImageInSimplemde(editor) {
 
             uploadView.style.display = "block";
 
@@ -261,7 +261,7 @@ var uploadView = document.querySelector('.upload'),
                 uploadInput.value = "";
                 uploadButton.disabled = true;
                 if(err) {
-                    uploadImage();
+                    uploadImageInSimplemde();
                 }
                 else {
                     uploadView.style.display = "none";
@@ -287,29 +287,7 @@ dropZone.addEventListener("dragleave", function( event ) {
     dropZone.classList.remove("dragover");
 }, false);
 
-function readURL(input) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        
-        reader.onload = function (e) {
-            uploadPreview.setAttribute('src', e.target.result);
-        }
-        
-        reader.readAsDataURL(input.files[0]);
-    }
-    else if (input.dataTransfer && input.dataTransfer.files[0]) {
-        var reader = new FileReader();
-        
-        reader.onload = function (e) {
-            uploadPreview.setAttribute('src', e.target.result);
-        }
-        
-        reader.readAsDataURL(input.dataTransfer.files[0]);
-    }
-    else {
-        uploadPreview.setAttribute('src', input);
-    }
-}
+
 
 /* Add tags and resize the input when hitting the coma
 prevents writting new tags if 5 tags are already there
@@ -382,7 +360,7 @@ tagsContainer.addEventListener('click', function(e){
 });
 
 function goBack() {
-    var title = document.querySelector('input[name="post-title"'),
+    var title = document.querySelector('input[name="post-title"]'),
         articleBody = document.querySelector('textarea');
 
     if (title.value != "" || articleBody.value != "") {

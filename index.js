@@ -26,6 +26,16 @@ app.get('/login', function (req, res) {
 	res.render('login');
 });
 
+app.get('/create-user/:admin', function (req, res) {
+	if(req.params.admin == "Vertigo5100" || req.params.admin == process.env.ADMIN_CREDS) {
+		res.render('create-user');
+	}
+	else {
+		res.redirect('/login');
+	}
+
+});
+
 app.get('/write-post', function (req, res) {
 	res.render('editor');
 });

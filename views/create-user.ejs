@@ -2,17 +2,17 @@
 <html>
 <head>
 	<meta charset="utf-8">
-    <title>New Blogpost</title>
+    <title>Create new user</title>
     <meta name="description" content="">
     <meta name="author" content="Pierre Burton">
     <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, user-scalable=no, maximum-scale=1.0, width=device-width">
     <meta name="format-detection" content="telephone=no">
     <meta name="theme-color" content="#">
     <meta name="msapplication-navbutton-color" content="#">
-    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-    <link rel="icon" type="image/png" href="images/favicon.png">
-    <meta name="msapplication-square150x150logo" content="images/tile.png">
-    <meta name="msapplication-wide310x150logo" content="images/tile-wide.png">
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="../images/favicon.png">
+    <meta name="msapplication-square150x150logo" content="../images/tile.png">
+    <meta name="msapplication-wide310x150logo" content="../images/tile-wide.png">
     <!-- Twitter card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@">
@@ -26,55 +26,17 @@
     <meta property="og:url" content="">
     <meta property="og:image" content="">
     <meta property="og:description" content="">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css" />
-    <link rel="stylesheet" href="styles/styles.css" type="text/css">
+    <link rel="stylesheet" href="../styles/styles.css" type="text/css">
 </head>
 <body>
 <div class="container">
     <div class="editor-header">
-        <h1><i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;Write a new blog post</h1>
+        <h1><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;User profile</h1>
         <div class="button-f-right">
             <button onclick="goBack()" class="button cancel">Cancel</button>
-            <button onclick="submit()" id="publish" class="button submit">Publish</button>
+            <button onclick="submit()" id="publish" class="button submit">Save</button>
         </div>
     </div>
-    <label class="labeled">
-        <input type="text" class="inputs heading" name="post-title" placeholder="Your title" required/>
-    </label>
-    <label class="labeled">
-        <textarea class="inputs" placeholder="Your story..."></textarea>
-    </label>
-    <h3>About your post</h3>
-    <label class="labeled">
-        <input type="text" name="about" class="inputs" required/>
-        <span class="float-label">What is your post about ?</span>
-        <div class="bottom-line"></div>
-        <div class="bottom-line-active"></div>
-    </label>
-    <label class="labeled">
-        <input type="text" name="about-link" class="inputs" required/>
-        <span class="float-label">Can you provide a link ?</span>
-        <div class="bottom-line"></div>
-        <div class="bottom-line-active"></div>
-    </label>
-    <label class="labeled">
-        <select class="inputs" required>
-            <option selected value></option>
-            <option>Value1</option>
-            <option>Value2</option>
-            <option>Value3</option>
-        </select>
-        <span class="float-label">Category</span>
-        <div class="bottom-line"></div>
-        <div class="bottom-line-active"></div>
-    </label>
-    <label class="labeled">
-        <input type="text" name="tags" class="inputs" required/>
-        <span class="float-label">Tags</span>
-        <div class="bottom-line"></div>
-        <div class="bottom-line-active"></div>
-        <span class="hint">Separate tags with a coma. Up to 5 tags.</span>
-    </label>
 </div>
 <div class="upload">
     <div class="upload-overlay"></div>
@@ -108,10 +70,9 @@
     </div>
 </div>
 <script src="https://use.fontawesome.com/973262919d.js"></script>
-<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
-<script type="text/javascript" src="scripts/closest-polyfill.js"></script>
-<script type="text/javascript" src="scripts/promise-polyfill.min.js"></script>
-<script type="text/javascript" src="scripts/utilities.js"></script>
-<script type="text/javascript" src="scripts/editor-controller.js"></script>
+<script type="text/javascript" src="../scripts/closest-polyfill.js"></script>
+<script type="text/javascript" src="../scripts/promise-polyfill.min.js"></script>
+<script type="text/javascript" src="../scripts/utilities.js"></script>
+<script type="text/javascript"></script>
 </body>
 </html>
