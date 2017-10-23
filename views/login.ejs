@@ -1,33 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<meta charset="utf-8">
-    <title>Log In</title>
-    <meta name="description" content="">
-    <meta name="author" content="Pierre Burton">
-    <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, user-scalable=no, maximum-scale=1.0, width=device-width">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="theme-color" content="#">
-    <meta name="msapplication-navbutton-color" content="#">
-    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-    <link rel="icon" type="image/png" href="images/favicon.png">
-    <meta name="msapplication-square150x150logo" content="images/tile.png">
-    <meta name="msapplication-wide310x150logo" content="images/tile-wide.png">
-    <!-- Twitter card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@">
-    <meta name="twitter:creator" content="@">
-    <meta name="twitter:title" content="">
-    <meta name="twitter:description" content="">
-    <meta name="twitter:image" content="">
-    <!-- Open graphs -->
-    <meta property="og:title" content="">
-    <meta property="og:type" content="article">
-    <meta property="og:url" content="">
-    <meta property="og:image" content="">
-    <meta property="og:description" content="">
-    <link rel="stylesheet" href="styles/styles.css" type="text/css">
-</head>
+<%- include('components/admin-head', {guard: false, simplemde: false, title: "Log in"}); %>
 <body>
 	<div class="container-flex">
         <div class="login-form">
@@ -35,79 +8,16 @@
                 <h1>Hey stranger !</h1>
                 <h2>Please log in so we know who you are.</h2>
             </div>
-            <label class="labeled">
-                <input type="text" name="Username" class="inputs" id="user" required/>
-                <span class="float-label">Username</span>
-                <div class="bottom-line"></div>
-                <div class="bottom-line-active"></div>
-            </label>
-            <label class="labeled">
-                <input type="password" name="Password" class="inputs" id="password" required/>
-                <span class="float-label">Password</span>
-                <div class="bottom-line"></div>
-                <div class="bottom-line-active"></div>
-            </label>
-            <label class="labeled">
-                <div class="checker">
-                    <input type="checkbox" name="save" class="inputs" id="save" required/>
-                    <i class="fa fa-check" aria-hidden="true"></i>
-                </div>
-                <span>Remember me</span>
-            </label>
+            <%- include('components/input', {type: "text", id: "user", name: "username", label: "Username", value: "", hint: ""}); %>
+            <%- include('components/input', {type: "text", id: "password", name: "password", label: "Password", value: "", hint: ""}); %>
+            <%- include('components/input', {type: "checkbox", id: "save", name: "save", label: "Remember me", value: "", hint: ""}); %>
             <div class="button-f-right">
                 <button class="button" onclick="login()">Log in</button>
             </div>
         </div>   
     </div>
 <script type="text/javascript" src="scripts/utilities.js"></script>
-<script type="text/javascript">
-    function login() {
-        var user = document.querySelector("#user"),
-            password = document.querySelector("#password"),
-            toSave = document.querySelector("#save").checked,
-            data = {"username": user.value, "password": password.value, "toSave": toSave};
-
-        if (user.value == "" || password.value == "") {
-            if (user.value == "") {
-                user.focus();
-            }
-            if (password.value == "") {
-                if (user.value != "") {
-                    password.focus();
-                }
-            }
-
-            var popUpInfos = {"type": "error", "form": "login", "reason": "empty"};
-            displayPop(popUpInfos);
-        }
-        else {
-            var xhr = new XMLHttpRequest();
-
-            xhr.onreadystatechange = function() {
-                if (this.readyState == 4) {
-                    if (this.status == 200) {
-                        var response = this.responseText;
-                        if(response == "true") {
-                            window.location.href = "/";
-                        }
-                        else {
-                            var popUpInfos = {"type": "error", "form": "login", "reason": "wrong"};
-                            displayPop(popUpInfos);
-                        }
-                    }
-                    else {
-                        console.log(this.status, this.statusText, this.getAllResponseHeaders());
-                        var popUpInfos = {"type": "error", "form": "login", "reason": this.status + " - " + this.statusText };
-                            displayPop(popUpInfos);
-                    }
-                }
-            }
-            xhr.open("POST", "/api/check-credentials", true);
-            xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.send(JSON.stringify(data));
-        }
-    }
-</script>
+<script type="text/javascript" src="scripts/login-controller.js"></script>
 <script src="https://use.fontawesome.com/973262919d.js"></script>
 </body>
 </html>

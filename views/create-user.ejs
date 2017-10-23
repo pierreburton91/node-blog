@@ -1,74 +1,17 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<meta charset="utf-8">
-    <title>Create new user</title>
-    <meta name="description" content="">
-    <meta name="author" content="Pierre Burton">
-    <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, user-scalable=no, maximum-scale=1.0, width=device-width">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="theme-color" content="#">
-    <meta name="msapplication-navbutton-color" content="#">
-    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png">
-    <link rel="icon" type="image/png" href="../images/favicon.png">
-    <meta name="msapplication-square150x150logo" content="../images/tile.png">
-    <meta name="msapplication-wide310x150logo" content="../images/tile-wide.png">
-    <!-- Twitter card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@">
-    <meta name="twitter:creator" content="@">
-    <meta name="twitter:title" content="">
-    <meta name="twitter:description" content="">
-    <meta name="twitter:image" content="">
-    <!-- Open graphs -->
-    <meta property="og:title" content="">
-    <meta property="og:type" content="article">
-    <meta property="og:url" content="">
-    <meta property="og:image" content="">
-    <meta property="og:description" content="">
-    <link rel="stylesheet" href="../styles/styles.css" type="text/css">
-</head>
+<%- include('components/admin-head', {guard: false, simplemde: false, title: "User registration"}); %>
 <body>
 <div class="container">
     <div class="editor-header">
         <h1><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;User profile</h1>
         <div class="button-f-right">
             <button onclick="goBack()" class="button cancel">Cancel</button>
-            <button onclick="submit()" id="publish" class="button submit">Save</button>
+            <button onclick="submit()" class="button submit">Save</button>
         </div>
     </div>
 </div>
-<div class="upload">
-    <div class="upload-overlay"></div>
-    <div class="upload-modal">
-        <div id="upload-form">
-            <label class="dragndrop">
-                <input type="file" name="upload-file" accept="image/*">
-                <i class="fa fa-picture-o" aria-hidden="true"></i>
-                <p>Drag and drop or click here<br><span>to upload your image</span></p>
-            </label>
-            <p>or</p>
-            <label class="labeled">
-                <input type="text" name="file-link" class="inputs" placeholder="http://example.com/image.png" required/>
-                <span class="float-label">Provide a link</span>
-                <div class="bottom-line"></div>
-                <div class="bottom-line-active"></div>
-            </label>
-            <span>Accepted files are images .jpeg, .png or .gif, max 2Mo.</span>
-        </div>
-        <div class="upload-preview">
-            <div class="image-preview">
-                <img id="previewed" src="" />
-                <span class="preview-error"></span>
-            </div>
-            <a href="#" id="cancel-upload">Cancel and add another image</a>
-        </div>
-        <div class="button-f-right">
-            <button id="upload-close" class="button borderless">Close</button>
-            <button id="upload-confirm" class="button" disabled="true">Add picture</button>
-        </div>
-    </div>
-</div>
+<%- include('components/upload-image'); %>
 <script src="https://use.fontawesome.com/973262919d.js"></script>
 <script type="text/javascript" src="../scripts/closest-polyfill.js"></script>
 <script type="text/javascript" src="../scripts/promise-polyfill.min.js"></script>

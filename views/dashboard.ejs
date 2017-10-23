@@ -1,34 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<meta charset="utf-8">
-    <title>Your Blog's Dashboard</title>
-    <meta name="description" content="">
-    <meta name="author" content="Pierre Burton">
-    <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, user-scalable=no, maximum-scale=1.0, width=device-width">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="theme-color" content="#">
-    <meta name="msapplication-navbutton-color" content="#">
-    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-    <link rel="icon" type="image/png" href="images/favicon.png">
-    <meta name="msapplication-square150x150logo" content="images/tile.png">
-    <meta name="msapplication-wide310x150logo" content="images/tile-wide.png">
-    <!-- Twitter card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@">
-    <meta name="twitter:creator" content="@">
-    <meta name="twitter:title" content="">
-    <meta name="twitter:description" content="">
-    <meta name="twitter:image" content="">
-    <!-- Open graphs -->
-    <meta property="og:title" content="">
-    <meta property="og:type" content="article">
-    <meta property="og:url" content="">
-    <meta property="og:image" content="">
-    <meta property="og:description" content="">
-    <!-- <script type="text/javascript" src="scripts/guard-service.js"></script> -->
-    <link rel="stylesheet" href="styles/styles.css" type="text/css">
-</head>
+<%- include('components/admin-head', {guard: false /* to be true */, simplemde: false, title: "Your blog's dashboard"}); %>
 <body>
 	<div class="dash__hero">
         <div class="hero-profile-pic"></div>
@@ -102,48 +74,48 @@
             </tfoot>
         </table>
         <% if (articles.length > 0) {%>
-        <table class="dash-table" id="dashboard-subscribers" style="display: none;">
-            <thead>
-                <tr>
-                    <td><label class="checker"><input type="checkbox" onchange="checkAll(),handleBoxCheck()"/><i class="fa fa-check" aria-hidden="true"></i></label></td>
-                    <th>EMail</th>
-                    <th>Firstname</th>
-                    <th>Lastname</th>
-                    <th>Date registred</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><label class="checker"><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
-                    <td>Subscriber</td>
-                    <td>Subscriber</td>
-                    <td>Subscriber</td>
-                    <td>Subscriber</td>
-                </tr>
-                <tr>
-                    <td><label class="checker"><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
-                    <td>Subscriber</td>
-                    <td>SubscriberSubscriber</td>
-                    <td>Subscriber</td>
-                    <td>SubscriberSubscriber</td>
-                </tr>
-                <tr>
-                    <td><label class="checker"><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
-                    <td>Subscriber</td>
-                    <td>SubscriberSubscriber</td>
-                    <td>Subscriber</td>
-                    <td>SubscriberSubscriber</td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="5">Subscribers</td>
-                </tr>
-            </tfoot>
-        </table>
+            <table class="dash-table" id="dashboard-subscribers" style="display: none;">
+                <thead>
+                    <tr>
+                        <td><label class="checker"><input type="checkbox" onchange="checkAll(),handleBoxCheck()"/><i class="fa fa-check" aria-hidden="true"></i></label></td>
+                        <th>EMail</th>
+                        <th>Firstname</th>
+                        <th>Lastname</th>
+                        <th>Date registred</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><label class="checker"><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
+                        <td>Subscriber</td>
+                        <td>Subscriber</td>
+                        <td>Subscriber</td>
+                        <td>Subscriber</td>
+                    </tr>
+                    <tr>
+                        <td><label class="checker"><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
+                        <td>Subscriber</td>
+                        <td>SubscriberSubscriber</td>
+                        <td>Subscriber</td>
+                        <td>SubscriberSubscriber</td>
+                    </tr>
+                    <tr>
+                        <td><label class="checker"><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
+                        <td>Subscriber</td>
+                        <td>SubscriberSubscriber</td>
+                        <td>Subscriber</td>
+                        <td>SubscriberSubscriber</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="5">Subscribers</td>
+                    </tr>
+                </tfoot>
+            </table>
         <% }
         else {%>
-        <div id="dashboard-subscribers" style="display: none;">Nothing here</div>
+            <div id="dashboard-subscribers" style="display: none;">Nothing here</div>
         <% } %>
     </div>
 <script type="text/javascript" src="scripts/closest-polyfill.js"></script>

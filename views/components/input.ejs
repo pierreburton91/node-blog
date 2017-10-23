@@ -1,0 +1,35 @@
+<label class="labeled">
+	<% switch (type) {
+
+		case "text": %>
+    		<input type="<%= type %>" name="<%= name %>" class="inputs" id="<%= id %>" required/>
+    		<span class="float-label"><%= label %></span>
+		    <div class="bottom-line"></div>
+		    <div class="bottom-line-active"></div>
+    	<% break; 
+
+    	case "select": %>
+    		<select name="<%= name %>" class="inputs" id="<%= id %>" required>
+	            <option selected value></option>
+	            <% value.forEach(function(value){ %>
+	            	<option><%= value %></option>
+	            <% }); %>
+	        </select>
+	        <span class="float-label"><%= label %></span>
+	        <div class="bottom-line"></div>
+	        <div class="bottom-line-active"></div>
+    	<% break;
+
+    	case "checkbox": %>
+    		<div class="checker">
+                <input type="<%= type %>" name="<%= name %>" class="inputs" id="<%= id %>" required/>
+                <i class="fa fa-check" aria-hidden="true"></i>
+            </div>
+            <span><%= label %></span>
+    	<% break;
+    } %>
+
+    <% if(hint != "") { %>
+    	<span class="hint"><%= hint %></span>
+    <% } %>
+</label>

@@ -1,34 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<meta charset="utf-8">
-    <title>New Blogpost</title>
-    <meta name="description" content="">
-    <meta name="author" content="Pierre Burton">
-    <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, user-scalable=no, maximum-scale=1.0, width=device-width">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="theme-color" content="#">
-    <meta name="msapplication-navbutton-color" content="#">
-    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-    <link rel="icon" type="image/png" href="images/favicon.png">
-    <meta name="msapplication-square150x150logo" content="images/tile.png">
-    <meta name="msapplication-wide310x150logo" content="images/tile-wide.png">
-    <!-- Twitter card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@">
-    <meta name="twitter:creator" content="@">
-    <meta name="twitter:title" content="">
-    <meta name="twitter:description" content="">
-    <meta name="twitter:image" content="">
-    <!-- Open graphs -->
-    <meta property="og:title" content="">
-    <meta property="og:type" content="article">
-    <meta property="og:url" content="">
-    <meta property="og:image" content="">
-    <meta property="og:description" content="">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css" />
-    <link rel="stylesheet" href="styles/styles.css" type="text/css">
-</head>
+<%- include('components/admin-head', {guard: false, simplemde: true, title: "Write a new blogpost"}); %>
 <body>
 <div class="container">
     <div class="editor-header">
@@ -45,68 +17,12 @@
         <textarea class="inputs" placeholder="Your story..."></textarea>
     </label>
     <h3>About your post</h3>
-    <label class="labeled">
-        <input type="text" name="about" class="inputs" required/>
-        <span class="float-label">What is your post about ?</span>
-        <div class="bottom-line"></div>
-        <div class="bottom-line-active"></div>
-    </label>
-    <label class="labeled">
-        <input type="text" name="about-link" class="inputs" required/>
-        <span class="float-label">Can you provide a link ?</span>
-        <div class="bottom-line"></div>
-        <div class="bottom-line-active"></div>
-    </label>
-    <label class="labeled">
-        <select class="inputs" required>
-            <option selected value></option>
-            <option>Value1</option>
-            <option>Value2</option>
-            <option>Value3</option>
-        </select>
-        <span class="float-label">Category</span>
-        <div class="bottom-line"></div>
-        <div class="bottom-line-active"></div>
-    </label>
-    <label class="labeled">
-        <input type="text" name="tags" class="inputs" required/>
-        <span class="float-label">Tags</span>
-        <div class="bottom-line"></div>
-        <div class="bottom-line-active"></div>
-        <span class="hint">Separate tags with a coma. Up to 5 tags.</span>
-    </label>
+    <%- include('components/input', {type: "text", id: "about", name: "about", label: "What is your post about ?", value: "", hint: ""}); %>
+    <%- include('components/input', {type: "text", id: "about-link", name: "about-link", label: "Can you provide a link ?", value: "", hint: ""}); %>
+    <%- include('components/input', {type: "select", id: "category", name: "category", label: "Category", value: ["Cat1", "Cat2"], hint: ""}); %>
+    <%- include('components/input', {type: "text", id: "tags", name: "tags", label: "Tags", value: "", hint: "Separate tags with a coma. Up to 5 tags."}); %>
 </div>
-<div class="upload">
-    <div class="upload-overlay"></div>
-    <div class="upload-modal">
-        <div id="upload-form">
-            <label class="dragndrop">
-                <input type="file" name="upload-file" accept="image/*">
-                <i class="fa fa-picture-o" aria-hidden="true"></i>
-                <p>Drag and drop or click here<br><span>to upload your image</span></p>
-            </label>
-            <p>or</p>
-            <label class="labeled">
-                <input type="text" name="file-link" class="inputs" placeholder="http://example.com/image.png" required/>
-                <span class="float-label">Provide a link</span>
-                <div class="bottom-line"></div>
-                <div class="bottom-line-active"></div>
-            </label>
-            <span>Accepted files are images .jpeg, .png or .gif, max 2Mo.</span>
-        </div>
-        <div class="upload-preview">
-            <div class="image-preview">
-                <img id="previewed" src="" />
-                <span class="preview-error"></span>
-            </div>
-            <a href="#" id="cancel-upload">Cancel and add another image</a>
-        </div>
-        <div class="button-f-right">
-            <button id="upload-close" class="button borderless">Close</button>
-            <button id="upload-confirm" class="button" disabled="true">Add picture</button>
-        </div>
-    </div>
-</div>
+<%- include('components/upload-image'); %>
 <script src="https://use.fontawesome.com/973262919d.js"></script>
 <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 <script type="text/javascript" src="scripts/closest-polyfill.js"></script>
