@@ -16,7 +16,7 @@
     <label class="labeled">
         <textarea class="inputs" placeholder="Your story..."></textarea>
     </label>
-    <h3>About your post</h3>
+    <h3 class="heading-separator">About your post</h3>
     <%- include('components/input', {type: "text", id: "about", name: "about", label: "What is your post about ?", value: "", hint: ""}); %>
     <%- include('components/input', {type: "text", id: "about-link", name: "about-link", label: "Can you provide a link ?", value: "", hint: ""}); %>
     <%- include('components/input', {type: "select", id: "category", name: "category", label: "Category", value: ["Cat1", "Cat2"], hint: ""}); %>

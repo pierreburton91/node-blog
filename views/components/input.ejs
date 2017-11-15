@@ -1,7 +1,8 @@
 <label class="labeled">
 	<% switch (type) {
 
-		case "text": %>
+		case "text":
+        case "email": %>
     		<input type="<%= type %>" name="<%= name %>" class="inputs" id="<%= id %>" required/>
     		<span class="float-label"><%= label %></span>
 		    <div class="bottom-line"></div>
@@ -27,6 +28,13 @@
             </div>
             <span><%= label %></span>
     	<% break;
+
+        case "textarea": %>
+            <<%= type %> name="<%= name %>" class="inputs" id="<%= id %>" maxlength="140" oninput="setTextareaHeight(this);" required></<%= type %>>
+            <span class="float-label"><%= label %></span>
+            <div class="bottom-line"></div>
+            <div class="bottom-line-active"></div>
+        <% break;
     } %>
 
     <% if(hint != "") { %>

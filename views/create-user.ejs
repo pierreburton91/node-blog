@@ -10,6 +10,17 @@
             <button onclick="submit()" class="button submit">Save</button>
         </div>
     </div>
+    <div class="labeled input-picture">
+    	<input type="hidden" name="profile-pic" value="">
+    	<img src="https://robohash.org/newuser.jpg?size=140x140&set=set2" alt="Profile picture">
+    	<p>Click to upload a new image</p>
+    </div>
+    <h3>About you</h3>
+    <%- include('components/input', {type: "text", id: "username", name: "username", label: "Username", value: "", hint: ""}); %>
+    <%- include('components/input', {type: "text", id: "firstname", name: "firstname", label: "Firstname", value: "", hint: ""}); %>
+    <%- include('components/input', {type: "text", id: "lastname", name: "lastname", label: "Lastname", value: "", hint: ""}); %>
+    <%- include('components/input', {type: "email", id: "email", name: "email", label: "Email address", value: "", hint: ""}); %>
+    <%- include('components/input', {type: "textarea", id: "description", name: "description", label: "Your personnal description...", value: "", hint: "Max 140 characters"}); %>
 </div>
 <%- include('components/upload-image'); %>
 <script src="https://use.fontawesome.com/973262919d.js"></script>

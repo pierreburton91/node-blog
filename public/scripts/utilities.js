@@ -400,3 +400,14 @@ function uploadImage() {
         }
     });
 }
+
+// Sets dynamic height for textarea as typing
+function setTextareaHeight(target) {
+    if (target.scrollHeight > 148) {
+        target.style.height = 'auto';
+        target.style.height = target.scrollHeight+'px';
+    }
+    else {
+        target.removeAttribute('style');
+    }
+}
