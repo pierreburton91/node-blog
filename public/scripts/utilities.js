@@ -84,6 +84,9 @@ function displayPop(content) {
     else if (content.form == "image-upload") {
         contentText = content.reason;
     }
+    else if (content.form == "blog-categories") {
+        contentText = content.reason;
+    }
 
     // your text to display
     popUpContent.innerHTML = contentText;
@@ -104,31 +107,6 @@ function displayPop(content) {
             body.removeChild(popUpContainer);
         }, 300);
     });
-}
-
-// File reader for image pre-render
-function readURL(input) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        
-        reader.onload = function (e) {
-            uploadPreview.setAttribute('src', e.target.result);
-        }
-        
-        reader.readAsDataURL(input.files[0]);
-    }
-    else if (input.dataTransfer && input.dataTransfer.files[0]) {
-        var reader = new FileReader();
-        
-        reader.onload = function (e) {
-            uploadPreview.setAttribute('src', e.target.result);
-        }
-        
-        reader.readAsDataURL(input.dataTransfer.files[0]);
-    }
-    else {
-        uploadPreview.setAttribute('src', input);
-    }
 }
 
 // Upload image handler
@@ -368,10 +346,10 @@ function uploadImage() {
         uploadForm.style.display = "block";
         uploadPreviewContainer.style.display = "none";
         
-        var popUpInfos = {"type": "error", "form": "image-upload", "reason": "Something went wrong..." };
-        displayPop(popUpInfos);
+        // var popUpInfos = {"type": "error", "form": "image-upload", "reason": "Something went wrong..." };
+        // displayPop(popUpInfos);
 
-        throw err;
+        //throw err;
         
     }).then(function(result){
         uploadView.style.display = "none";
@@ -399,6 +377,31 @@ function uploadImage() {
             uploadView.style.display = "none";
         }
     });
+}
+
+// File reader for image pre-render
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        
+        reader.onload = function (e) {
+            document.querySelector('#previewed').setAttribute('src', e.target.result);
+        }
+        
+        reader.readAsDataURL(input.files[0]);
+    }
+    else if (input.dataTransfer && input.dataTransfer.files[0]) {
+        var reader = new FileReader();
+        
+        reader.onload = function (e) {
+            document.querySelector('#previewed').setAttribute('src', e.target.result);
+        }
+        
+        reader.readAsDataURL(input.dataTransfer.files[0]);
+    }
+    else {
+        document.querySelector('#previewed').setAttribute('src', input);
+    }
 }
 
 // Sets dynamic height for textarea as typing

@@ -10,9 +10,8 @@
             <button onclick="submit()" class="button submit">Save</button>
         </div>
     </div>
-    <div class="labeled input-picture">
-    	<input type="hidden" name="profile-pic" value="">
-    	<img src="https://robohash.org/newuser.jpg?size=140x140&set=set2" alt="Profile picture">
+    <div class="labeled input-picture" onclick="uploadNewimage()">
+    	<img id="profile-pic" src="https://robohash.org/newuser.jpg?size=140x140&set=set2" alt="Profile picture">
     	<p>Click to upload a new image</p>
     </div>
     <h3>About you</h3>
@@ -21,12 +20,76 @@
     <%- include('components/input', {type: "text", id: "lastname", name: "lastname", label: "Lastname", value: "", hint: ""}); %>
     <%- include('components/input', {type: "email", id: "email", name: "email", label: "Email address", value: "", hint: ""}); %>
     <%- include('components/input', {type: "textarea", id: "description", name: "description", label: "Your personnal description...", value: "", hint: "Max 140 characters"}); %>
+    <h3>About your blog</h3>
+    <%- include('components/input', {type: "textarea", id: "catchphrase", name: "catchphrase", label: "Your awesome catchphrase...", value: "", hint: "Max 140 characters"}); %>
+    <h4>Your blog categories</h4>
+    <div class="editor-categories">
+    </div>
+    <%- include('components/input', {type: "text", id: "category", name: "category", label: "Add a new category", value: "", hint: "Validate with \"Enter\" key"}); %>
 </div>
 <%- include('components/upload-image'); %>
 <script src="https://use.fontawesome.com/973262919d.js"></script>
 <script type="text/javascript" src="../scripts/closest-polyfill.js"></script>
 <script type="text/javascript" src="../scripts/promise-polyfill.min.js"></script>
 <script type="text/javascript" src="../scripts/utilities.js"></script>
-<script type="text/javascript"></script>
+<script type="text/javascript">
+	//There's a problem here
+	function uploadNewimage() {
+		var profilePic = document.querySelector('#profile-pic');
+
+		var newImage = new Promise(function(resolve, reject) {
+			var newImageUrl = uploadImage();
+	        resolve(newImageUrl);
+	    });
+
+	    newImage.then(function(newImageUrl) {
+	    	console.log(newImageUrl);
+			profilePic.src = newImageUrl;
+	    });
+		
+	}
+
+	var catInput = document.querySelector('#category'),
+		catItems = document.querySelector('.editor-categories'),
+		categories = [];
+
+	catInput.addEventListener('keyup', function(e) {
+		if (e.keyCode == 13) {
+			var value = e.target.value;
+			
+	        // Prevent duplicates
+	        if (categories.indexOf(value) != -1) {
+	        	var popUpInfos = {"type": "info", "form": "blog-categories", "reason": "This category already exists."};
+                displayPop(popUpInfos);
+                catInput.value = "";
+                return false;
+	        }
+
+	        var	catBox = document.createElement('div'),
+	            catBoxText = document.createTextNode(value),
+	            closeButton = document.createElement('span'),
+	            closeCross = document.createTextNode('x');
+
+	        closeButton.appendChild(closeCross);
+	        catBox.appendChild(catBoxText);
+	        catBox.appendChild(closeButton);
+	        catBox.classList.add("category-item");
+	        catItems.appendChild(catBox);
+	        categories.push(value);
+	        catInput.value = "";
+	        location.href = "#category";
+		}
+	});
+
+	catItems.addEventListener('click', function(e) {
+		if(e.target && e.target.nodeName == "SPAN") {
+			var currentCat = e.path[1].childNodes[0].data,
+				catToDelete = categories.indexOf(currentCat);
+
+			catItems.removeChild(catItems.childNodes[catToDelete + 1]);
+        	categories.splice(catToDelete, 1);
+		}
+	});
+</script>
 </body>
 </html>

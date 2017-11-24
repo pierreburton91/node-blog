@@ -27,7 +27,7 @@ body
 	padding 0
 	font-family $body
 	position relative
-	font-size 14px
+	font-size 16px
 
 a
 	text-decoration none
@@ -192,7 +192,7 @@ a
 	display flex
 	justify-content center
 	width 100%
-	position absolute
+	position fixed
 	top 0
 	left 0
 	opacity 0
@@ -224,6 +224,21 @@ a
 			justify-content center
 			cursor pointer
 			margin-left 32px
+
+h3
+	float left
+	width 100%
+	color $dark
+	letter-spacing 1px
+	font-weight 700
+	padding-top 32px
+h4
+	float left
+	width 100%
+	color $dark
+	font-weight 700
+	padding-top 16px
+	font-size 1.1em
 			
 
 /*======================================= 
@@ -507,13 +522,6 @@ a
 	padding 12px 0
 .editor-statusbar
 	display none
-h3
-	float left
-	width 100%
-	color $dark
-	letter-spacing 1px
-	font-weight 400
-	padding-top 32px
 .heading-separator
 	border-top 1px solid rgba(0,0,0,0.1)
 .upload
@@ -612,3 +620,36 @@ h3
 		width 140px
 		height 140px
 		margin-top 24px
+.editor-categories
+	width 100%
+	float left
+	& .category-item
+		padding 4px 16px
+		float left
+		position relative
+		cursor default
+		background-color #fafafa
+		margin-right 24px
+		margin-bottom 16px
+		border-left 4px solid #999999
+		& span
+			display inline-block
+			position absolute
+			right -8px
+			top -8px
+			background-color $dash-accent
+			height 24px
+			width 24px
+			color $white
+			border-radius 50%
+			line-height 24px
+			text-align center
+			opacity 0
+			font-size 0.8rem
+			cursor pointer
+			box-shadow 0 1px 4px rgba(0,0,0,0.3)
+		&:hover
+			background-color $light-dark
+			border-color $dash-accent
+			& span
+				opacity 1
