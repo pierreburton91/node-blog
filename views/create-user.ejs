@@ -10,8 +10,8 @@
             <button onclick="submit()" class="button submit">Save</button>
         </div>
     </div>
-    <div class="labeled input-picture" onclick="uploadNewimage()">
-    	<img id="profile-pic" src="https://robohash.org/newuser.jpg?size=140x140&set=set2" alt="Profile picture">
+    <div class="labeled input-picture">
+    	<img id="profile-pic" src="https://robohash.org/newuser.jpg?size=140x140&set=set2" alt="Profile picture" onclick="uploadImage(this)">
     	<p>Click to upload a new image</p>
     </div>
     <h3>About you</h3>
@@ -33,25 +33,20 @@
 <script type="text/javascript" src="../scripts/promise-polyfill.min.js"></script>
 <script type="text/javascript" src="../scripts/utilities.js"></script>
 <script type="text/javascript">
-	//There's a problem here
-	function uploadNewimage() {
-		var profilePic = document.querySelector('#profile-pic');
-
-		var newImage = new Promise(function(resolve, reject) {
-			var newImageUrl = uploadImage();
-	        resolve(newImageUrl);
-	    });
-
-	    newImage.then(function(newImageUrl) {
-	    	console.log(newImageUrl);
-			profilePic.src = newImageUrl;
-	    });
-		
-	}
 
 	var catInput = document.querySelector('#category'),
 		catItems = document.querySelector('.editor-categories'),
+		categories;
+		
+	if(document.querySelector('.category-item')) {
+		var categoryList = document.querySelector('.category-item');
+		for (i = 0; i > categoryList.length; i++) {
+			categories.push(categoryList[i].childNodes[0].nodeValue);
+		}
+	}
+	else {
 		categories = [];
+	}
 
 	catInput.addEventListener('keyup', function(e) {
 		if (e.keyCode == 13) {
@@ -90,6 +85,10 @@
         	categories.splice(catToDelete, 1);
 		}
 	});
+
+	function goBack() {
+        window.location.href = "/";
+	}
 </script>
 </body>
 </html>

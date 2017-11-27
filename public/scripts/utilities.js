@@ -110,7 +110,7 @@ function displayPop(content) {
 }
 
 // Upload image handler
-function uploadImage() {
+function uploadImage(element) {
     var htmlString = '<div class="upload"><div class="upload-overlay"></div><div class="upload-modal"><div id="upload-form"><label class="dragndrop"><input type="file" name="upload-file" accept="image/*"><i class="fa fa-picture-o" aria-hidden="true"></i><p>Drag and drop or click here<br><span>to upload your image</span></p></label><p>or</p><label class="labeled"><input type="text" name="file-link" class="inputs" placeholder="http://example.com/image.png" required/><span class="float-label">Provide a link</span><div class="bottom-line"></div><div class="bottom-line-active"></div></label><span>Accepted files are images .jpeg, .png or .gif, max 2Mo.</span></div><div class="upload-preview"><div class="image-preview"><img id="previewed" src="" /><span class="preview-error"></span></div><a href="#" id="cancel-upload">Cancel and add another image</a></div><div class="button-f-right"><button id="upload-close" class="button borderless">Close</button><button id="upload-confirm" class="button" disabled="true">Add picture</button></div></div></div>',
         uploadView = document.querySelector('.upload'),
         uploadForm = document.querySelector('#upload-form'),
@@ -346,10 +346,6 @@ function uploadImage() {
         uploadForm.style.display = "block";
         uploadPreviewContainer.style.display = "none";
         
-        // var popUpInfos = {"type": "error", "form": "image-upload", "reason": "Something went wrong..." };
-        // displayPop(popUpInfos);
-
-        //throw err;
         
     }).then(function(result){
         uploadView.style.display = "none";
@@ -359,8 +355,13 @@ function uploadImage() {
         uploadForm.style.display = "block";
         uploadPreviewContainer.style.display = "none";
 
-        //All this mess for this !
-        return result;
+        if (element.tagName == "IMG") {
+            element.src = result;
+        }
+        else {
+            element.style.backgroundImage = "url("+result+")";
+        }
+        //return result;
 
     }, function(err) {
         uploadView.style.display = "none";
@@ -371,7 +372,7 @@ function uploadImage() {
         uploadInput.value = "";
         uploadButton.disabled = true;
         if(err) {
-            uploadImage();
+            uploadImage(element);
         }
         else {
             uploadView.style.display = "none";
