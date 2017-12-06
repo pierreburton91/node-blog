@@ -93,7 +93,7 @@ function uploadImage(element) {
         uploadForm = document.querySelector('#upload-form'),
         uploadInput = document.querySelector('input[name="upload-file"]'),
         dropZone = document.querySelector('.dragndrop'),
-        fileLink = document.querySelector('input[name="file-link"'),
+        fileLink = document.querySelector('input[name="file-link"]'),
         uploadPreviewContainer = document.querySelector('.upload-preview'),
         uploadPreview = document.querySelector('#previewed'),
         imagePreviewContainer = document.querySelector('.image-preview'),
