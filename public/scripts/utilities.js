@@ -49,7 +49,7 @@ function displayPop(content) {
         popUpContainer = document.querySelector(".pop-container"),
         closeButton = document.querySelector(".pop-close"), 
         popUpContent = document.querySelector(".pop-content"),
-        contentText; 
+        contentText = content.text;
 
     switch (content.type) {
         case "error":
@@ -66,32 +66,9 @@ function displayPop(content) {
             break;
     }
 
-    if (content.form == "login") {
-        switch (content.reason) {
-            case "empty":
-                contentText = "Some required fields are empty !";
-                break;
-            case "wrong":
-                contentText = "Invalid Username and Password combination !";
-                break;
-            default:
-                contentText = content.reason;
-        }
-    }
-    else if (content.form == "register") {
-        contentText = "The super content of the dead for your pop-up !"; 
-    }
-    else if (content.form == "image-upload") {
-        contentText = content.reason;
-    }
-    else if (content.form == "blog-categories") {
-        contentText = content.reason;
-    }
-
     // your text to display
     popUpContent.innerHTML = contentText;
 
-    
 
     // Display popup
     setTimeout(function() {
@@ -194,7 +171,7 @@ function uploadImage(element) {
                             }
                             else {
                                 console.log(this.status, this.statusText, this.getAllResponseHeaders());
-                                var popUpInfos = {"type": "error", "form": "image-upload", "reason": this.status + " - " + this.statusText };
+                                var popUpInfos = {"type": "error", "reason": this.status + " - " + this.statusText };
                                 displayPop(popUpInfos);
                                 reject(false);
                             }
@@ -269,7 +246,7 @@ function uploadImage(element) {
                             }
                             else {
                                 console.log(this.status, this.statusText, this.getAllResponseHeaders());
-                                var popUpInfos = {"type": "error", "form": "image-upload", "reason": this.status + " - " + this.statusText };
+                                var popUpInfos = {"type": "error", "reason": this.status + " - " + this.statusText };
                                 displayPop(popUpInfos);
                                 reject(false);
                             }

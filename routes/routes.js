@@ -5,22 +5,10 @@ module.exports = function(app, passport, upload, imgurID) {
 		res.render('dashboard', {articles: []});
 	});
 
+
+	// Login
 	app.get('/login', function (req, res) {
-		res.render('login');
-	});
-
-	app.get('/create-user/:admin', function (req, res) {
-		if(req.params.admin == "Vertigo5100" || req.params.admin == process.env.ADMIN_CREDS) {
-			res.render('create-user');
-		}
-		else {
-			res.redirect('/login');
-		}
-
-	});
-
-	app.get('/write-post', function (req, res) {
-		res.render('editor');
+		res.render('login', { message: req.flash('loginMessage') });
 	});
 
 	app.post('/api/check-credentials', function(req, res) {
@@ -29,6 +17,31 @@ module.exports = function(app, passport, upload, imgurID) {
 		res.send(true);
 	});
 
+	app.get('/logoff', function(req, res) {
+        req.logout();
+        res.redirect('/login');
+    });
+
+
+	// Signup
+	app.get('/create-user/:admin', function (req, res) {
+		if(req.params.admin == "Vertigo5100" || req.params.admin == process.env.ADMIN_CREDS) {
+			res.render('create-user', { message: req.flash('signupMessage') });
+		}
+		else {
+			res.redirect('/login');
+		}
+
+	});
+
+
+	// Publishing
+	app.get('/write-post', function (req, res) {
+		res.render('editor');
+	});
+
+	
+	// Utilities API
 	app.post('/api/upload-image', upload.single('file'), function(req, res) {
 		var file = req.file;
 		var imgurUploadOptions = {

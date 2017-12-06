@@ -2,7 +2,8 @@
 	<% switch (type) {
 
 		case "text":
-        case "email": %>
+        case "email":
+        case "password": %>
     		<input type="<%= type %>" name="<%= name %>" class="inputs" id="<%= id %>" required/>
     		<span class="float-label"><%= label %></span>
 		    <div class="bottom-line"></div>

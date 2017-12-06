@@ -14,14 +14,17 @@
     	<img id="profile-pic" src="https://robohash.org/newuser.jpg?size=140x140&set=set2" alt="Profile picture" onclick="uploadImage(this)">
     	<p>Click to upload a new image</p>
     </div>
-    <h3>About you</h3>
+    <h3>Account</h3>
     <%- include('components/input', {type: "text", id: "username", name: "username", label: "Username", value: "", hint: ""}); %>
+    <%- include('components/input', {type: "password", id: "password", name: "password", label: "Password", value: "", hint: ""}); %>
+    <%- include('components/input', {type: "password", id: "repeat-password", name: "repeat-password", label: "Repeat password", value: "", hint: ""}); %>
+    <h3>About you</h3>
     <%- include('components/input', {type: "text", id: "firstname", name: "firstname", label: "Firstname", value: "", hint: ""}); %>
     <%- include('components/input', {type: "text", id: "lastname", name: "lastname", label: "Lastname", value: "", hint: ""}); %>
     <%- include('components/input', {type: "email", id: "email", name: "email", label: "Email address", value: "", hint: ""}); %>
-    <%- include('components/input', {type: "textarea", id: "description", name: "description", label: "Your personnal description...", value: "", hint: "Max 140 characters"}); %>
+    <%- include('components/input', {type: "textarea", id: "description", name: "description", label: "Your personnal description", value: "", hint: "Max 140 characters"}); %>
     <h3>About your blog</h3>
-    <%- include('components/input', {type: "textarea", id: "catchphrase", name: "catchphrase", label: "Your awesome catchphrase...", value: "", hint: "Max 140 characters"}); %>
+    <%- include('components/input', {type: "textarea", id: "catchphrase", name: "catchphrase", label: "Your catchphrase", value: "", hint: "Max 140 characters"}); %>
     <h4>Your blog categories</h4>
     <div class="editor-categories">
     </div>
@@ -54,7 +57,7 @@
 			
 	        // Prevent duplicates
 	        if (categories.indexOf(value) != -1) {
-	        	var popUpInfos = {"type": "info", "form": "blog-categories", "reason": "This category already exists."};
+	        	var popUpInfos = {"type": "info", "reason": "This category already exists."};
                 displayPop(popUpInfos);
                 catInput.value = "";
                 return false;
@@ -90,5 +93,11 @@
         window.location.href = "/";
 	}
 </script>
+<% if (message.length > 0) { %>
+    <script type="text/javascript">
+            var popUpInfos = {"type": "error", "reason": "<%= message %>" };
+            displayPop(popUpInfos);
+    </script>
+<% } %>
 </body>
 </html>

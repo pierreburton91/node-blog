@@ -19,5 +19,11 @@
 <script type="text/javascript" src="scripts/utilities.js"></script>
 <script type="text/javascript" src="scripts/login-controller.js"></script>
 <script src="https://use.fontawesome.com/973262919d.js"></script>
+<% if (message.length > 0) { %>
+    <script type="text/javascript">
+            var popUpInfos = {"type": "error", "form": "login", "reason": "<%= message %>" };
+            displayPop(popUpInfos);
+    </script>
+<% } %>
 </body>
 </html>

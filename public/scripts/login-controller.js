@@ -14,7 +14,7 @@ function login() {
             }
         }
 
-        var popUpInfos = {"type": "error", "form": "login", "reason": "empty"};
+        var popUpInfos = {"type": "warning", "reason": "Some required fields are empty !"};
         displayPop(popUpInfos);
     }
     else {
@@ -28,14 +28,13 @@ function login() {
                         window.location.href = "/";
                     }
                     else {
-                        var popUpInfos = {"type": "error", "form": "login", "reason": "wrong"};
+                        var popUpInfos = {"type": "error", "reason": "Wrong username/password combination !"};
                         displayPop(popUpInfos);
                     }
                 }
                 else {
-                    console.log(this.status, this.statusText, this.getAllResponseHeaders());
-                    var popUpInfos = {"type": "error", "form": "login", "reason": this.status + " - " + this.statusText };
-                        displayPop(popUpInfos);
+                    var popUpInfos = {"type": "error", "reason": this.status + " - " + this.statusText };
+                    displayPop(popUpInfos);
                 }
             }
         }
