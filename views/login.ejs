@@ -21,7 +21,7 @@
 <script src="https://use.fontawesome.com/973262919d.js"></script>
 <% if (message.length > 0) { %>
     <script type="text/javascript">
-            var popUpInfos = {"type": "error", "form": "login", "reason": "<%= message %>" };
+            var popUpInfos = {"type": "error", "text": "<%= message %>" };
             displayPop(popUpInfos);
     </script>
 <% } %>

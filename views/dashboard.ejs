@@ -4,7 +4,7 @@
 <body>
 	<div class="dash__hero">
         <div class="hero-profile-pic"></div>
-        <div class="hero-profile-name">Jane Doe</div>
+        <div class="hero-profile-name"><% if(user) { %><%= user.about.firstname%> <%= user.about.lastname%><% } else { %>Jane Doe<% } %></div>
         <div class="account-controls">
             <a class="account-control" href="/create-user/Vertigo5100"><i class="fa fa-sliders" aria-hidden="true"></i>Blog settings</a>
             <a class="account-control" href="/logoff"><i class="fa fa-power-off" aria-hidden="true"></i>Disconnect</a>

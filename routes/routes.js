@@ -1,8 +1,8 @@
-module.exports = function(app, passport, upload, imgurID) {
+module.exports = function(app, passport, request, upload, imgurID) {
 
 
 	app.get('/', function (req, res) {
-		res.render('dashboard', {articles: []});
+		res.render('dashboard', {user: req.user, articles: []});
 	});
 
 
@@ -32,6 +32,29 @@ module.exports = function(app, passport, upload, imgurID) {
 			res.redirect('/login');
 		}
 
+	});
+	app.post('/api/signup', function(req, res) {
+		passport.authenticate('local-signup', function(err, user, info) {
+		    if (err) {
+		      return next(err); // will generate a 500 error
+		    }
+		    // Generate a JSON response reflecting authentication status
+		    if (!user) {
+		      return res.send({ success : false, message : 'Operation failed!' });
+		    }
+		    // ***********************************************************************
+		    // "Note that when using a custom callback, it becomes the application's
+		    // responsibility to establish a session (by calling req.login()) and send
+		    // a response."
+		    // Source: http://passportjs.org/docs
+		    // ***********************************************************************
+		    req.login(user, loginErr => {
+		      if (loginErr) {
+		        return next(loginErr);
+		      }
+		      return res.send({ success : true, message : 'Operation succeeded!' });
+		  	});
+		});
 	});
 
 

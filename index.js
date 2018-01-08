@@ -16,6 +16,8 @@ const app = express();
 const configDB = require('./config/database.js');
 mongoose.connect(configDB.url, { useMongoClient: true }); // connect to our database
 
+require('./config/passport')(passport); // pass passport for configuration
+
 /* Middlewares */
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
@@ -29,9 +31,8 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
-
 /* Routes */
-require('./routes/routes.js')(app, passport, upload, imgurID);
+require('./routes/routes.js')(app, passport, request, upload, imgurID);
 
 /* 3, 2, 1, Launch ! */
 app.listen(process.env.PORT || 3000, function() {

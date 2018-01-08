@@ -14,7 +14,7 @@ function login() {
             }
         }
 
-        var popUpInfos = {"type": "warning", "reason": "Some required fields are empty !"};
+        var popUpInfos = {"type": "warning", "text": "Some required fields are empty !"};
         displayPop(popUpInfos);
     }
     else {
@@ -28,12 +28,12 @@ function login() {
                         window.location.href = "/";
                     }
                     else {
-                        var popUpInfos = {"type": "error", "reason": "Wrong username/password combination !"};
+                        var popUpInfos = {"type": "error", "text": "Wrong username/password combination !"};
                         displayPop(popUpInfos);
                     }
                 }
                 else {
-                    var popUpInfos = {"type": "error", "reason": this.status + " - " + this.statusText };
+                    var popUpInfos = {"type": "error", "text": this.status + " - " + this.statusText };
                     displayPop(popUpInfos);
                 }
             }

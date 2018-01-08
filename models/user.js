@@ -33,6 +33,7 @@ const userSchema = mongoose.Schema({
         name: String,
         url: String,
         logo: String,
+        catchphrase: String,
         categories: [String],
         social: {
             facebook: String,

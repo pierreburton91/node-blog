@@ -365,7 +365,7 @@ function goBack() {
 
     if (title.value != "" || articleBody.value != "") {
         var confirm = window.confirm("Are your sure ? All your work will be lost.");
-        console.log(simplemde.options.previewRender(articleBody.value));
+        // console.log(simplemde.options.previewRender(articleBody.value)); Needed for db insert
         if (confirm == true) {
             window.location.href = "/";
         }

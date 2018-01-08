@@ -24,6 +24,7 @@
     <%- include('components/input', {type: "email", id: "email", name: "email", label: "Email address", value: "", hint: ""}); %>
     <%- include('components/input', {type: "textarea", id: "description", name: "description", label: "Your personnal description", value: "", hint: "Max 140 characters"}); %>
     <h3>About your blog</h3>
+    <%- include('components/input', {type: "text", id: "name", name: "name", label: "Your blog's name", value: "", hint: ""}); %>
     <%- include('components/input', {type: "textarea", id: "catchphrase", name: "catchphrase", label: "Your catchphrase", value: "", hint: "Max 140 characters"}); %>
     <h4>Your blog categories</h4>
     <div class="editor-categories">
@@ -57,7 +58,7 @@
 			
 	        // Prevent duplicates
 	        if (categories.indexOf(value) != -1) {
-	        	var popUpInfos = {"type": "info", "reason": "This category already exists."};
+	        	var popUpInfos = {"type": "info", "text": "This category already exists."};
                 displayPop(popUpInfos);
                 catInput.value = "";
                 return false;
@@ -89,13 +90,134 @@
 		}
 	});
 
+	function submit() {
+		var username = document.querySelector('#username').value,
+			password = document.querySelector('#password').value,
+			repeatPassword = document.querySelector('#repeat-password').value,
+			firstname = document.querySelector('#firstname').value,
+			lastname = document.querySelector('#lastname').value,
+			picture = document.querySelector('#profile-pic').src,
+			email = document.querySelector('#email').value,
+			description = document.querySelector('#description').value,
+			name = document.querySelector('#name').value,
+			catchphrase = document.querySelector('#catchphrase').value,
+			data;
+
+		if (!username) {
+			var popUpInfos = {"type": "error", "text": "You must choose a username."};
+            displayPop(popUpInfos);
+            document.querySelector('#username').focus();
+
+		}
+		else if (password.length < 8) {
+			var popUpInfos = {"type": "error", "text": "Your password must contain at least 8 characters."};
+            displayPop(popUpInfos);
+            document.querySelector('#password').focus();
+		}
+		else if (password != repeatPassword) {
+			var popUpInfos = {"type": "error", "text": "Passwords don't match."};
+            displayPop(popUpInfos);
+            document.querySelector('#repeat-password').focus();
+		}
+		else if (!email || !document.querySelector('#email').checkValidity()) {
+			var popUpInfos = {"type": "error", "text": "You must provide a valid email address."};
+            displayPop(popUpInfos);
+            document.querySelector('#email').focus();
+		}
+		else if (!name) {
+			var popUpInfos = {"type": "error", "text": "Your blog must have a name."};
+            displayPop(popUpInfos);
+            document.querySelector('#name').focus();
+		}
+		else if (categories.length == 0) {
+			var popUpInfos = {"type": "error", "text": "Your blog should at least have 1 category."};
+            displayPop(popUpInfos);
+            document.querySelector('#category').focus();
+		}
+		else {
+			data = {
+			    username: document.querySelector('#username').value,
+			    password: document.querySelector('#password').value,
+			    about: {
+			        firstname: document.querySelector('#firstname').value,
+			        lastname: document.querySelector('#lastname').value,
+			        picture: document.querySelector('#profile-pic').src,
+			        email: document.querySelector('#email').value,
+			        description: document.querySelector('#description').value,
+			        social: {
+			            facebook: '',
+			            twitter: '',
+			            google: '',
+			            instagram: '',
+			            pinterest: '',
+			            youtube: '',
+			            vimeo: '',
+			            medium: '',
+			            github: '',
+			            dribbble: '',
+			            behance: ''
+			        }
+			    },
+			    blog: {
+			        name: document.querySelector('#name').value,
+			        url: '',
+			        logo: '',
+			        catchphrase: document.querySelector('#catchphrase').value,
+			        categories: categories,
+			        social: {
+			            facebook: '',
+			            twitter: '',
+			            google: '',
+			            instagram: '',
+			            pinterest: '',
+			            youtube: '',
+			            vimeo: '',
+			            medium: '',
+			            github: '',
+			            dribbble: '',
+			            behance: ''
+			        }
+			    }
+			};
+
+			var xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = function() {
+                if (this.readyState == 4) {
+                    if (this.status == 200) {
+                        var response = JSON.parse(this.responseText),
+                        	isSuccess = response.success,
+                        	message = response.text;
+                        
+                        if (isSuccess) {
+                        	var popUpInfos = {"type": "success", "text": "The operation succeed !" };
+            				displayPop(popUpInfos);
+                        }
+                        else {
+                        	var popUpInfos = {"type": "warning", "text": "We couldn't authenticate you. Please contact the support." };
+            				displayPop(popUpInfos);
+                        }
+                        
+                    }
+                    else {
+                        console.log(this.status, this.statusText, this.getAllResponseHeaders());
+                        var popUpInfos = {"type": "error", "text": "Internal server error. Please contact the support." };
+            			displayPop(popUpInfos);
+                    }
+                }
+            }
+            xhr.open("POST", "/api/signup", true);
+            xhr.send(JSON.stringify(data));
+		}
+	}
+
 	function goBack() {
         window.location.href = "/";
 	}
 </script>
 <% if (message.length > 0) { %>
     <script type="text/javascript">
-            var popUpInfos = {"type": "error", "reason": "<%= message %>" };
+            var popUpInfos = {"type": "error", "text": "<%= message %>" };
             displayPop(popUpInfos);
     </script>
 <% } %>
