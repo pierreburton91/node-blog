@@ -32,6 +32,8 @@ module.exports = function(passport) {
     // by default, if there was no name, it would just be called 'local'
 
     passport.use('local-signup', new LocalStrategy({
+        usernameField: 'account[]username',
+        passwordField: 'account[]password',
         passReqToCallback : true // allows us to pass back the entire request to the callback
     },
     function(req, username, password, done) {
@@ -41,7 +43,7 @@ module.exports = function(passport) {
 
         // find a user whose username is the same as the forms username
         // we are checking to see if the user trying to login already exists
-        User.findOne({ 'account.username' :  req.username }, function(err, user) {
+        User.findOne({ 'account.username' :  username }, function(err, user) {
             // if there are any errors, return the error
             if (err)
                 return done(err);
@@ -57,8 +59,8 @@ module.exports = function(passport) {
                 var newUser = new User();
 
                 // set the user's account credentials
-                newUser.account.username = req.username;
-                newUser.account.password = newUser.generateHash(req.password);
+                newUser.account.username = username;
+                newUser.account.password = newUser.generateHash(password);
 
                 // set the user's account and blog info
                 newUser.about.firstname = req.body.about.firstname;

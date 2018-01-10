@@ -136,8 +136,10 @@
 		}
 		else {
 			data = {
-			    username: document.querySelector('#username').value,
-			    password: document.querySelector('#password').value,
+				account: {
+					username: document.querySelector('#username').value,
+			    	password: document.querySelector('#password').value
+				},
 			    about: {
 			        firstname: document.querySelector('#firstname').value,
 			        lastname: document.querySelector('#lastname').value,
@@ -190,7 +192,7 @@
                         	message = response.text;
                         
                         if (isSuccess) {
-                        	var popUpInfos = {"type": "success", "text": "The operation succeed !" };
+                        	var popUpInfos = {"type": "success", "text": "The operation succeeded !" + message +"" };
             				displayPop(popUpInfos);
                         }
                         else {
@@ -207,6 +209,7 @@
                 }
             }
             xhr.open("POST", "/api/signup", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
             xhr.send(JSON.stringify(data));
 		}
 	}
