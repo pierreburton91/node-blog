@@ -9,8 +9,7 @@
                 <h2>Please log in so we know who you are.</h2>
             </div>
             <%- include('components/input', {type: "text", id: "user", name: "username", label: "Username", value: "", hint: ""}); %>
-            <%- include('components/input', {type: "text", id: "password", name: "password", label: "Password", value: "", hint: ""}); %>
-            <%- include('components/input', {type: "checkbox", id: "save", name: "save", label: "Remember me", value: "", hint: ""}); %>
+            <%- include('components/input', {type: "password", id: "password", name: "password", label: "Password", value: "", hint: ""}); %>
             <div class="button-f-right">
                 <button class="button" onclick="login()">Log in</button>
             </div>

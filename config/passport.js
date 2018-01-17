@@ -50,7 +50,7 @@ module.exports = function(passport) {
 
             // check to see if theres already a user with that username
             if (user) {
-                return done(null, false, req.flash('signupMessage', 'That username is already taken.'));
+                return done(null, false);
             } 
             else {
 
@@ -85,6 +85,45 @@ module.exports = function(passport) {
             }
 
         });    
+
+        });
+
+    }));
+
+
+    // =========================================================================
+    // LOCAL LOGIN ============================================================
+    // =========================================================================
+    // we are using named strategies since we have one for login and one for signup
+    // by default, if there was no name, it would just be called 'local'
+
+    passport.use('local-login', new LocalStrategy({
+        usernameField: 'username',
+        passwordField: 'password'
+    },
+    function(username, password, done) {
+        // asynchronous
+        // User.findOne wont fire unless data is sent back
+        process.nextTick(function() {
+
+            // find a user whose username is the same as the forms username
+            // we are checking to see if the user trying to login already exists
+            User.findOne({ 'account.username' :  username }, function(err, user) {
+                // if there are any errors, return the error
+                if (err)
+                    return done(err);
+
+                // check to see if theres already a user with that username
+                if (!user) {
+                    return done(null, false);
+                } 
+                if (!user.validPassword(password)) {
+                    return done(null, false);
+                }
+
+                return done(null, user);
+
+            });    
 
         });
 

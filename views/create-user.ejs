@@ -189,11 +189,12 @@
                     if (this.status == 200) {
                         var response = JSON.parse(this.responseText),
                         	isSuccess = response.success,
-                        	message = response.text;
+                        	message = response.message;
                         
                         if (isSuccess) {
-                        	var popUpInfos = {"type": "success", "text": "The operation succeeded !" + message +"" };
+                        	var popUpInfos = {"type": "success", "text": "The operation succeeded ! " + message +"" };
             				displayPop(popUpInfos);
+            				setTimeout(function(){window.location.href = "/";}, 2000);
                         }
                         else {
                         	var popUpInfos = {"type": "warning", "text": "We couldn't authenticate you. Please contact the support." };

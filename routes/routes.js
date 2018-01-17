@@ -11,13 +11,16 @@ module.exports = function(app, passport, request, upload, imgurID) {
 		res.render('login', { message: req.flash('loginMessage') });
 	});
 
-	app.post('/api/check-credentials', function(req, res) {
-		var credentials = req.body;
-
-		res.send(true);
+	app.post('/api/check-credentials', passport.authenticate('local-login'), function(req, res) {
+	    // Generate a JSON response reflecting authentication status
+	    if (!req.user) {
+	      return res.send({ success : false, message : 'Try again.' });
+	    }
+	    
+	    return res.send({ success : true, message : 'Logged in successfully !' });
 	});
 
-	app.get('/logoff', function(req, res) {
+	app.get('/logout', function(req, res) {
         req.logout();
         res.redirect('/login');
     });
@@ -36,10 +39,10 @@ module.exports = function(app, passport, request, upload, imgurID) {
 	app.post('/api/signup', passport.authenticate('local-signup'), function(req, res) {
 	    // Generate a JSON response reflecting authentication status
 	    if (!req.user) {
-	      return res.send({ success : false, message : 'Operation failed!' });
+	      return res.send({ success : false, message : 'Try again.' });
 	    }
 	    
-	    return res.send({ success : true, message : 'Operation succeeded!' });
+	    return res.send({ success : true, message : 'User is now in the database.' });
 	});
 
 
