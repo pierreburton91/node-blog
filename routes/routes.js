@@ -1,7 +1,7 @@
 module.exports = function(app, passport, request, upload, imgurID) {
 
 
-	app.get('/', function (req, res) {
+	app.get('/', isLoggedIn, function (req, res) {
 		res.render('dashboard', {user: req.user, articles: []});
 	});
 
