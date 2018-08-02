@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
-<%- include('components/admin-head', {guard: false /* to be true */, simplemde: false, title: "Your blog's dashboard"}); %>
+<%- include('components/admin-head', {guard: false /* to be true */, simplemde: false, title: "Dashboard"}); %>
 <body>
 	<div class="dash__hero">
         <div class="hero-profile-pic" <% if(user) { %> style="background-image:url(<%= user.about.picture%>)" <% } %>></div>
         <div class="hero-profile-name"><% if(user) { %><%= user.about.firstname%> <%= user.about.lastname%><% } else { %>Jane Doe<% } %></div>
         <div class="account-controls">
-            <a class="account-control" href="/create-user/Vertigo5100"><i class="fa fa-sliders" aria-hidden="true"></i>Blog settings</a>
+            <a class="account-control" href="/settings"><i class="fa fa-sliders" aria-hidden="true"></i>Settings</a>
             <a class="account-control" href="/logout"><i class="fa fa-power-off" aria-hidden="true"></i>Disconnect</a>
         </div>
     </div>
@@ -40,36 +40,20 @@
                 </tr>
             </thead>
             <tbody>
+            <% if (articles.length > 0) {%>
                 <tr>
                     <td><label class="checker"><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
-                    <td>Test</td>
-                    <td>TestTest</td>
-                    <td>Test</td>
-                    <td>TestTest</td>
-                    <td>Test</td>
-                    <td>TestTest</td>
-                    <td>TestTest</td>
+                    <td>articles</td>
+                    <td>articles</td>
+                    <td>articles</td>
+                    <td>articles</td>
                 </tr>
+            <% }
+            else { %>
                 <tr>
-                    <td><label class="checker"><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
-                    <td>Test</td>
-                    <td>TestTest</td>
-                    <td>Test</td>
-                    <td>TestTest</td>
-                    <td>Test</td>
-                    <td>TestTest</td>
-                    <td>TestTest</td>
+                    <td colspan="8" style="text-align: center">You havn't wrote any article for now...</td>
                 </tr>
-                <tr>
-                    <td><label class="checker"><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
-                    <td>Test</td>
-                    <td>TestTest</td>
-                    <td>Test</td>
-                    <td>TestTest</td>
-                    <td>Test</td>
-                    <td>TestTest</td>
-                    <td>TestTest</td>
-                </tr>
+            <% } %>
             </tbody>
             <tfoot>
                 <tr>
@@ -77,50 +61,38 @@
                 </tr>
             </tfoot>
         </table>
-        <% if (articles.length > 0) {%>
-            <table class="dash-table" id="dashboard-subscribers" style="display: none;">
-                <thead>
-                    <tr>
-                        <td><label class="checker"><input type="checkbox" onchange="checkAll(event),handleBoxCheck()"/><i class="fa fa-check" aria-hidden="true"></i></label></td>
-                        <th>EMail</th>
-                        <th>Firstname</th>
-                        <th>Lastname</th>
-                        <th>Date registred</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><label class="checker"><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
-                        <td>Subscriber</td>
-                        <td>Subscriber</td>
-                        <td>Subscriber</td>
-                        <td>Subscriber</td>
-                    </tr>
-                    <tr>
-                        <td><label class="checker"><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
-                        <td>Subscriber</td>
-                        <td>SubscriberSubscriber</td>
-                        <td>Subscriber</td>
-                        <td>SubscriberSubscriber</td>
-                    </tr>
-                    <tr>
-                        <td><label class="checker"><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
-                        <td>Subscriber</td>
-                        <td>SubscriberSubscriber</td>
-                        <td>Subscriber</td>
-                        <td>SubscriberSubscriber</td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="5">Subscribers</td>
-                    </tr>
-                </tfoot>
-            </table>
-        <% }
-        else {%>
-            <div id="dashboard-subscribers" style="display: none;">Nothing here</div>
-        <% } %>
+        <table class="dash-table" id="dashboard-subscribers" style="display: none;">
+            <thead>
+                <tr>
+                    <td><label class="checker"><input type="checkbox" onchange="checkAll(event),handleBoxCheck()"/><i class="fa fa-check" aria-hidden="true"></i></label></td>
+                    <th>EMail</th>
+                    <th>Firstname</th>
+                    <th>Lastname</th>
+                    <th>Date registred</th>
+                </tr>
+            </thead>
+            <tbody>
+            <% if (subscribers.length > 0) {%>
+                <tr>
+                    <td><label class="checker"><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
+                    <td>Subscriber</td>
+                    <td>Subscriber</td>
+                    <td>Subscriber</td>
+                    <td>Subscriber</td>
+                </tr>
+            <% }
+            else { %>
+                <tr>
+                    <td colspan="5" style="text-align: center">You have no registred subscribers for now...</td>
+                </tr>
+            <% } %>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="5">Subscribers</td>
+                </tr>
+            </tfoot>
+        </table>
     </div>
 <script type="text/javascript" src="scripts/closest-polyfill.js"></script>
 <script type="text/javascript" src="scripts/dashboard-controller.js"></script>

@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 const flash = require('flash');
 const passport = require('passport');
 const session = require('express-session');
+const MemoryStore = require('memorystore')(session)
 const imgurID = "c6a8ce7a6f9c704";
 const app = express();
 
@@ -26,7 +27,14 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // required for passport
-app.use(session({ secret: 'nodejscmsforthewinfuckwordpress' })); // session secret
+app.use(session({
+	store: new MemoryStore({
+		checkPeriod: 86400000 // Removes expired entries every 24h
+	}),
+	secret: 'nodejscmsforthewinfuckwordpress',
+	resave: true,
+	saveUninitialized: false 
+})); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session

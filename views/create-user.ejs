@@ -15,7 +15,7 @@
     	<p>Click to upload a new image</p>
     </div>
     <h3>Account</h3>
-    <%- include('components/input', {type: "text", id: "username", name: "username", label: "Username", value: "", hint: ""}); %>
+    <%- include('components/input', {type: "text", id: "username", name: "username", label: "Username", value: user.account.username, hint: ""}); %>
     <%- include('components/input', {type: "password", id: "password", name: "password", label: "Password", value: "", hint: ""}); %>
     <%- include('components/input', {type: "password", id: "repeat-password", name: "repeat-password", label: "Repeat password", value: "", hint: ""}); %>
     <h3>About you</h3>

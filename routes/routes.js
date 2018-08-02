@@ -2,7 +2,7 @@ module.exports = function(app, passport, request, upload, imgurID) {
 
 
 	app.get('/', isLoggedIn, function (req, res) {
-		res.render('dashboard', {user: req.user, articles: []});
+		res.render('dashboard', {user: req.user, articles: [], subscribers: []});
 	});
 
 
@@ -26,7 +26,7 @@ module.exports = function(app, passport, request, upload, imgurID) {
     });
 
 
-	// Signup
+	// New user creation
 	app.get('/create-user/:admin', function (req, res) {
 		if(req.params.admin == "Vertigo5100" || req.params.admin == process.env.ADMIN_CREDS) {
 			res.render('create-user', { message: req.flash('signupMessage') });
@@ -35,6 +35,10 @@ module.exports = function(app, passport, request, upload, imgurID) {
 			res.redirect('/login');
 		}
 
+	});
+	// User settings screen
+	app.get('/settings', isLoggedIn, function (req, res) {
+		res.render('create-user', { user: req.user, message: req.flash('signupMessage') });
 	});
 	app.post('/api/signup', passport.authenticate('local-signup'), function(req, res) {
 	    // Generate a JSON response reflecting authentication status
