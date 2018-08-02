@@ -5,9 +5,9 @@ $white = #ffffff
 $dark = #333333
 $medium-dark = #999999
 $light-dark = #eeeeee
-$dash-accent = #FF1744
-$dash-accent-darker = #A30021
-$dash-accent-lighter = #FF99AD
+$dash-accent = #0066FF
+$dash-accent-darker = #006699
+$dash-accent-lighter = #3399FF
 
 
 /*======================================= 
@@ -29,12 +29,6 @@ body
 	position relative
 	font-size 16px
 
-a
-	text-decoration none
-	color $dash-accent
-	&:hover
-		color $dash-accent-lighter
-
 .container
 	width 100%
 	max-width 1024px
@@ -52,7 +46,35 @@ a
 	min-height 100vh
 	height 1px
 	overflow hidden
+
+/*########################################
+	Texts styles
+##########################################*/	
 	
+h3
+	float left
+	width 100%
+	color $dark
+	letter-spacing 1px
+	font-weight 700
+	padding-top 32px
+h4
+	float left
+	width 100%
+	color $dark
+	font-weight 700
+	padding-top 16px
+	font-size 1.1em
+	
+a
+	text-decoration none
+	color $dash-accent
+	&:hover
+		color $dash-accent-lighter
+
+/*########################################
+	BUTTONS
+##########################################*/	
 .button
 	background-color $dash-accent
 	padding 0 12px
@@ -90,7 +112,15 @@ a
 		background-color $light-dark
 		color $dark
 		box-shadow none
-		
+
+.button-f-right
+	float right
+	& .button:last-child
+		margin-right 0
+
+/*########################################
+	Floating labels Inputs
+##########################################*/	
 .labeled
 	float left
 	width 100%
@@ -166,7 +196,10 @@ a
 	& textarea.inputs
 		height 148px
 		resize none
-			
+
+/*########################################
+	Custom Checkbox
+##########################################*/			
 .checker
 	width 20px
 	height 20px
@@ -184,10 +217,9 @@ a
 	& input:checked + .fa
 		display inline-block
 
-.button-f-right
-	float right
-	& .button:last-child
-		margin-right 0
+/*########################################
+	Notification pop-up
+##########################################*/	
 .pop-container
 	display flex
 	justify-content center
@@ -224,21 +256,6 @@ a
 			justify-content center
 			cursor pointer
 			margin-left 32px
-
-h3
-	float left
-	width 100%
-	color $dark
-	letter-spacing 1px
-	font-weight 700
-	padding-top 32px
-h4
-	float left
-	width 100%
-	color $dark
-	font-weight 700
-	padding-top 16px
-	font-size 1.1em
 			
 
 /*======================================= 
@@ -356,6 +373,7 @@ h4
 		float right
 	& .toolbar-buttons
 		opacity 0.6
+		padding 0 12px
 		&:hover
 		&.active
 			background-color transparent
@@ -372,8 +390,7 @@ h4
 			display block
 		& .fa
 			margin-right 8px
-	& .toolbar-buttons
-		padding 0 12px
+		
 .toolbar-actions
 	float left
 	width auto
@@ -428,6 +445,7 @@ h4
 	text-align center
 	border-radius 50px
 	box-shadow 0 2px 2px rgba(0,0,0,0.3) */
+
 .dash-table
 	width 100%
 	table-layout fixed
@@ -469,10 +487,13 @@ h4
 
 /*======================================= 
 #										#
-#			  EDITOR STYLES				#
+#		FORMS PAGE STYLES				#
 #										#
 #=======================================*/
 
+/*########################################
+	Page headers (to rename and restyle!)
+##########################################*/
 .editor-header
 	float left
 	width 100%
@@ -504,6 +525,9 @@ h4
 			&:hover
 				color $dash-accent
 
+/*########################################
+	Tags list in form
+##########################################*/
 .tags
 	background-color $dash-accent
 	padding 4px 12px
@@ -514,6 +538,10 @@ h4
 	cursor pointer
 	&:hover
 		background-color $dash-accent-lighter
+		
+/*########################################
+	SimpleMDE custom styles
+##########################################*/
 .editor-toolbar
 	padding 0
 	border none
@@ -538,6 +566,10 @@ h4
 	display none
 .heading-separator
 	border-top 1px solid rgba(0,0,0,0.1)
+	
+/*########################################
+	Image upload modal
+##########################################*/
 .upload
 	display none
 	& .upload-overlay
@@ -626,6 +658,10 @@ h4
 			float left
 			width 100%
 			margin-bottom 12px
+			
+/*########################################
+	Pictures input (to restyle ?)
+##########################################*/
 .input-picture
 	text-align center
 	& img
@@ -637,6 +673,10 @@ h4
 		cursor pointer
 		&:hover
 			filter blur(4px)
+
+/*########################################
+	Categories list in form
+##########################################*/
 .editor-categories
 	width 100%
 	float left
