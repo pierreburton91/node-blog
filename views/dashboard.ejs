@@ -13,11 +13,11 @@
     <div class="dash__controls">
         <div class="controls-toolbar">
             <div class="toolbar-panels">
-                <button id="panel-posts" class="toolbar-buttons active" onclick="handleTabClick()"><i class="fa fa-newspaper-o" aria-hidden="true"></i>Articles</button>
-                <button id="panel-subscribers" class="toolbar-buttons" onclick="handleTabClick()"><i class="fa fa-users" aria-hidden="true"></i>Subscribers</button>
+                <button id="panel-posts" class="toolbar-buttons active" onclick="handleTabClick(event)"><i class="fa fa-newspaper-o" aria-hidden="true"></i>Articles</button>
+                <button id="panel-subscribers" class="toolbar-buttons" onclick="handleTabClick(event)"><i class="fa fa-users" aria-hidden="true"></i>Subscribers</button>
             </div>
             <div id="posts-actions" class="toolbar-actions">
-                <button id="edit-post" title="Edit" class="toolbar-buttons" onclick="handleActionClick()" disabled="true"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                <button id="edit-post" title="Edit" class="toolbar-buttons" onclick="handleActionClick(event)" disabled="true"><i class="fa fa-pencil" aria-hidden="true"></i></button>
                 <button id="delete-post" title="Delete" class="toolbar-buttons" disabled="true"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                 <a href="write-post" title="Write" class="toolbar-fab"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
             </div>
@@ -29,7 +29,7 @@
         <table class="dash-table" id="dashboard-posts">
             <thead>
                 <tr>
-                    <td><label class="checker"><input type="checkbox" onchange="checkAll(),handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
+                    <td><label class="checker"><input type="checkbox" onchange="checkAll(event),handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
                     <th>Title</th>
                     <th>Category</th>
                     <th>Date published</th>
@@ -81,7 +81,7 @@
             <table class="dash-table" id="dashboard-subscribers" style="display: none;">
                 <thead>
                     <tr>
-                        <td><label class="checker"><input type="checkbox" onchange="checkAll(),handleBoxCheck()"/><i class="fa fa-check" aria-hidden="true"></i></label></td>
+                        <td><label class="checker"><input type="checkbox" onchange="checkAll(event),handleBoxCheck()"/><i class="fa fa-check" aria-hidden="true"></i></label></td>
                         <th>EMail</th>
                         <th>Firstname</th>
                         <th>Lastname</th>

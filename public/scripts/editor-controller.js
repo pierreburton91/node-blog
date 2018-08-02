@@ -347,8 +347,7 @@ tagsInput.addEventListener('keydown', function(e) {
 /* Removes tags on click */
 tagsContainer.addEventListener('click', function(e){
     if(e.target && e.target.classList.contains("tags")) {
-        var tagBoxGroup = document.querySelectorAll('.tags'),
-            currentItem = e.target.innerHTML,
+        var currentItem = e.target.innerHTML,
             tagToDelete = tags.indexOf(currentItem);
 
         tagsContainer.removeChild(tagsContainer.childNodes[tagToDelete + 1]);

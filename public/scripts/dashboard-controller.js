@@ -1,4 +1,4 @@
-function handleTabClick() {
+function handleTabClick(event) {
     var target = event.currentTarget,
         articlesButton = document.querySelector('#panel-posts'),
         subscribersButton = document.querySelector('#panel-subscribers'),
@@ -19,7 +19,8 @@ function handleTabClick() {
             var inputs = subscribersTable.querySelectorAll('input[type="checkbox"]');
             for (i = 0; i < inputs.length; i++) {
                 inputs[i].checked = false;
-            }  
+            }
+            handleBoxCheck();
             subscribersButton.classList.remove('active');
             articlesButton.classList.add('active');
         }
@@ -36,14 +37,15 @@ function handleTabClick() {
             var inputs = articlesTable.querySelectorAll('input[type="checkbox"]');
             for (i = 0; i < inputs.length; i++) {
                 inputs[i].checked = false;
-            } 
+            }
+            handleBoxCheck();
             articlesButton.classList.remove('active');
             subscribersButton.classList.add('active');
         }
     }
 }
 
-function checkAll() {
+function checkAll(event) {
     var target = event.target,
         parentTable = target.closest('table'),
         inputs = document.querySelectorAll('#'+parentTable.id+' input[type="checkbox"]');
@@ -60,7 +62,6 @@ function checkAll() {
 
 function handleBoxCheck() {
     var checkboxes = document.querySelectorAll('input[type="checkbox"]'),
-        isChecked = Array.prototype.slice.call(checkboxes).some(function(x) {return x.checked}),
         checkedOnes = Array.prototype.slice.call(checkboxes).filter(function(x) {return x.checked}),
         editPostButton = document.querySelector('#edit-post'),
         deletePostButton = document.querySelector('#delete-post'),
