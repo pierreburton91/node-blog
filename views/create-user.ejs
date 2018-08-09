@@ -7,8 +7,12 @@
     <div class="editor-header">
         <h1><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;User profile</h1>
         <div class="button-f-right">
-            <button onclick="goBack()" class="button cancel">Cancel</button>
-            <button onclick="submit()" class="button submit">Save</button>
+			<button onclick="goBack()" class="button cancel">Cancel</button>
+			<% if (typeof user != undefined) {%>
+				<button onclick="submit(true)" class="button submit">Save</button>
+			<%} else {%>
+				<button onclick="submit(false)" class="button submit">Save</button>
+			<%}%>
         </div>
     </div>
     <div class="labeled input-picture">
@@ -16,7 +20,7 @@
     	<p>Click to upload a new image</p>
     </div>
     <h3>Account</h3>
-    <%- include('components/input', {type: "text", id: "username", name: "username", label: "Username", value: user.account.username, hint: ""}); %>
+    <%- include('components/input', {type: "text", id: "username", name: "username", label: "Username", value: "", hint: ""}); %>
     <%- include('components/input', {type: "password", id: "password", name: "password", label: "Password", value: "", hint: ""}); %>
     <%- include('components/input', {type: "password", id: "repeat-password", name: "repeat-password", label: "Repeat password", value: "", hint: ""}); %>
     <h3>About you</h3>
@@ -91,7 +95,7 @@
 		}
 	});
 
-	function submit() {
+	function submit(update) {
 		var username = document.querySelector('#username').value,
 			password = document.querySelector('#password').value,
 			repeatPassword = document.querySelector('#repeat-password').value,
@@ -209,8 +213,12 @@
             			displayPop(popUpInfos);
                     }
                 }
-            }
-            xhr.open("POST", "/api/signup", true);
+			}
+			if (update != true) {
+				xhr.open("POST", "/api/signup", true);
+			} else {
+				xhr.open("PUT", "/api/update-profile", true);
+			}
             xhr.setRequestHeader("Content-Type", "application/json");
             xhr.send(JSON.stringify(data));
 		}

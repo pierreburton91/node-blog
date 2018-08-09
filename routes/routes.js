@@ -48,6 +48,12 @@ module.exports = function(app, passport, request, upload, imgurID) {
 	    
 	    return res.send({ success : true, message : 'User is now in the database.' });
 	});
+	app.put('/api/update-profile', passport.authenticate('local-update'), function(req, res) {
+		if (!req.user)
+			return res.send({success : false, message : 'An error occured'});
+		else
+			return res.send({success : true, message : 'User updated'});
+	});
 
 
 	// Publishing

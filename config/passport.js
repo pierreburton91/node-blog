@@ -91,6 +91,29 @@ module.exports = function(passport) {
     }));
 
 
+    passport.use('local-update', new LocalStrategy({
+        usernameField: 'account[]username',
+        passwordField: 'account[]password',
+        passReqToCallback : true // allows us to pass back the entire request to the callback
+    },
+    function(req, username, password, done) {
+        
+        process.nextTick(function() {
+        
+            User.findByIdAndUpdate(req.user.id, user, {new: true}, function(err, user) {
+                // if there are any errors, return the error
+                if (err)
+                    return done(err);
+
+                else 
+                    return done(null, user);
+            });    
+
+        });
+
+    }));
+
+
     // =========================================================================
     // LOCAL LOGIN ============================================================
     // =========================================================================
