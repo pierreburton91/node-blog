@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<%- include('components/admin-head', {guard: false /* to be true */, simplemde: false, title: "Dashboard"}); %>
+<%- include('components/admin-head', {simplemde: false, title: "Dashboard"}); %>
 <body>
 	<div class="dash__hero">
         <div class="hero-profile-pic" <% if(user) { %> style="background-image:url(<%= user.about.picture%>)" <% } %>></div>

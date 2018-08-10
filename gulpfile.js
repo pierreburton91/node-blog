@@ -15,16 +15,16 @@ gulp.task('css', function () {
         .pipe(gulp.dest('public/styles'));
 });
 
-gulp.task('sync', ['nodemon'], function() {
-	browserSync.init({
-	    proxy: 'http://localhost:3000',
-	    port: 4000,
-	    open: true,
-	    notify: true,
-	    logConnections: true,
-	    reloadDelay: 1000
-	});
-});
+// gulp.task('sync', ['nodemon'], function() {
+// 	browserSync.init({
+// 	    proxy: 'http://localhost:3000',
+// 	    port: 4000,
+// 	    open: true,
+// 	    notify: true,
+// 	    logConnections: true,
+// 	    reloadDelay: 1000
+// 	});
+// });
 
 gulp.task('nodemon', function (cb) {
 	var started = false;
@@ -33,14 +33,14 @@ gulp.task('nodemon', function (cb) {
 		tasks: ['css'],
 		ext: 'js ejs styl', 
 		env: { 'NODE_ENV': 'development' }
-	}).on('start', function() {
-		if (!started) {
-			cb();
-			started = true;
-			browserSync.reload();
-		} 
-	}).on('restart', function() {
-	});
+	})
+	// .on('start', function() {
+	// 	if (!started) {
+	// 		cb();
+	// 		started = true;
+	// 		browserSync.reload();
+	// 	} 
+	// })
 });
 
-gulp.task('start', ['sync']);
+gulp.task('start', ['nodemon']);

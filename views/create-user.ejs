@@ -1,39 +1,70 @@
 <!-- https://github.com/tj/ejs/issues/90 -->
 <!DOCTYPE html>
 <html>
-<%- include('components/admin-head', {guard: false, simplemde: false, title: "User registration"}); %>
+<%- include('components/admin-head', {simplemde: false, title: "User registration"}); %>
 <body>
 <div class="container">
     <div class="editor-header">
         <h1><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;User profile</h1>
         <div class="button-f-right">
 			<button onclick="goBack()" class="button cancel">Cancel</button>
-			<% if (typeof user != undefined) {%>
+			<% if (typeof user != undefined) { %>
 				<button onclick="submit(true)" class="button submit">Save</button>
-			<%} else {%>
+			<% } else { %>
 				<button onclick="submit(false)" class="button submit">Save</button>
-			<%}%>
+			<% } %>
         </div>
     </div>
-    <div class="labeled input-picture">
-    	<img id="profile-pic" src="https://robohash.org/newuser.jpg?size=140x140&set=set2" alt="Profile picture" onclick="uploadImage(this)">
+	<div class="labeled input-picture">
+		<% if (typeof user != undefined) { %>
+			<img id="profile-pic" src="<%= user.about.picture %>" alt="Profile picture" onclick="uploadImage(this)">
+		<% } else { %>
+			<img id="profile-pic" src="https://robohash.org/newuser.jpg?size=140x140&set=set2" alt="Profile picture" onclick="uploadImage(this)">
+		<% } %>
     	<p>Click to upload a new image</p>
     </div>
-    <h3>Account</h3>
-    <%- include('components/input', {type: "text", id: "username", name: "username", label: "Username", value: "", hint: ""}); %>
+	<h3>Account</h3>
+	<% if (typeof user != undefined) { %>
+		<%- include('components/input', {type: "text", id: "username", name: "username", label: "Username", value: user.account.username, hint: ""}); %>
+	<% } else { %>
+		<%- include('components/input', {type: "text", id: "username", name: "username", label: "Username", value: "", hint: ""}); %>
+	<% } %>
     <%- include('components/input', {type: "password", id: "password", name: "password", label: "Password", value: "", hint: ""}); %>
-    <%- include('components/input', {type: "password", id: "repeat-password", name: "repeat-password", label: "Repeat password", value: "", hint: ""}); %>
-    <h3>About you</h3>
-    <%- include('components/input', {type: "text", id: "firstname", name: "firstname", label: "Firstname", value: "", hint: ""}); %>
-    <%- include('components/input', {type: "text", id: "lastname", name: "lastname", label: "Lastname", value: "", hint: ""}); %>
-    <%- include('components/input', {type: "email", id: "email", name: "email", label: "Email address", value: "", hint: ""}); %>
-    <%- include('components/input', {type: "textarea", id: "description", name: "description", label: "Your personnal description", value: "", hint: "Max 140 characters"}); %>
-    <h3>About your blog</h3>
-    <%- include('components/input', {type: "text", id: "name", name: "name", label: "Your blog's name", value: "", hint: ""}); %>
-    <%- include('components/input', {type: "textarea", id: "catchphrase", name: "catchphrase", label: "Your catchphrase", value: "", hint: "Max 140 characters"}); %>
-    <h4>Your blog categories</h4>
-    <div class="editor-categories">
+	<%- include('components/input', {type: "password", id: "repeat-password", name: "repeat-password", label: "Repeat password", value: "", hint: ""}); %>
+	<h3>About you</h3>
+	<% if (typeof user != undefined) { %>
+		<%- include('components/input', {type: "text", id: "firstname", name: "firstname", label: "Firstname", value: user.about.firstname, hint: ""}); %>
+		<%- include('components/input', {type: "text", id: "lastname", name: "lastname", label: "Lastname", value: user.about.lastname, hint: ""}); %>
+		<%- include('components/input', {type: "email", id: "email", name: "email", label: "Email address", value: user.about.email, hint: ""}); %>
+		<%- include('components/input', {type: "textarea", id: "description", name: "description", label: "Your personnal description", value: user.about.description, hint: "Max 140 characters"}); %>
+	<% } else { %>
+		<%- include('components/input', {type: "text", id: "firstname", name: "firstname", label: "Firstname", value: "", hint: ""}); %>
+		<%- include('components/input', {type: "text", id: "lastname", name: "lastname", label: "Lastname", value: "", hint: ""}); %>
+		<%- include('components/input', {type: "email", id: "email", name: "email", label: "Email address", value: "", hint: ""}); %>
+		<%- include('components/input', {type: "textarea", id: "description", name: "description", label: "Your personnal description", value: "", hint: "Max 140 characters"}); %>
+	<% } %>
+    
+	<h3>About your blog</h3>
+	<% if (typeof user != undefined) { %>
+		<%- include('components/input', {type: "text", id: "name", name: "name", label: "Your blog's name", value: user.blog.name, hint: ""}); %>
+		<%- include('components/input', {type: "textarea", id: "catchphrase", name: "catchphrase", label: "Your catchphrase", value: user.blog.catchphrase, hint: "Max 140 characters"}); %>
+	<% } else { %>
+		<%- include('components/input', {type: "text", id: "name", name: "name", label: "Your blog's name", value: "", hint: ""}); %>
+		<%- include('components/input', {type: "textarea", id: "catchphrase", name: "catchphrase", label: "Your catchphrase", value: "", hint: "Max 140 characters"}); %>
+	<% } %>
+    
+	<h4>Your blog categories</h4>
+	<% if (typeof user != undefined) { %>
+	<div class="editor-categories">
+		<% user.blog.categories.forEach(function(cat){ %>
+			<div class="category-item"><%= cat %><span>x</span></div>
+		<% }); %>
     </div>
+	<% } else { %>
+	<div class="editor-categories">
+    </div>
+	<% } %>
+    
     <%- include('components/input', {type: "text", id: "category", name: "category", label: "Add a new category", value: "", hint: "Validate with \"Enter\" key"}); %>
 </div>
 <%- include('components/upload-image'); %>
@@ -45,18 +76,15 @@
 
 	var catInput = document.querySelector('#category'),
 		catItems = document.querySelector('.editor-categories'),
-		categories;
-		
-	if(document.querySelector('.category-item')) {
-		var categoryList = document.querySelector('.category-item');
-		for (i = 0; i > categoryList.length; i++) {
+		categories = [];
+
+	if(document.querySelectorAll('.category-item') != undefined) {
+		var categoryList = document.querySelectorAll('.category-item');
+		for (i = 0; i < categoryList.length; i++) {
 			categories.push(categoryList[i].childNodes[0].nodeValue);
 		}
 	}
-	else {
-		categories = [];
-	}
-
+	
 	catInput.addEventListener('keyup', function(e) {
 		if (e.keyCode == 13) {
 			var value = e.target.value;
@@ -114,7 +142,7 @@
             document.querySelector('#username').focus();
 
 		}
-		else if (password.length < 8) {
+		else if (password.length < 8 && update == false && password != '') {
 			var popUpInfos = {"type": "error", "text": "Your password must contain at least 8 characters."};
             displayPop(popUpInfos);
             document.querySelector('#password').focus();
@@ -202,7 +230,7 @@
             				setTimeout(function(){window.location.href = "/";}, 2000);
                         }
                         else {
-                        	var popUpInfos = {"type": "warning", "text": "We couldn't authenticate you. Please contact the support." };
+                        	var popUpInfos = {"type": "warning", "text": "An error occured. Please contact the support." };
             				displayPop(popUpInfos);
                         }
                         
@@ -230,7 +258,7 @@
 </script>
 <% if (message.length > 0) { %>
     <script type="text/javascript">
-            var popUpInfos = {"type": "error", "text": "<%= message %>" };
+            var popUpInfos = {"type": "error", "text": message };
             displayPop(popUpInfos);
     </script>
 <% } %>
