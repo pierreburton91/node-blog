@@ -274,6 +274,7 @@ var uploadView = document.querySelector('.upload'),
     }),
     tagsInput = document.querySelector('input[name="tags"]'),
     tagsContainer = tagsInput.closest('.labeled'),
+    tagBoxGroup,
     tags = [];
 
 dropZone.addEventListener("dragover", function( event ) {
@@ -288,6 +289,15 @@ dropZone.addEventListener("dragleave", function( event ) {
 }, false);
 
 
+// Update tags array and resize tagInput on load if article update
+if (document.querySelectorAll('.tags') != undefined) {
+    tagBoxGroup = document.querySelectorAll('.tags');
+
+    for(var i=0 ; i < tagBoxGroup.length ; i++) {
+        offset += tagBoxGroup[i].offsetWidth + 9;
+        tagsInput.style.width = "calc(100% - "+ offset +"px)";
+    }
+}
 
 /* Add tags and resize the input when hitting the coma
 prevents writting new tags if 5 tags are already there
@@ -315,7 +325,7 @@ tagsInput.addEventListener('keyup', function(e) {
         tagBox.appendChild(tagBoxText);
         tagsContainer.insertBefore(tagBox, tagsInput);
 
-        var tagBoxGroup = document.querySelectorAll('.tags');
+        tagBoxGroup = document.querySelectorAll('.tags');
 
         for(var i=0 ; i < tagBoxGroup.length ; i++) {
             offset += tagBoxGroup[i].offsetWidth + 9;

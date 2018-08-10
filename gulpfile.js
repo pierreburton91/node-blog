@@ -7,15 +7,16 @@ var nodemon = require('gulp-nodemon');
 var browserSync = require('browser-sync');
 
 gulp.task('css', function () {
-    gulp.src('stylus/main.styl')
+    var stream = gulp.src('stylus/main.styl')
         .pipe(stylus({compress: false, paths: ['stylus']}))
         .pipe(autoprefixer())
         .pipe(minifyCSS())
         .pipe(rename('styles.css'))
-        .pipe(gulp.dest('public/styles'));
+		.pipe(gulp.dest('public/styles'));
+	return stream;
 });
 
-// gulp.task('sync', ['nodemon'], function() {
+// gulp.task('sync', function() {
 // 	browserSync.init({
 // 	    proxy: 'http://localhost:3000',
 // 	    port: 4000,

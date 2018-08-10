@@ -20,8 +20,8 @@ module.exports = function(app, passport, request, upload, imgurID) {
 	});
 	
 	// New user creation
-	app.get('/create-user/:admin', function (req, res) {
-		if(req.params.admin == process.env.ADMIN_CREDS) {
+	app.get('/create-user', isLoggedIn, function (req, res) {
+		if(req.user.account.username == process.env.ADMIN_CREDS) {
 			res.render('create-user', { message: req.flash('signupMessage') });
 		}
 		else {
