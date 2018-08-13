@@ -36,8 +36,16 @@ module.exports = function(app, passport, request, upload, imgurID) {
 	});
 
 	// Publishing
-	app.get('/write-post', function (req, res) {
-		res.render('editor');
+	app.get('/write-post', isLoggedIn, function (req, res) {
+		const user = req.user;
+		res.render('editor', {user: user});
+	});
+
+	app.get('/edit/:article', function(req, res) {
+		const article = req.params.article;
+		const user = req.user;
+
+		res.render('editor', {user: user, article: article});
 	});
 
 

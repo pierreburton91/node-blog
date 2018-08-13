@@ -28,13 +28,13 @@ gulp.task('css', function () {
 // });
 
 gulp.task('nodemon', function (cb) {
-	var started = false;
+	// var started = false;
 	return nodemon({
 		script: 'index.js',
-		tasks: ['css'],
+		//tasks: ['css'],
 		ext: 'js ejs styl', 
 		env: { 'NODE_ENV': 'development' }
-	})
+	}).on('start', ['css']);
 	// .on('start', function() {
 	// 	if (!started) {
 	// 		cb();

@@ -25,11 +25,12 @@
         <input type="text" class="inputs heading" name="post-title" placeholder="Your title" required/>
     <%}%>
     </label>
+    <!--TODO: Insérer le contenu pour update -->
     <label class="labeled">
         <textarea class="inputs" placeholder="Your story..."></textarea>
     </label>
     <h3 class="heading-separator">About your post</h3>
-    <% if (typeof article != 'undefined' && typeof user != 'undefined') {%>
+    <% if (typeof article != 'undefined') {%>
         <%- include('components/input', {type: "text", id: "about", name: "about", label: "What is your post about ?", value: article.about.name, hint: ""}); %>
         <%- include('components/input', {type: "text", id: "about-link", name: "about-link", label: "Can you provide a link ?", value: article.about.url, hint: ""}); %>
         <%- include('components/input', {type: "select", id: "category", name: "category", label: "Category", value: user.blog.categories, hint: ""}); %>
@@ -37,16 +38,16 @@
     <%} else {%>
         <%- include('components/input', {type: "text", id: "about", name: "about", label: "What is your post about ?", value: "", hint: ""}); %>
         <%- include('components/input', {type: "text", id: "about-link", name: "about-link", label: "Can you provide a link ?", value: "", hint: ""}); %>
-        <%- include('components/input', {type: "select", id: "category", name: "category", label: "Category", value: ["Cat1", "Cat2"], hint: ""}); %>
+        <%- include('components/input', {type: "select", id: "category", name: "category", label: "Category", value: user.blog.categories, hint: ""}); %>
         <%- include('components/input', {type: "text", id: "tags", name: "tags", label: "Tags", value: "", hint: "Separate tags with a coma. Up to 5 tags."}); %>
     <%}%>
 </div>
 <%- include('components/upload-image'); %>
 <script src="https://use.fontawesome.com/973262919d.js"></script>
 <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
-<script type="text/javascript" src="scripts/closest-polyfill.js"></script>
-<script type="text/javascript" src="scripts/promise-polyfill.min.js"></script>
-<script type="text/javascript" src="scripts/utilities.js"></script>
-<script type="text/javascript" src="scripts/editor-controller.js"></script>
+<script type="text/javascript" src="../scripts/closest-polyfill.js"></script>
+<script type="text/javascript" src="../scripts/promise-polyfill.min.js"></script>
+<script type="text/javascript" src="../scripts/utilities.js"></script>
+<script type="text/javascript" src="../scripts/editor-controller.js"></script>
 </body>
 </html>
