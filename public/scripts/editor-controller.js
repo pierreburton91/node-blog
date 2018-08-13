@@ -272,6 +272,11 @@ var uploadView = document.querySelector('.upload'),
             title: "Insert Image"
         }, "|", "preview", "side-by-side", "fullscreen", "|", "guide"]
     }),
+    title = document.querySelector('input[name="post-title"]'),
+    articleBody = document.querySelector('textarea'),
+    articleAbout = document.querySelector('#about'),
+    articleAboutUrl = document.querySelector('#about-link'),
+    articleCategory = document.querySelector('#category'),
     tagsInput = document.querySelector('input[name="tags"]'),
     tagsContainer = tagsInput.closest('.labeled'),
     tagBoxGroup,
@@ -368,19 +373,23 @@ tagsContainer.addEventListener('click', function (e) {
     }
 });
 
-function submit(update) {
-	var headline,
+function submit(update, isDraft, articleID) {
+    var articleID = articleID || null,
+        headline = title.value,
 		datePublished,
 		dateModified,
-		aboutName,
-		aboutUrl,
-		category,
+		aboutName = articleAbout.value,
+		aboutUrl = articleAboutUrl.value,
+		category = articleCategory.value,
 		keywords = tags,
-		thumbnailUrl,
-		HTMLBody,
-        bodyString,
-        markdownString,
-        wordCount,
+        markdownString = articleBody.value,
+		htmlString = simplemde.options.previewRender(markdownString),
+        bodyString = htmlString.replace(/<[^>]*>/g, ''),
+        firstImageRef = markdownString.match(/(!\[[^\]]+\]\([^)]+\))/),
+        thumbnailUrlStart = firstImageRef.indexOf('http://i.imgur'),
+        thumbnailUrlEnd = firstImageRef.indexOf('")'),
+        thumbnailUrl = firstImageRef.substring(thumbnailUrlStart, thumbnailUrlEnd),
+        wordCount = bodyString.split(' ').length,
 		data = {
             headline : headline,
             datepublished: datePublished,
@@ -392,42 +401,37 @@ function submit(update) {
             category: category,
             keywords: keywords,
             thumbnail: thumbnailUrl,
-            fullBody: HTMLBody,
+            fullBody: htmlString,
             bodyString: bodyString,
             markdown: markdownString,
-            wordCount: wordCount
+            wordCount: wordCount,
+            isDraft: isDraft
         };
 
-	if (!username) {
-		var popUpInfos = { "type": "error", "text": "You must choose a username." };
+	if (headline == '') {
+		var popUpInfos = { "type": "error", "text": "You must choose a title." };
 		displayPop(popUpInfos);
-		document.querySelector('#username').focus();
-
+		title.focus();
+    }
+    else if (markdownString == '') {
+		var popUpInfos = { "type": "error", "text": "Your article can't be empty." };
+		displayPop(popUpInfos);
+		articleBody.focus();
 	}
-	else if (password.length < 8 && update == false && password != '') {
-		var popUpInfos = { "type": "error", "text": "Your password must contain at least 8 characters." };
+	else if (aboutName == '' && isDraft == false) {
+		var popUpInfos = { "type": "error", "text": "You must enter what your article is about." };
 		displayPop(popUpInfos);
-		document.querySelector('#password').focus();
+		articleAbout.focus();
 	}
-	else if (password != repeatPassword) {
-		var popUpInfos = { "type": "error", "text": "Passwords don't match." };
+	else if (category == '' && isDraft == false) {
+		var popUpInfos = { "type": "error", "text": "You must select a category" };
 		displayPop(popUpInfos);
-		document.querySelector('#repeat-password').focus();
+		articleCategory.focus();
 	}
-	else if (!email || !document.querySelector('#email').checkValidity()) {
-		var popUpInfos = { "type": "error", "text": "You must provide a valid email address." };
+	else if (keywords == [] && isDraft == false) {
+		var popUpInfos = { "type": "error", "text": "You must provide at least one tag." };
 		displayPop(popUpInfos);
-		document.querySelector('#email').focus();
-	}
-	else if (!name) {
-		var popUpInfos = { "type": "error", "text": "Your blog must have a name." };
-		displayPop(popUpInfos);
-		document.querySelector('#name').focus();
-	}
-	else if (categories.length == 0) {
-		var popUpInfos = { "type": "error", "text": "Your blog should at least have 1 category." };
-		displayPop(popUpInfos);
-		document.querySelector('#category').focus();
+		tagsInput.focus();
 	}
 	else {
 		var xhr = new XMLHttpRequest();
@@ -456,11 +460,12 @@ function submit(update) {
 					displayPop(popUpInfos);
 				}
 			}
-		}
-		if (update != true) {
-			xhr.open("POST", "/api/signup", true);
-		} else {
-			xhr.open("PUT", "/api/update-profile", true);
+        }
+        // TODO : Save logic to define...
+		if (update != true && isDraft == false) {
+			xhr.open("POST", "/api/publish/"+ articleID +"", true);
+		} else if (update != true && isDraft == true) {
+			xhr.open("POST", "/api/save-draft", true);
 		}
 		xhr.setRequestHeader("Content-Type", "application/json");
 		xhr.send(JSON.stringify(data));
@@ -468,12 +473,9 @@ function submit(update) {
 }
 
 function goBack() {
-    var title = document.querySelector('input[name="post-title"]'),
-        articleBody = document.querySelector('textarea');
 
     if (title.value != "" || articleBody.value != "") {
         var confirm = window.confirm("Are your sure ? All your unsaved work will be lost.");
-        // console.log(simplemde.options.previewRender(articleBody.value)); Needed for db insert
         if (confirm == true) {
             window.location.href = "/";
         }

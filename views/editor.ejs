@@ -12,9 +12,11 @@
         <div class="button-f-right">
             <button onclick="goBack()" class="button cancel">Cancel</button>
             <% if (typeof article != 'undefined') {%>
-                <button onclick="submit(true)" id="publish" class="button submit">Save</button>
+                <button onclick="submit(true, true, <% article.id %>)" id="save-draft" class="button submit">Save draft</button>
+                <button onclick="submit(true, false, <% article.id %>)" id="publish" class="button submit">Publish</button>
             <%} else {%>
-                <button onclick="submit(false)" id="publish" class="button submit">Publish</button>
+                <button onclick="submit(false, true)" id="save-draft" class="button submit">Save draft</button>
+                <button onclick="submit(false, false)" id="publish" class="button submit">Publish</button>
             <%}%>
         </div>
     </div>
@@ -25,7 +27,6 @@
         <input type="text" class="inputs heading" name="post-title" placeholder="Your title" required/>
     <%}%>
     </label>
-    <!--TODO: Insérer le contenu pour update -->
     <label class="labeled">
         <textarea class="inputs" placeholder="Your story..."></textarea>
     </label>
@@ -49,5 +50,10 @@
 <script type="text/javascript" src="../scripts/promise-polyfill.min.js"></script>
 <script type="text/javascript" src="../scripts/utilities.js"></script>
 <script type="text/javascript" src="../scripts/editor-controller.js"></script>
+<% if (typeof article != 'undefined') {%>
+    <script type="text/javascript">
+        simplemde.setValue(<%= article.markdown %>);
+    </script>
+<% } %>
 </body>
 </html>
