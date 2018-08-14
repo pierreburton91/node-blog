@@ -373,11 +373,10 @@ tagsContainer.addEventListener('click', function (e) {
     }
 });
 
-function submit(update, isDraft, articleID) {
+function submit(update, toDraft, articleID) {
     var articleID = articleID || null,
         headline = title.value,
-		datePublished,
-		dateModified,
+		dateNow = new Date().toISOString(),
 		aboutName = articleAbout.value,
 		aboutUrl = articleAboutUrl.value,
 		category = articleCategory.value,
@@ -392,8 +391,7 @@ function submit(update, isDraft, articleID) {
         wordCount = bodyString.split(' ').length,
 		data = {
             headline : headline,
-            datepublished: datePublished,
-            dateModified : dateModified,
+            dateNow: dateNow,
             about: {
                 name: aboutName,
                 url: aboutUrl
@@ -405,7 +403,7 @@ function submit(update, isDraft, articleID) {
             bodyString: bodyString,
             markdown: markdownString,
             wordCount: wordCount,
-            isDraft: isDraft
+            toDraft: toDraft
         };
 
 	if (headline == '') {
@@ -418,17 +416,17 @@ function submit(update, isDraft, articleID) {
 		displayPop(popUpInfos);
 		articleBody.focus();
 	}
-	else if (aboutName == '' && isDraft == false) {
+	else if (aboutName == '' && toDraft == false) {
 		var popUpInfos = { "type": "error", "text": "You must enter what your article is about." };
 		displayPop(popUpInfos);
 		articleAbout.focus();
 	}
-	else if (category == '' && isDraft == false) {
+	else if (category == '' && toDraft == false) {
 		var popUpInfos = { "type": "error", "text": "You must select a category" };
 		displayPop(popUpInfos);
 		articleCategory.focus();
 	}
-	else if (keywords == [] && isDraft == false) {
+	else if (keywords == [] && toDraft == false) {
 		var popUpInfos = { "type": "error", "text": "You must provide at least one tag." };
 		displayPop(popUpInfos);
 		tagsInput.focus();
@@ -441,12 +439,19 @@ function submit(update, isDraft, articleID) {
 				if (this.status == 200) {
 					var response = JSON.parse(this.responseText),
 						isSuccess = response.success,
-						message = response.message;
+                        message = response.message,
+                        idToReload = response.idToReload || '';
 
 					if (isSuccess) {
 						var popUpInfos = { "type": "success", "text": "The operation succeeded ! " + message + "" };
-						displayPop(popUpInfos);
-						setTimeout(function () { window.location.href = "/"; }, 2000);
+                        displayPop(popUpInfos);
+                        if (idToReload != '') {
+                            setTimeout(function() {window.location.href = "/edit/" + idToReload;}, 2000);
+                        } else if (update == true && toDraft == true) {
+                            return;
+                        } else {
+                            setTimeout(function () { window.location.href = "/"; }, 2000);
+                        }
 					}
 					else {
 						var popUpInfos = { "type": "warning", "text": "An error occured. Please contact the support." };
@@ -461,12 +466,16 @@ function submit(update, isDraft, articleID) {
 				}
 			}
         }
-        // TODO : Save logic to define...
-		if (update != true && isDraft == false) {
-			xhr.open("POST", "/api/publish/"+ articleID +"", true);
-		} else if (update != true && isDraft == true) {
-			xhr.open("POST", "/api/save-draft", true);
-		}
+
+		if (update == false && toDraft == false) {
+			xhr.open("POST", "/api/publish/", true);
+		} else if (update == false && toDraft == true) {
+			xhr.open("POST", "/api/save-new-draft", true);
+		} else if (update == true && toDraft == false) {
+            xhr.open("PUT", "/api/update-and-publish/"+ articleID, true);
+        } else if (update == true && toDraft == true) {
+            xhr.open("PUT", "/api/update-draft/"+ articleID, true);
+        }
 		xhr.setRequestHeader("Content-Type", "application/json");
 		xhr.send(JSON.stringify(data));
 	}

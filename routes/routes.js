@@ -1,4 +1,5 @@
 var User = require('../models/user');
+var Article = require('../models/article');
 
 module.exports = function(app, passport, request, upload, imgurID) {
 
@@ -120,6 +121,145 @@ module.exports = function(app, passport, request, upload, imgurID) {
 			else 
 				return res.send({success : true, message : 'User updated'});
 		});	
+	});
+
+	app.post('/api/publish', function(req, res) {
+		const data = req.body;
+		const userId = req.user.id;
+
+		let newArticle = new Article();
+
+		newArticle = {
+			authorID: userId,
+			isDraft: false,
+			headline: data.headline,
+			datepublished: data.dateNow,
+			dateModified: '',
+			about: {
+				name: data.about.name,
+				url: data.about.url
+			},
+			category: data.category,
+			keywords: data.keywords,
+			thumbnail: data.thumbnail,
+			fullBody: data.fullBody,
+			bodyString: data.bodyString,
+			markdown: data.markdown,
+			wordCount: data.wordCount,
+			comments: [],
+			likes: [],
+			viewCount: 0
+		}
+
+		newArticle.save(err => {
+			if (err)
+				return res.send({success : false, message : 'An error occured'});
+
+			else 
+				return res.send({success : true, message : 'Article published !'});
+		});
+	});
+
+	app.post('/api/save-new-draft', function(req, res) {
+		const data = req.body;
+		const userId = req.user.id;
+
+		let newArticleDraft = new Article();
+
+		newArticleDraft = {
+			authorID: userId,
+			isDraft: true,
+			headline: data.headline,
+			datepublished: '',
+			dateModified: '',
+			about: {
+				name: data.about.name,
+				url: data.about.url
+			},
+			category: data.category,
+			keywords: data.keywords,
+			thumbnail: data.thumbnail,
+			fullBody: data.fullBody,
+			bodyString: data.bodyString,
+			markdown: data.markdown,
+			wordCount: data.wordCount,
+			comments: [],
+			likes: [],
+			viewCount: 0
+		}
+
+		newArticleDraft.save(err => {
+			if (err)
+				return res.send({success : false, message : 'An error occured'});
+
+			else 
+				return res.send({success : true, idToReload : newArticleDraft.id, message : 'Draft saved !'});
+		});
+	});
+
+	app.put('/api/update-and-publish/:articleID', function(req, res) {
+		const data = req.body;
+		const userId = req.user.id;
+		const articleID = req.params.articleID;
+
+		Article.findById(articleID, function(err, article) {
+			
+			article.authorID = userId;
+			article.isDraft = false;
+			article.headline = data.headline;
+			if (article.datepublished == '') {
+				article.datepublished = data.dateNow;
+			} else {
+				article.dateModified = data.dateNow;
+			}
+			article.about.name = data.about.name;
+			article.about.url = data.about.url;
+			article.category = data.category;
+			article.keywords = data.keywords;
+			article.thumbnail = data.thumbnail;
+			article.fullBody = data.fullBody;
+			article.bodyString = data.bodyString;
+			article.markdown = data.markdown;
+			article.wordCount = data.wordCount;
+
+			article.save();
+
+			if (err)
+				return res.send({success : false, message : 'An error occured'});
+
+			else 
+				return res.send({success : true, message : 'Article updated and published !'});
+		});
+	});
+
+	app.put('/api/update-draft/:articleID', function(req, res) {
+		const data = req.body;
+		const userId = req.user.id;
+		const articleID = req.params.articleID;
+
+		Article.findById(articleID, function(err, article) {
+			
+			article.authorID = userId;
+			article.isDraft = true;
+			article.headline = data.headline;
+			article.about.name = data.about.name;
+			article.about.url = data.about.url;
+			article.category = data.category;
+			article.keywords = data.keywords;
+			article.thumbnail = data.thumbnail;
+			article.fullBody = data.fullBody;
+			article.bodyString = data.bodyString;
+			article.markdown = data.markdown;
+			article.wordCount = data.wordCount;
+
+			article.save();
+
+			if (err)
+				return res.send({success : false, message : 'An error occured'});
+
+			else 
+				return res.send({success : true, message : 'Draft saved !'});
+		});
 	});
 
 	// Utilities API

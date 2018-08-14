@@ -17,7 +17,7 @@ gulp.task('css', function () {
 });
 
 // gulp.task('sync', function() {
-// 	browserSync.init({
+// 	var syncStream =  browserSync.init({
 // 	    proxy: 'http://localhost:3000',
 // 	    port: 4000,
 // 	    open: true,
@@ -25,6 +25,7 @@ gulp.task('css', function () {
 // 	    logConnections: true,
 // 	    reloadDelay: 1000
 // 	});
+// 	return syncStream;
 // });
 
 gulp.task('nodemon', function (cb) {
