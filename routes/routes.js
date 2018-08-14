@@ -42,10 +42,11 @@ module.exports = function(app, passport, request, upload, imgurID) {
 		res.render('editor', {user: user});
 	});
 
-	app.get('/edit/:article', function(req, res) {
-		const article = req.params.article;
+	app.get('/edit/:article', isLoggedIn, function(req, res) {
+		const articleID = req.params.article;
 		const user = req.user;
-
+		// TODO: Finir le block
+		Article.findById(articleID)
 		res.render('editor', {user: user, article: article});
 	});
 
@@ -129,27 +130,23 @@ module.exports = function(app, passport, request, upload, imgurID) {
 
 		let newArticle = new Article();
 
-		newArticle = {
-			authorID: userId,
-			isDraft: false,
-			headline: data.headline,
-			datepublished: data.dateNow,
-			dateModified: '',
-			about: {
-				name: data.about.name,
-				url: data.about.url
-			},
-			category: data.category,
-			keywords: data.keywords,
-			thumbnail: data.thumbnail,
-			fullBody: data.fullBody,
-			bodyString: data.bodyString,
-			markdown: data.markdown,
-			wordCount: data.wordCount,
-			comments: [],
-			likes: [],
-			viewCount: 0
-		}
+		newArticle.authorID = userId;
+		newArticle.isDraft = false;
+		newArticle.headline = data.headline;
+		newArticle.datepublished = data.dateNow;
+		newArticle.dateModified = '';
+		newArticle.about.name = data.about.name;
+		newArticle.about.url = data.about.url;
+		newArticle.category = data.category;
+		newArticle.keywords = data.keywords;
+		newArticle.thumbnail = data.thumbnail;
+		newArticle.fullBody = data.fullBody;
+		newArticle.bodyString = data.bodyString;
+		newArticle.markdown = data.markdown;
+		newArticle.wordCount = data.wordCount;
+		newArticle.comments = [];
+		newArticle.likes = [];
+		newArticle.viewCount = 0;
 
 		newArticle.save(err => {
 			if (err)
@@ -166,27 +163,23 @@ module.exports = function(app, passport, request, upload, imgurID) {
 
 		let newArticleDraft = new Article();
 
-		newArticleDraft = {
-			authorID: userId,
-			isDraft: true,
-			headline: data.headline,
-			datepublished: '',
-			dateModified: '',
-			about: {
-				name: data.about.name,
-				url: data.about.url
-			},
-			category: data.category,
-			keywords: data.keywords,
-			thumbnail: data.thumbnail,
-			fullBody: data.fullBody,
-			bodyString: data.bodyString,
-			markdown: data.markdown,
-			wordCount: data.wordCount,
-			comments: [],
-			likes: [],
-			viewCount: 0
-		}
+		newArticleDraft.authorID = userId;
+		newArticleDraft.isDraft = true;
+		newArticleDraft.headline = data.headline;
+		newArticleDraft.datepublished = '';
+		newArticleDraft.dateModified = '';
+		newArticleDraft.about.name = data.about.name;
+		newArticleDraft.about.url = data.about.url;
+		newArticleDraft.category = data.category;
+		newArticleDraft.keywords = data.keywords;
+		newArticleDraft.thumbnail = data.thumbnail;
+		newArticleDraft.fullBody = data.fullBody;
+		newArticleDraft.bodyString = data.bodyString;
+		newArticleDraft.markdown = data.markdown;
+		newArticleDraft.wordCount = data.wordCount;
+		newArticleDraft.comments = [];
+		newArticleDraft.likes = [];
+		newArticleDraft.viewCount = 0;
 
 		newArticleDraft.save(err => {
 			if (err)
