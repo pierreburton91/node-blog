@@ -1,3 +1,5 @@
+var valuesChecked = [];
+
 function handleTabClick(event) {
     var target = event.currentTarget,
         articlesButton = document.querySelector('#panel-posts'),
@@ -20,7 +22,7 @@ function handleTabClick(event) {
             for (i = 0; i < inputs.length; i++) {
                 inputs[i].checked = false;
             }
-            handleBoxCheck();
+            setActionsAvailability();
             subscribersButton.classList.remove('active');
             articlesButton.classList.add('active');
         }
@@ -38,7 +40,7 @@ function handleTabClick(event) {
             for (i = 0; i < inputs.length; i++) {
                 inputs[i].checked = false;
             }
-            handleBoxCheck();
+            setActionsAvailability();
             articlesButton.classList.remove('active');
             subscribersButton.classList.add('active');
         }
@@ -60,8 +62,8 @@ function checkAll(event) {
     }        
 }
 
-function handleBoxCheck() {
-    var checkboxes = document.querySelectorAll('input[type="checkbox"]'),
+function setActionsAvailability() {
+    var checkboxes = document.querySelectorAll('input[type="checkbox"]:not(#checkAll)'),
         checkedOnes = Array.prototype.slice.call(checkboxes).filter(function(x) {return x.checked}),
         editPostButton = document.querySelector('#edit-post'),
         deletePostButton = document.querySelector('#delete-post'),
@@ -85,5 +87,60 @@ function handleBoxCheck() {
         deletePostButton.disabled = false;
         exportContactButton.disabled = false;
         deleteContactButton.disabled = false;
+    }
+
+    valuesChecked = [];
+    for (i=0; i < checkedOnes.length; i++) {
+        valuesChecked.push(checkedOnes[i].value);
+    }
+}
+
+function handleActionClick(entity, action) {
+    if(entity == 'articles' && action == 'edit') {
+        window.location.href = "/edit/" + valuesChecked[0];
+    } else {
+        if (action == "delete") {
+            var prompt = window.confirm("You are about to delete the selected "+ entity +".\nAre you sure ?");
+            if (prompt == false) {
+                return;
+            }
+        }
+        var xhr = new XMLHttpRequest();
+
+		xhr.onreadystatechange = function () {
+			if (this.readyState == 4) {
+				if (this.status == 200) {
+					var response = JSON.parse(this.responseText),
+						isSuccess = response.success,
+                        message = response.message;
+
+					if (isSuccess) {
+						var popUpInfos = { "type": "success", "text": "The operation succeeded ! " + message + "" };
+                        displayPop(popUpInfos);
+                        setTimeout(function () { window.location.href = "/"; }, 2000);
+					}
+					else {
+						var popUpInfos = { "type": "warning", "text": "An error occured. Please contact the support." };
+						displayPop(popUpInfos);
+					}
+
+				}
+				else {
+					console.log(this.status, this.statusText, this.getAllResponseHeaders());
+					var popUpInfos = { "type": "error", "text": "Internal server error. Please contact the support." };
+					displayPop(popUpInfos);
+				}
+			}
+        }
+
+		if (entity == 'articles' && action == 'delete') {
+			xhr.open("DELETE", "/api/delete-posts", true);
+		} else if (entity == 'subscribers' && action == 'export') {
+			xhr.open("POST", "/api/export-subscribers", true);
+		} else if (entity == 'subscribers' && action == 'delete') {
+            xhr.open("DELETE", "/api/delete-subscribers", true);
+        }
+		xhr.setRequestHeader("Content-Type", "application/json");
+		xhr.send(JSON.stringify(valuesChecked));
     }
 }

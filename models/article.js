@@ -6,8 +6,8 @@ const articleSchema = mongoose.Schema({
         authorID: String,
         isDraft: Boolean,
         headline: String,
-        datepublished: Date,
-        dateModified : Date,
+        datePublished: String,
+        dateModified : String,
         about: {
             name: String,
             url: String

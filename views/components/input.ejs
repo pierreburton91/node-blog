@@ -1,7 +1,7 @@
 <label class="labeled">
 	<% if(typeof tags != 'undefined') {
 		tags.forEach(tag => {%>
-			<span><%= tag %></span>
+			<span class="tags"><%= tag %></span>
 		<%})
 	}
 	switch (type) {
@@ -17,9 +17,9 @@
 
     	case "select": %>
     		<select name="<%= name %>" class="inputs" id="<%= id %>" required>
-	            <option selected value></option>
+	            <option <% if(selected == ''){%>selected<% } %> ></option>
 	            <% value.forEach(function(value){ %>
-	            	<option><%= value %></option>
+	            	<option <% if(selected == value){%>selected<% } %> ><%= value %></option>
 	            <% }); %>
 	        </select>
 	        <span class="float-label"><%= label %></span>

@@ -1,3 +1,4 @@
+var mongoose = require('mongoose');
 var User = require('../models/user');
 var Article = require('../models/article');
 
@@ -7,7 +8,15 @@ module.exports = function(app, passport, request, upload, imgurID) {
 // Back office pages
 //########################
 	app.get('/', isLoggedIn, function (req, res) {
-		res.render('dashboard', {user: req.user, articles: [], subscribers: []});
+		const user = req.user;
+		Article.find({authorID: user.id}, function(err, articles) {
+			if (err) {
+				console.log(err);
+				throw err;
+			}
+			
+			return res.render('dashboard', {user: user, articles: articles, subscribers: []});
+		});
 	});
 
 	// Login
@@ -45,9 +54,14 @@ module.exports = function(app, passport, request, upload, imgurID) {
 	app.get('/edit/:article', isLoggedIn, function(req, res) {
 		const articleID = req.params.article;
 		const user = req.user;
-		// TODO: Finir le block
-		Article.findById(articleID)
-		res.render('editor', {user: user, article: article});
+		Article.findById(articleID, function(err, article) {
+			if (err) {
+				console.log(err);
+				throw err;
+			}
+
+			return res.render('editor', {user: user, article: article});;
+		});
 	});
 
 
@@ -133,7 +147,7 @@ module.exports = function(app, passport, request, upload, imgurID) {
 		newArticle.authorID = userId;
 		newArticle.isDraft = false;
 		newArticle.headline = data.headline;
-		newArticle.datepublished = data.dateNow;
+		newArticle.datePublished = data.dateNow;
 		newArticle.dateModified = '';
 		newArticle.about.name = data.about.name;
 		newArticle.about.url = data.about.url;
@@ -166,7 +180,7 @@ module.exports = function(app, passport, request, upload, imgurID) {
 		newArticleDraft.authorID = userId;
 		newArticleDraft.isDraft = true;
 		newArticleDraft.headline = data.headline;
-		newArticleDraft.datepublished = '';
+		newArticleDraft.datePublished = '';
 		newArticleDraft.dateModified = '';
 		newArticleDraft.about.name = data.about.name;
 		newArticleDraft.about.url = data.about.url;
@@ -200,8 +214,8 @@ module.exports = function(app, passport, request, upload, imgurID) {
 			article.authorID = userId;
 			article.isDraft = false;
 			article.headline = data.headline;
-			if (article.datepublished == '') {
-				article.datepublished = data.dateNow;
+			if (article.datePublished == '') {
+				article.datePublished = data.dateNow;
 			} else {
 				article.dateModified = data.dateNow;
 			}
@@ -253,6 +267,34 @@ module.exports = function(app, passport, request, upload, imgurID) {
 			else 
 				return res.send({success : true, message : 'Draft saved !'});
 		});
+	});
+
+	app.delete('/api/delete-posts', function(req, res) {
+		const data = req.body;
+		const toDelete = [];
+
+		data.forEach(id => {
+			toDelete.push(mongoose.Types.ObjectId(id));
+		});
+		Article.find({'_id': { $in: toDelete}}, function(err, docs){
+			if (err)
+				return res.send({success : false, message : 'An error occured'});
+			else
+				docs.forEach(doc => {
+					doc.remove();
+				});
+				return res.send({success : true, message : 'Deletion successful !'});
+		});
+	});
+
+	app.delete('/api/delete-subscribers', function(req, res) {
+		const data = req.body;
+		return res.send({success : true, message : 'Deletion successful !'});
+	});
+
+	app.post('/api/export-subscribers', function(req, res) {
+		const data = req.body;
+		return res.send({success : true, message : 'Export successful !'});
 	});
 
 	// Utilities API

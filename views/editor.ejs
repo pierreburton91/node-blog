@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
+<% if (typeof article != 'undefined') {%>
+<%- include('components/admin-head', {simplemde: true, title: "Edit a post"}); %>
+<%} else {%>
 <%- include('components/admin-head', {simplemde: true, title: "Write a new blogpost"}); %>
+<%}%>
 <body>
 <div class="container">
     <div class="editor-header">
@@ -12,8 +16,8 @@
         <div class="button-f-right">
             <button onclick="goBack()" class="button cancel">Cancel</button>
             <% if (typeof article != 'undefined') {%>
-                <button onclick="submit(true, true, <% article.id %>)" id="save-draft" class="button submit">Save draft</button>
-                <button onclick="submit(true, false, <% article.id %>)" id="publish" class="button submit">Publish</button>
+                <button onclick="submit(true, true, '<%=article.id %>')" id="save-draft" class="button submit">Save draft</button>
+                <button onclick="submit(true, false, '<%=article.id %>')" id="publish" class="button submit">Publish</button>
             <%} else {%>
                 <button onclick="submit(false, true)" id="save-draft" class="button submit">Save draft</button>
                 <button onclick="submit(false, false)" id="publish" class="button submit">Publish</button>
@@ -34,12 +38,12 @@
     <% if (typeof article != 'undefined') {%>
         <%- include('components/input', {type: "text", id: "about", name: "about", label: "What is your post about ?", value: article.about.name, hint: ""}); %>
         <%- include('components/input', {type: "text", id: "about-link", name: "about-link", label: "Can you provide a link ?", value: article.about.url, hint: ""}); %>
-        <%- include('components/input', {type: "select", id: "category", name: "category", label: "Category", value: user.blog.categories, hint: ""}); %>
+        <%- include('components/input', {type: "select", id: "category", name: "category", label: "Category", value: user.blog.categories, selected: article.category, hint: ""}); %>
         <%- include('components/input', {type: "text", id: "tags", name: "tags", label: "Tags", value: "", hint: "Separate tags with a coma. Up to 5 tags.", tags: article.keywords}); %>
     <%} else {%>
         <%- include('components/input', {type: "text", id: "about", name: "about", label: "What is your post about ?", value: "", hint: ""}); %>
         <%- include('components/input', {type: "text", id: "about-link", name: "about-link", label: "Can you provide a link ?", value: "", hint: ""}); %>
-        <%- include('components/input', {type: "select", id: "category", name: "category", label: "Category", value: user.blog.categories, hint: ""}); %>
+        <%- include('components/input', {type: "select", id: "category", name: "category", label: "Category", value: user.blog.categories, selected: '', hint: ""}); %>
         <%- include('components/input', {type: "text", id: "tags", name: "tags", label: "Tags", value: "", hint: "Separate tags with a coma. Up to 5 tags."}); %>
     <%}%>
 </div>
@@ -51,9 +55,10 @@
 <script type="text/javascript" src="../scripts/utilities.js"></script>
 <script type="text/javascript" src="../scripts/editor-controller.js"></script>
 <% if (typeof article != 'undefined') {%>
-    <script type="text/javascript">
-        simplemde.setValue(<%= article.markdown %>);
-    </script>
+<script type="text/javascript">
+console.log("<%= article.markdown %>", "1233");
+    simplemde.codemirror.setValue("<%= article.markdown %>");
+</script>
 <% } %>
 </body>
 </html>

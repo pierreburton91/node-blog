@@ -297,9 +297,9 @@ dropZone.addEventListener("dragleave", function (event) {
 // Update tags array and resize tagInput on load if article update
 if (document.querySelectorAll('.tags') != undefined) {
     tagBoxGroup = document.querySelectorAll('.tags');
-
+    var offset = 0;
     for (var i = 0; i < tagBoxGroup.length; i++) {
-        offset += tagBoxGroup[i].offsetWidth + 9;
+        offset += tagBoxGroup[i].offsetWidth + 13;
         tagsInput.style.width = "calc(100% - " + offset + "px)";
     }
 }
@@ -308,7 +308,7 @@ if (document.querySelectorAll('.tags') != undefined) {
 prevents writting new tags if 5 tags are already there
 prevents a bug where writting a single coma cause the layout to break */
 tagsInput.addEventListener('keyup', function (e) {
-    if (tags.length == 5 && e.keyCode == 188) {
+    if (tagBoxGroup.length == 5 && e.keyCode == 188) {
         return false;
     }
     else if (e.target.value == ",") {
@@ -333,7 +333,7 @@ tagsInput.addEventListener('keyup', function (e) {
         tagBoxGroup = document.querySelectorAll('.tags');
 
         for (var i = 0; i < tagBoxGroup.length; i++) {
-            offset += tagBoxGroup[i].offsetWidth + 9;
+            offset += tagBoxGroup[i].offsetWidth + 13;
             tagsInput.style.width = "calc(100% - " + offset + "px)";
         }
     }
@@ -353,7 +353,7 @@ tagsInput.addEventListener('keydown', function (e) {
             document.querySelector('input[name="tags"] + .float-label').classList.remove("active");
         }
     }
-    else if (tags.length == 5 && e.keyCode != 8) {
+    else if (tagBoxGroup.length == 5 && e.keyCode != 8) {
         e.preventDefault();
         e.stopPropagation();
     }
@@ -405,7 +405,6 @@ function submit(update, toDraft, articleID) {
             wordCount: wordCount,
             toDraft: toDraft
         };
-
 	if (headline == '') {
 		var popUpInfos = { "type": "error", "text": "You must choose a title." };
 		displayPop(popUpInfos);

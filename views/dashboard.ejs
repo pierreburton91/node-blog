@@ -3,8 +3,8 @@
 <%- include('components/admin-head', {simplemde: false, title: "Dashboard"}); %>
 <body>
 	<div class="dash__hero">
-        <div class="hero-profile-pic" <% if(user) { %> style="background-image:url(<%= user.about.picture%>)" <% } %>></div>
-        <div class="hero-profile-name"><% if(user) { %><%= user.about.firstname%> <%= user.about.lastname%><% } else { %>Jane Doe<% } %></div>
+        <div class="hero-profile-pic" <% if(user.about.picture != '') { %>style="background-image:url(<%= user.about.picture%>)"<% } %>></div>
+        <div class="hero-profile-name"><%= user.about.firstname%> <%= user.about.lastname%></div>
         <div class="account-controls">
             <a class="account-control" href="/settings"><i class="fa fa-sliders" aria-hidden="true"></i>Settings</a>
             <a class="account-control" href="/logout"><i class="fa fa-power-off" aria-hidden="true"></i>Disconnect</a>
@@ -17,19 +17,19 @@
                 <button id="panel-subscribers" class="toolbar-buttons" onclick="handleTabClick(event)"><i class="fa fa-users" aria-hidden="true"></i>Subscribers</button>
             </div>
             <div id="posts-actions" class="toolbar-actions">
-                <button id="edit-post" title="Edit" class="toolbar-buttons" onclick="handleActionClick(event)" disabled="true"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-                <button id="delete-post" title="Delete" class="toolbar-buttons" disabled="true"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                <button id="edit-post" title="Edit" class="toolbar-buttons" onclick="handleActionClick('articles', 'edit')" disabled="true"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                <button id="delete-post" title="Delete" class="toolbar-buttons" onclick="handleActionClick('articles', 'delete')" disabled="true"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                 <a href="write-post" title="Write" class="toolbar-fab"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
             </div>
             <div id="subscribers-actions" class="toolbar-actions" style="display: none;">
-                <button id="export-contacts" title="Export" class="toolbar-buttons"><i class="fa fa-external-link" aria-hidden="true"></i></button>
-                <button id="delete-contacts" title="Delete" class="toolbar-buttons" disabled="true"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                <button id="export-contacts" title="Export" class="toolbar-buttons" onclick="handleActionClick('subscribers', 'export')"><i class="fa fa-external-link" aria-hidden="true"></i></button>
+                <button id="delete-contacts" title="Delete" class="toolbar-buttons" onclick="handleActionClick('subscribers', 'delete')" disabled="true"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
             </div>
         </div>
         <table class="dash-table" id="dashboard-posts">
             <thead>
                 <tr>
-                    <td><label class="checker"><input type="checkbox" onchange="checkAll(event),handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
+                    <td><label class="checker"><input type="checkbox" id="checkAll" onchange="checkAll(event), setActionsAvailability()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
                     <th>Title</th>
                     <th>Category</th>
                     <th>Date published</th>
@@ -40,15 +40,19 @@
                 </tr>
             </thead>
             <tbody>
-            <% if (articles.length > 0) {%>
+            <% if (articles.length > 0) {
+                articles.forEach(article => {%>
                 <tr>
-                    <td><label class="checker"><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
-                    <td>articles</td>
-                    <td>articles</td>
-                    <td>articles</td>
-                    <td>articles</td>
+                    <td><label class="checker"><input type="checkbox" onchange="setActionsAvailability()" value="<%= article.id %>" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
+                    <td><%=article.headline %></td>
+                    <td><%=article.category %></td>
+                    <td><%=article.datepublished %></td>
+                    <td><%=article.dateModified %></td>
+                    <td><%=article.viewCount %></td>
+                    <td><%=article.likes.length %></td>
+                    <td><%=article.comments.length %></td>
                 </tr>
-            <% }
+            <% }); }
             else { %>
                 <tr>
                     <td colspan="8" style="text-align: center">You havn't wrote any article for now...</td>
@@ -64,7 +68,7 @@
         <table class="dash-table" id="dashboard-subscribers" style="display: none;">
             <thead>
                 <tr>
-                    <td><label class="checker"><input type="checkbox" onchange="checkAll(event),handleBoxCheck()"/><i class="fa fa-check" aria-hidden="true"></i></label></td>
+                    <td><label class="checker"><input type="checkbox" onchange="checkAll(event), setActionsAvailability()"/><i class="fa fa-check" aria-hidden="true"></i></label></td>
                     <th>EMail</th>
                     <th>Firstname</th>
                     <th>Lastname</th>
@@ -74,7 +78,7 @@
             <tbody>
             <% if (subscribers.length > 0) {%>
                 <tr>
-                    <td><label class="checker"><input type="checkbox" onchange="handleBoxCheck()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
+                    <td><label class="checker"><input type="checkbox" onchange="setActionsAvailability()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
                     <td>Subscriber</td>
                     <td>Subscriber</td>
                     <td>Subscriber</td>
@@ -95,6 +99,8 @@
         </table>
     </div>
 <script type="text/javascript" src="scripts/closest-polyfill.js"></script>
+<script type="text/javascript" src="../scripts/promise-polyfill.min.js"></script>
+<script type="text/javascript" src="../scripts/utilities.js"></script>
 <script type="text/javascript" src="scripts/dashboard-controller.js"></script>
 <script src="https://use.fontawesome.com/973262919d.js"></script>
 </body>
