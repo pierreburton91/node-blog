@@ -56,8 +56,7 @@
 <script type="text/javascript" src="../scripts/editor-controller.js"></script>
 <% if (typeof article != 'undefined') {%>
 <script type="text/javascript">
-console.log("<%= article.markdown %>", "1233");
-    simplemde.codemirror.setValue("<%= article.markdown %>");
+    simplemde.codemirror.setValue("<%= article.markdown.replace(/\n/g, '\\n') %>");
 </script>
 <% } %>
 </body>

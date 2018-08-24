@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var User = require('../models/user');
 var Article = require('../models/article');
+var Subscriber = require('../models/subscriber');
 
 module.exports = function(app, passport, request, upload, imgurID) {
 
@@ -289,12 +290,38 @@ module.exports = function(app, passport, request, upload, imgurID) {
 
 	app.delete('/api/delete-subscribers', function(req, res) {
 		const data = req.body;
-		return res.send({success : true, message : 'Deletion successful !'});
+		const toDelete = [];
+
+		data.forEach(id => {
+			toDelete.push(mongoose.Types.ObjectId(id));
+		});
+		Subscriber.find({'_id': { $in: toDelete}}, function(err, docs){
+			if (err)
+				return res.send({success : false, message : 'An error occured'});
+			else
+				docs.forEach(doc => {
+					doc.remove();
+				});
+				return res.send({success : true, message : 'Deletion successful !'});
+		});
 	});
 
 	app.post('/api/export-subscribers', function(req, res) {
 		const data = req.body;
-		return res.send({success : true, message : 'Export successful !'});
+		const toExport = [];
+// TODO : Finish export to CSV
+		data.forEach(id => {
+			toExport.push(mongoose.Types.ObjectId(id));
+		});
+		Subscriber.find({'_id': { $in: toExport}}, function(err, docs){
+			if (err)
+				return res.send({success : false, message : 'An error occured'});
+			else
+				docs.forEach(doc => {
+					//doc.remove();
+				});
+				return res.send({success : true, message : 'Deletion successful !'});
+		});
 	});
 
 	// Utilities API
