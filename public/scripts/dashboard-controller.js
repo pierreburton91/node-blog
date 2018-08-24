@@ -67,25 +67,21 @@ function setActionsAvailability() {
         checkedOnes = Array.prototype.slice.call(checkboxes).filter(function(x) {return x.checked}),
         editPostButton = document.querySelector('#edit-post'),
         deletePostButton = document.querySelector('#delete-post'),
-        exportContactButton = document.querySelector('#export-contacts'),
         deleteContactButton = document.querySelector('#delete-contacts');
 
     if (checkedOnes.length == 0) {
         editPostButton.disabled = true;
         deletePostButton.disabled = true;
-        exportContactButton.disabled = false;
         deleteContactButton.disabled = true;
     }
     else if (checkedOnes.length == 1) {
         editPostButton.disabled = false;
         deletePostButton.disabled = false;
-        exportContactButton.disabled = false;
         deleteContactButton.disabled = false;
     }
     else {
         editPostButton.disabled = true;
         deletePostButton.disabled = false;
-        exportContactButton.disabled = false;
         deleteContactButton.disabled = false;
     }
 
@@ -98,6 +94,8 @@ function setActionsAvailability() {
 function handleActionClick(entity, action) {
     if(entity == 'articles' && action == 'edit') {
         window.location.href = "/edit/" + valuesChecked[0];
+    } else if (entity == 'subscribers' && action == 'export') {
+        window.location.href = "/api/export-subscribers";
     } else {
         if (action == "delete") {
             var prompt = window.confirm("You are about to delete the selected "+ entity +".\nAre you sure ?");

@@ -76,15 +76,16 @@
                 </tr>
             </thead>
             <tbody>
-            <% if (subscribers.length > 0) {%>
+            <% if (subscribers.length > 0) {
+            subscribers.forEach(subscriber => {%>
                 <tr>
-                    <td><label class="checker"><input type="checkbox" onchange="setActionsAvailability()" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
-                    <td>Subscriber</td>
-                    <td>Subscriber</td>
-                    <td>Subscriber</td>
-                    <td>Subscriber</td>
+                    <td><label class="checker"><input type="checkbox" onchange="setActionsAvailability()" value="<%= subscriber.id %>" /><i class="fa fa-check" aria-hidden="true"></i></label></td>
+                    <td><%=subscriber.email %></td>
+                    <td><%=subscriber.firstName %></td>
+                    <td><%=subscriber.lastName %></td>
+                    <td><%=subscriber.dateRegistred %></td>
                 </tr>
-            <% }
+            <% }); }
             else { %>
                 <tr>
                     <td colspan="5" style="text-align: center">You have no registred subscribers for now...</td>

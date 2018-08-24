@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 // define the schema for our user model
 const subscriberSchema = mongoose.Schema({
 
+        relatedUserId: String,
         email: String,
         firstName: String,
         lastName: String,

@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var csv = require('csv-express');
 var User = require('../models/user');
 var Article = require('../models/article');
 var Subscriber = require('../models/subscriber');
@@ -8,16 +9,25 @@ module.exports = function(app, passport, request, upload, imgurID) {
 //########################
 // Back office pages
 //########################
-	app.get('/', isLoggedIn, function (req, res) {
+	app.get('/', isLoggedIn, async function (req, res) {
 		const user = req.user;
-		Article.find({authorID: user.id}, function(err, articles) {
+		let response = {};
+
+		await Article.find({authorID: user.id}, function(err, articles) {
 			if (err) {
 				console.log(err);
 				throw err;
 			}
-			
-			return res.render('dashboard', {user: user, articles: articles, subscribers: []});
+			return response.articles = articles;
 		});
+		await Subscriber.find({relatedUserId: user.id}, function(err, subscribers) {
+			if (err) {
+				console.log(err);
+				throw err;
+			}
+			return response.subscribers = subscribers;
+		});
+		return res.render('dashboard', {user: user, articles: response.articles, subscribers: response.subscribers});
 	});
 
 	// Login
@@ -306,21 +316,14 @@ module.exports = function(app, passport, request, upload, imgurID) {
 		});
 	});
 
-	app.post('/api/export-subscribers', function(req, res) {
-		const data = req.body;
-		const toExport = [];
-// TODO : Finish export to CSV
-		data.forEach(id => {
-			toExport.push(mongoose.Types.ObjectId(id));
-		});
-		Subscriber.find({'_id': { $in: toExport}}, function(err, docs){
+	app.get('/api/export-subscribers', function(req, res) {
+		const filename = "subscribers.csv";
+		csv.separator = ';';
+		Subscriber.find({relatedUserId: req.user.id}, { '_id': 0, 'email' :1, 'firstName': 1, 'lastName': 1, 'dateRegistred': 1}).lean().exec(function(err, docs){
 			if (err)
 				return res.send({success : false, message : 'An error occured'});
 			else
-				docs.forEach(doc => {
-					//doc.remove();
-				});
-				return res.send({success : true, message : 'Deletion successful !'});
+				return res.csv(docs, true, {"Content-Disposition": 'attachment; filename='+filename});
 		});
 	});
 
@@ -344,6 +347,21 @@ module.exports = function(app, passport, request, upload, imgurID) {
 		});
 	});
 
+	// TODO: Make this a real thing
+	app.get('/populate-sub-test', function (req, res) {
+		for(i=0; i < 5; i++) {
+			let newSub = new Subscriber;
+
+			newSub.relatedUserId = req.user.id;
+			newSub.email = "test"+i;
+			newSub.firstName = "test"+i;
+			newSub.lastName = "test"+i;
+			newSub.dateRegistred = "test"+i;
+
+			newSub.save();
+		}
+		return res.redirect('/');
+	});
 }
 
 function isLoggedIn(req, res, next) {
