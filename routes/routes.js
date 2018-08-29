@@ -4,7 +4,7 @@ var User = require('../models/user');
 var Article = require('../models/article');
 var Subscriber = require('../models/subscriber');
 
-module.exports = function(app, passport, request, upload, imgurID) {
+module.exports = function (app, passport, request, upload, imgurID) {
 
 //########################
 // Back office pages
@@ -13,14 +13,14 @@ module.exports = function(app, passport, request, upload, imgurID) {
 		const user = req.user;
 		let response = {};
 
-		await Article.find({authorID: user.id}, function(err, articles) {
+		await Article.find({authorID: user.id}, '_id headline category datePublished dateModified viewCount likes comments', function (err, articles) {
 			if (err) {
 				console.log(err);
 				throw err;
 			}
 			return response.articles = articles;
 		});
-		await Subscriber.find({relatedUserId: user.id}, function(err, subscribers) {
+		await Subscriber.find({relatedUserId: user.id}, function (err, subscribers) {
 			if (err) {
 				console.log(err);
 				throw err;
@@ -35,7 +35,7 @@ module.exports = function(app, passport, request, upload, imgurID) {
 		res.render('login', { message: req.flash('loginMessage') });
 	});
 
-	app.get('/logout', function(req, res) {
+	app.get('/logout', function (req, res) {
         req.logout();
         res.redirect('/login');
 	});
@@ -62,10 +62,10 @@ module.exports = function(app, passport, request, upload, imgurID) {
 		res.render('editor', {user: user});
 	});
 
-	app.get('/edit/:article', isLoggedIn, function(req, res) {
+	app.get('/edit/:article', isLoggedIn, function (req, res) {
 		const articleID = req.params.article;
 		const user = req.user;
-		Article.findById(articleID, function(err, article) {
+		Article.findById(articleID, function (err, article) {
 			if (err) {
 				console.log(err);
 				throw err;
@@ -79,7 +79,7 @@ module.exports = function(app, passport, request, upload, imgurID) {
 //########################
 // API
 //########################
-	app.post('/api/check-credentials', passport.authenticate('local-login'), function(req, res) {
+	app.post('/api/check-credentials', passport.authenticate('local-login'), function (req, res) {
 	    // Generate a JSON response reflecting authentication status
 	    if (!req.user) {
 	      return res.send({ success : false, message : 'Try again.' });
@@ -88,7 +88,7 @@ module.exports = function(app, passport, request, upload, imgurID) {
 	    return res.send({ success : true, message : 'Logged in successfully !' });
 	});
 
-	app.post('/api/signup', passport.authenticate('local-signup'), function(req, res) {
+	app.post('/api/signup', passport.authenticate('local-signup'), function (req, res) {
 	    // Generate a JSON response reflecting authentication status
 	    if (!req.user) {
 	      return res.send({ success : false, message : 'Try again.' });
@@ -97,10 +97,10 @@ module.exports = function(app, passport, request, upload, imgurID) {
 	    return res.send({ success : true, message : 'User is now in the database.' });
 	});
 
-	app.put('/api/update-profile', function(req, res) {
+	app.put('/api/update-profile', function (req, res) {
 		const data = req.body;
 		
-		User.findById(req.user.id, function(err, user) {
+		User.findById(req.user.id, function (err, user) {
 			user.account.username = data.account.username;
 			if (data.account.password != '') {
 				const newPassword = user.generateHash(data.account.password);
@@ -149,7 +149,7 @@ module.exports = function(app, passport, request, upload, imgurID) {
 		});	
 	});
 
-	app.post('/api/publish', function(req, res) {
+	app.post('/api/publish', function (req, res) {
 		const data = req.body;
 		const userId = req.user.id;
 
@@ -182,7 +182,7 @@ module.exports = function(app, passport, request, upload, imgurID) {
 		});
 	});
 
-	app.post('/api/save-new-draft', function(req, res) {
+	app.post('/api/save-new-draft', function (req, res) {
 		const data = req.body;
 		const userId = req.user.id;
 
@@ -215,12 +215,12 @@ module.exports = function(app, passport, request, upload, imgurID) {
 		});
 	});
 
-	app.put('/api/update-and-publish/:articleID', function(req, res) {
+	app.put('/api/update-and-publish/:articleID', function (req, res) {
 		const data = req.body;
 		const userId = req.user.id;
 		const articleID = req.params.articleID;
 
-		Article.findById(articleID, function(err, article) {
+		Article.findById(articleID, function (err, article) {
 			
 			article.authorID = userId;
 			article.isDraft = false;
@@ -250,12 +250,12 @@ module.exports = function(app, passport, request, upload, imgurID) {
 		});
 	});
 
-	app.put('/api/update-draft/:articleID', function(req, res) {
+	app.put('/api/update-draft/:articleID', function (req, res) {
 		const data = req.body;
 		const userId = req.user.id;
 		const articleID = req.params.articleID;
 
-		Article.findById(articleID, function(err, article) {
+		Article.findById(articleID, function (err, article) {
 			
 			article.authorID = userId;
 			article.isDraft = true;
@@ -280,14 +280,14 @@ module.exports = function(app, passport, request, upload, imgurID) {
 		});
 	});
 
-	app.delete('/api/delete-posts', function(req, res) {
+	app.delete('/api/delete-posts', function (req, res) {
 		const data = req.body;
 		const toDelete = [];
 
 		data.forEach(id => {
 			toDelete.push(mongoose.Types.ObjectId(id));
 		});
-		Article.find({'_id': { $in: toDelete}}, function(err, docs){
+		Article.find({'_id': { $in: toDelete}}, function (err, docs){
 			if (err)
 				return res.send({success : false, message : 'An error occured'});
 			else
@@ -298,14 +298,14 @@ module.exports = function(app, passport, request, upload, imgurID) {
 		});
 	});
 
-	app.delete('/api/delete-subscribers', function(req, res) {
+	app.delete('/api/delete-subscribers', function (req, res) {
 		const data = req.body;
 		const toDelete = [];
 
 		data.forEach(id => {
 			toDelete.push(mongoose.Types.ObjectId(id));
 		});
-		Subscriber.find({'_id': { $in: toDelete}}, function(err, docs){
+		Subscriber.find({'_id': { $in: toDelete}}, function (err, docs){
 			if (err)
 				return res.send({success : false, message : 'An error occured'});
 			else
@@ -316,10 +316,10 @@ module.exports = function(app, passport, request, upload, imgurID) {
 		});
 	});
 
-	app.get('/api/export-subscribers', function(req, res) {
+	app.get('/api/export-subscribers', function (req, res) {
 		const filename = "subscribers.csv";
 		csv.separator = ';';
-		Subscriber.find({relatedUserId: req.user.id}, { '_id': 0, 'email' :1, 'firstName': 1, 'lastName': 1, 'dateRegistred': 1}).lean().exec(function(err, docs){
+		Subscriber.find({relatedUserId: req.user.id}, { '_id': 0, 'email' :1, 'firstName': 1, 'lastName': 1, 'dateRegistred': 1}).lean().exec(function (err, docs){
 			if (err)
 				return res.send({success : false, message : 'An error occured'});
 			else
@@ -327,8 +327,91 @@ module.exports = function(app, passport, request, upload, imgurID) {
 		});
 	});
 
+	app.post('/api/get-articles/:userId', function (req, res) {
+		const user = req.params.userId;
+
+		Article.find({authorID: user}, '-isDraft -markdown', function (err, docs) {
+			if (err)
+				return res.send({success : false, message : 'An error occured'});
+			else
+				return res.send(docs);
+		});
+	});
+
+	app.post('/api/increment-view-count/:articleId', function (req, res) {
+		const article = req.params.articleID;
+
+		Article.findById(article, function (err, article) {
+			article.viewCount++;
+			article.save();
+
+			if (err)
+				return res.send({success : false, message : 'An error occured.'});
+			else
+				return res.send({success : true, message : 'View saved.'});
+		});
+	});
+
+	app.post('/api/add-article-like/:articleId', function (req, res) {
+		const article = req.params.articleID;
+		const readerIP = req.body;
+
+		Article.findById(article, function (err, article) {
+			article.likes.push(readerIP);
+			article.save();
+
+			if (err)
+				return res.send({success : false, message : 'An error occured.'});
+			else
+				return res.send({success : true, message : 'Like saved.'});
+		});
+	});
+
+	app.post('/api/add-article-comment/:articleId', function (req, res) {
+		const article = req.params.articleID;
+		const data = req.body;
+
+		Article.findById(article, function (err, article) {
+			const newId = article.comments.length;
+			const newComment = {
+				commentId: newId,
+				name: data.name,
+				email: data.email,
+				content: data.comment
+			};
+
+			article.comments.push(newComment);
+			article.save();
+
+			if (err)
+				return res.send({success : false, message : 'An error occured.'});
+			else
+				return res.send({success : true, message : 'Like saved.'});
+		});
+	});
+
+	app.post('/api/new-subscriber/:userId', function (req, res) {
+		const data = req.body;
+		const user = req.params.userId;
+		let newSub = new Subscriber;
+
+		newSub.relatedUserId = user;
+		newSub.email = data.email;
+		newSub.firstName = data.firstName;
+		newSub.lastName = data.lastName;
+		newSub.dateRegistred = data.dateRegistred;
+
+		newSub.save(err => {
+			if (err)
+				return res.send({success : false, message : 'An error occured.'});
+			else
+				return res.send({success : true, message : 'Subscriber registred !'});
+
+		});
+	});
+
 	// Utilities API
-	app.post('/api/upload-image', upload.single('file'), function(req, res) {
+	app.post('/api/upload-image', upload.single('file'), function (req, res) {
 		var file = req.file;
 		var imgurUploadOptions = {
 			"method": "POST",
@@ -338,29 +421,13 @@ module.exports = function(app, passport, request, upload, imgurID) {
 		    	"authorization": "Client-ID "+ imgurID +""
 		  	}
 		};
-		request(imgurUploadOptions, function(error, response, body) {
+		request(imgurUploadOptions, function (error, response, body) {
 			if (error) {
 				res.send(error);
 				return;
 			}
 	  		res.send(body);
 		});
-	});
-
-	// TODO: Make this a real thing
-	app.get('/populate-sub-test', function (req, res) {
-		for(i=0; i < 5; i++) {
-			let newSub = new Subscriber;
-
-			newSub.relatedUserId = req.user.id;
-			newSub.email = "test"+i;
-			newSub.firstName = "test"+i;
-			newSub.lastName = "test"+i;
-			newSub.dateRegistred = "test"+i;
-
-			newSub.save();
-		}
-		return res.redirect('/');
 	});
 }
 
