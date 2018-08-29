@@ -388,7 +388,7 @@ function submit(update, toDraft, articleID) {
         thumbnailUrlStart = firstImageRef.indexOf('http') || null,
         thumbnailUrlEnd = firstImageRef.indexOf('")') || null,
         thumbnailUrl = firstImageRef.substring(thumbnailUrlStart, thumbnailUrlEnd) || '',
-        wordCount = bodyString.split(' ').length,
+        wordCount = bodyString.split(/\s+|\\n+/g).length,
 		data = {
             headline : headline,
             dateNow: dateNow,
