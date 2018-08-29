@@ -327,7 +327,7 @@ module.exports = function (app, passport, request, upload, imgurID) {
 		});
 	});
 
-	app.post('/api/get-articles/:userId', function (req, res) {
+	app.get('/api/get-articles/:userId', function (req, res) {
 		const user = req.params.userId;
 
 		Article.find({authorID: user}, '-isDraft -markdown', function (err, docs) {
@@ -338,8 +338,8 @@ module.exports = function (app, passport, request, upload, imgurID) {
 		});
 	});
 
-	app.post('/api/increment-view-count/:articleId', function (req, res) {
-		const article = req.params.articleID;
+	app.get('/api/increment-view-count/:articleId', function (req, res) {
+		const article = req.params.articleId;
 
 		Article.findById(article, function (err, article) {
 			article.viewCount++;
@@ -353,7 +353,7 @@ module.exports = function (app, passport, request, upload, imgurID) {
 	});
 
 	app.post('/api/add-article-like/:articleId', function (req, res) {
-		const article = req.params.articleID;
+		const article = req.params.articleId;
 		const readerIP = req.body;
 
 		Article.findById(article, function (err, article) {
@@ -368,7 +368,7 @@ module.exports = function (app, passport, request, upload, imgurID) {
 	});
 
 	app.post('/api/add-article-comment/:articleId', function (req, res) {
-		const article = req.params.articleID;
+		const article = req.params.articleId;
 		const data = req.body;
 
 		Article.findById(article, function (err, article) {
