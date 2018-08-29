@@ -1,4 +1,6 @@
 const express = require('express');
+const helmet = require('helmet');
+const compression = require('compression');
 const multer = require('multer');
 const http = require('https');
 const request = require('request');
@@ -21,6 +23,8 @@ require('./config/passport')(passport); // pass passport for configuration
 
 /* Middlewares */
 app.set('view engine', 'ejs');
+app.use(compression());
+app.use(helmet())
 app.use(express.static('public'));
 app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser.json()); // for parsing application/json

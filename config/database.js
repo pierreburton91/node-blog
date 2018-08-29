@@ -1,5 +1,5 @@
 module.exports = {
 
-    'url' : 'mongodb://testuser:thedatabaseuserTest@ds141264.mlab.com:41264/nodejscmsdb'
+    'url' : process.env.MLAB_DB_URI
 
 };
