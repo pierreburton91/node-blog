@@ -88,16 +88,22 @@ module.exports = function (app, passport, request, upload, imgurID) {
 	    return res.send({ success : true, message : 'Logged in successfully !' });
 	});
 
-	app.post('/api/signup', passport.authenticate('local-signup'), function (req, res) {
-	    // Generate a JSON response reflecting authentication status
-	    if (!req.user) {
-	      return res.send({ success : false, message : 'Try again.' });
-	    }
-	    
-	    return res.send({ success : true, message : 'User is now in the database.' });
+
+	/////////////////
+	// User
+	////////////////
+	app.get('/api/user');
+
+	app.post('/api/user', passport.authenticate('local-signup'), function (req, res) {
+		// Generate a JSON response reflecting authentication status
+		if (!req.user) {
+		return res.send({ success : false, message : 'Try again.' });
+		}
+		
+		return res.send({ success : true, message : 'User is now in the database.' });
 	});
 
-	app.put('/api/update-profile', function (req, res) {
+	app.put('/api/user', function (req, res) {
 		const data = req.body;
 		
 		User.findById(req.user.id, function (err, user) {
@@ -149,7 +155,26 @@ module.exports = function (app, passport, request, upload, imgurID) {
 		});	
 	});
 
-	app.post('/api/publish', function (req, res) {
+	app.delete('/api/user');
+
+
+	/////////////////
+	// Article
+	////////////////
+	app.get('/api/article/s/:userId', function (req, res) {
+		const user = req.params.userId;
+
+		Article.find({authorID: user}, '-isDraft -markdown', function (err, docs) {
+			if (err)
+				return res.send({success : false, message : 'An error occured'});
+			else
+				return res.send(docs);
+		});
+	});
+
+	app.get('/api/article');
+
+	app.post('/api/article', function (req, res) {
 		const data = req.body;
 		const userId = req.user.id;
 
@@ -182,7 +207,7 @@ module.exports = function (app, passport, request, upload, imgurID) {
 		});
 	});
 
-	app.post('/api/save-new-draft', function (req, res) {
+	app.post('/api/article/draft', function (req, res) {
 		const data = req.body;
 		const userId = req.user.id;
 
@@ -215,12 +240,12 @@ module.exports = function (app, passport, request, upload, imgurID) {
 		});
 	});
 
-	app.put('/api/update-and-publish/:articleID', function (req, res) {
+	app.put('/api/article/publish', function (req, res) {
 		const data = req.body;
 		const userId = req.user.id;
-		const articleID = req.params.articleID;
+		const articleId = mongoose.Types.ObjectId(data.articleID);
 
-		Article.findById(articleID, function (err, article) {
+		Article.findById(articleId, function (err, article) {
 			
 			article.authorID = userId;
 			article.isDraft = false;
@@ -250,12 +275,12 @@ module.exports = function (app, passport, request, upload, imgurID) {
 		});
 	});
 
-	app.put('/api/update-draft/:articleID', function (req, res) {
+	app.put('/api/article/draft', function (req, res) {
 		const data = req.body;
 		const userId = req.user.id;
-		const articleID = req.params.articleID;
+		const articleId = mongoose.Types.ObjectId(data.articleID);
 
-		Article.findById(articleID, function (err, article) {
+		Article.findById(articleId, function (err, article) {
 			
 			article.authorID = userId;
 			article.isDraft = true;
@@ -280,65 +305,7 @@ module.exports = function (app, passport, request, upload, imgurID) {
 		});
 	});
 
-	app.delete('/api/delete-posts', function (req, res) {
-		const data = req.body;
-		const toDelete = [];
-
-		data.forEach(id => {
-			toDelete.push(mongoose.Types.ObjectId(id));
-		});
-		Article.find({'_id': { $in: toDelete}}, function (err, docs){
-			if (err)
-				return res.send({success : false, message : 'An error occured'});
-			else
-				docs.forEach(doc => {
-					doc.remove();
-				});
-				return res.send({success : true, message : 'Deletion successful !'});
-		});
-	});
-
-	app.delete('/api/delete-subscribers', function (req, res) {
-		const data = req.body;
-		const toDelete = [];
-
-		data.forEach(id => {
-			toDelete.push(mongoose.Types.ObjectId(id));
-		});
-		Subscriber.find({'_id': { $in: toDelete}}, function (err, docs){
-			if (err)
-				return res.send({success : false, message : 'An error occured'});
-			else
-				docs.forEach(doc => {
-					doc.remove();
-				});
-				return res.send({success : true, message : 'Deletion successful !'});
-		});
-	});
-
-	app.get('/api/export-subscribers', function (req, res) {
-		const filename = "subscribers.csv";
-		csv.separator = ';';
-		Subscriber.find({relatedUserId: req.user.id}, { '_id': 0, 'email' :1, 'firstName': 1, 'lastName': 1, 'dateRegistred': 1}).lean().exec(function (err, docs){
-			if (err)
-				return res.send({success : false, message : 'An error occured'});
-			else
-				return res.csv(docs, true, {"Content-Disposition": 'attachment; filename='+filename});
-		});
-	});
-
-	app.get('/api/get-articles/:userId', function (req, res) {
-		const user = req.params.userId;
-
-		Article.find({authorID: user}, '-isDraft -markdown', function (err, docs) {
-			if (err)
-				return res.send({success : false, message : 'An error occured'});
-			else
-				return res.send(docs);
-		});
-	});
-
-	app.get('/api/increment-view-count/:articleId', function (req, res) {
+	app.put('/api/article/viewcount', function (req, res) {
 		const article = req.params.articleId;
 
 		Article.findById(article, function (err, article) {
@@ -352,9 +319,9 @@ module.exports = function (app, passport, request, upload, imgurID) {
 		});
 	});
 
-	app.post('/api/add-article-like/:articleId', function (req, res) {
-		const article = req.params.articleId;
-		const readerIP = req.body;
+	app.put('/api/article/like', function (req, res) {
+		const article = req.body.articleID;
+		const readerIP = req.body.readerIP;
 
 		Article.findById(article, function (err, article) {
 			article.likes.push(readerIP);
@@ -367,11 +334,11 @@ module.exports = function (app, passport, request, upload, imgurID) {
 		});
 	});
 
-	app.post('/api/add-article-comment/:articleId', function (req, res) {
-		const article = req.params.articleId;
+	app.put('/api/article/comment', function (req, res) {
 		const data = req.body;
+		const articleId = mongoose.Types.ObjectId(data.articleId);
 
-		Article.findById(article, function (err, article) {
+		Article.findById(articleId, function (err, article) {
 			const newId = article.comments.length;
 			const newComment = {
 				commentId: newId,
@@ -390,12 +357,46 @@ module.exports = function (app, passport, request, upload, imgurID) {
 		});
 	});
 
-	app.post('/api/new-subscriber/:userId', function (req, res) {
+	app.delete('/api/article', function (req, res) {
 		const data = req.body;
-		const user = req.params.userId;
+		const toDelete = [];
+
+		data.forEach(id => {
+			toDelete.push(mongoose.Types.ObjectId(id));
+		});
+		Article.find({'_id': { $in: toDelete}}, function (err, docs){
+			if (err)
+				return res.send({success : false, message : 'An error occured'});
+			else
+				docs.forEach(doc => {
+					doc.remove();
+				});
+				return res.send({success : true, message : 'Deletion successful !'});
+		});
+	});
+
+
+	/////////////////
+	// Subscribers
+	////////////////
+	app.get('/api/subscribers');
+
+	app.get('/api/subscribers/export', function (req, res) {
+		const filename = "subscribers.csv";
+		csv.separator = ';';
+		Subscriber.find({relatedUserId: req.user.id}, { '_id': 0, 'email' :1, 'firstName': 1, 'lastName': 1, 'dateRegistred': 1}).lean().exec(function (err, docs){
+			if (err)
+				return res.send({success : false, message : 'An error occured'});
+			else
+				return res.csv(docs, true, {"Content-Disposition": 'attachment; filename='+filename});
+		});
+	});
+
+	app.post('/api/subscribers', function (req, res) {
+		const data = req.body;
 		let newSub = new Subscriber;
 
-		newSub.relatedUserId = user;
+		newSub.relatedUserId = data.userID;
 		newSub.email = data.email;
 		newSub.firstName = data.firstName;
 		newSub.lastName = data.lastName;
@@ -409,8 +410,29 @@ module.exports = function (app, passport, request, upload, imgurID) {
 
 		});
 	});
+		
+	app.delete('/api/subscribers', function (req, res) {
+		const data = req.body;
+		const toDelete = [];
 
-	// Utilities API
+		data.forEach(id => {
+			toDelete.push(mongoose.Types.ObjectId(id));
+		});
+		Subscriber.find({'_id': { $in: toDelete}}, function (err, docs){
+			if (err)
+				return res.send({success : false, message : 'An error occured'});
+			else
+				docs.forEach(doc => {
+					doc.remove();
+				});
+				return res.send({success : true, message : 'Deletion successful !'});
+		});
+	});
+	
+
+	/////////////////
+	// Subscribers
+	////////////////
 	app.post('/api/upload-image', upload.single('file'), function (req, res) {
 		var file = req.file;
 		var imgurUploadOptions = {

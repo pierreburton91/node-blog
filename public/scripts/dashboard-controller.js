@@ -95,7 +95,7 @@ function handleActionClick(entity, action) {
     if(entity == 'articles' && action == 'edit') {
         window.location.href = "/edit/" + valuesChecked[0];
     } else if (entity == 'subscribers' && action == 'export') {
-        window.location.href = "/api/export-subscribers";
+        window.location.href = "/api/subscribers/export";
     } else {
         if (action == "delete") {
             var prompt = window.confirm("You are about to delete the selected "+ entity +".\nAre you sure ?");
@@ -132,11 +132,11 @@ function handleActionClick(entity, action) {
         }
 
 		if (entity == 'articles' && action == 'delete') {
-			xhr.open("DELETE", "/api/delete-posts", true);
+			xhr.open("DELETE", "/api/article", true);
 		} else if (entity == 'subscribers' && action == 'export') {
-			xhr.open("POST", "/api/export-subscribers", true);
+			xhr.open("GET", "/api/subscribers/export", true);
 		} else if (entity == 'subscribers' && action == 'delete') {
-            xhr.open("DELETE", "/api/delete-subscribers", true);
+            xhr.open("DELETE", "/api/subscribers", true);
         }
 		xhr.setRequestHeader("Content-Type", "application/json");
 		xhr.send(JSON.stringify(valuesChecked));

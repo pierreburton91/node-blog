@@ -165,9 +165,9 @@ function submit(update) {
 			}
 		}
 		if (update != true) {
-			xhr.open("POST", "/api/signup", true);
+			xhr.open("POST", "/api/user", true);
 		} else {
-			xhr.open("PUT", "/api/update-profile", true);
+			xhr.open("PUT", "/api/user", true);
 		}
 		xhr.setRequestHeader("Content-Type", "application/json");
 		xhr.send(JSON.stringify(data));

@@ -390,6 +390,7 @@ function submit(update, toDraft, articleID) {
         thumbnailUrl = firstImageRef.substring(thumbnailUrlStart, thumbnailUrlEnd) || '',
         wordCount = bodyString.split(/\s+|\\n+/g).length,
 		data = {
+            articleID: articleID,
             headline : headline,
             dateNow: dateNow,
             about: {
@@ -467,13 +468,13 @@ function submit(update, toDraft, articleID) {
         }
 
 		if (update == false && toDraft == false) {
-			xhr.open("POST", "/api/publish/", true);
+			xhr.open("POST", "/api/article", true);
 		} else if (update == false && toDraft == true) {
-			xhr.open("POST", "/api/save-new-draft", true);
+			xhr.open("POST", "/api/article/draft", true);
 		} else if (update == true && toDraft == false) {
-            xhr.open("PUT", "/api/update-and-publish/"+ articleID, true);
+            xhr.open("PUT", "/api/article/publish", true);
         } else if (update == true && toDraft == true) {
-            xhr.open("PUT", "/api/update-draft/"+ articleID, true);
+            xhr.open("PUT", "/api/article/draft", true);
         }
 		xhr.setRequestHeader("Content-Type", "application/json");
 		xhr.send(JSON.stringify(data));
