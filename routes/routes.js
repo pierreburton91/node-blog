@@ -308,7 +308,8 @@ module.exports = function (app, passport, request, upload, imgurID) {
 	});
 
 	app.put('/api/article/viewcount', function (req, res) {
-		const article = req.params.articleId;
+		const data = req.body;
+		const article = mongoose.Types.ObjectId(data.articleID);
 
 		Article.findById(article, function (err, article) {
 			article.viewCount++;
@@ -322,7 +323,7 @@ module.exports = function (app, passport, request, upload, imgurID) {
 	});
 
 	app.put('/api/article/like', function (req, res) {
-		const article = req.body.articleID;
+		const article = mongoose.Types.ObjectId(req.body.articleID);
 		const readerIP = req.body.readerIP;
 
 		Article.findById(article, function (err, article) {
@@ -386,6 +387,7 @@ module.exports = function (app, passport, request, upload, imgurID) {
 	app.get('/api/subscribers/export', function (req, res) {
 		const filename = "subscribers.csv";
 		csv.separator = ';';
+		
 		Subscriber.find({relatedUserId: req.user.id}, { '_id': 0, 'email' :1, 'firstName': 1, 'lastName': 1, 'dateRegistred': 1}).lean().exec(function (err, docs){
 			if (err)
 				return res.send({success : false, message : 'An error occured'});
