@@ -79,7 +79,15 @@ module.exports = function (app, passport, request, upload, imgurID) {
 //########################
 // API
 //########################
-	app.post('/api/check-credentials', passport.authenticate('local-login'), function (req, res) {
+	
+
+
+	/////////////////
+	// User
+	////////////////
+	app.get('/api/user');
+
+	app.post('/api/user/login', passport.authenticate('local-login'), function (req, res) {
 	    // Generate a JSON response reflecting authentication status
 	    if (!req.user) {
 	      return res.send({ success : false, message : 'Try again.' });
@@ -87,12 +95,6 @@ module.exports = function (app, passport, request, upload, imgurID) {
 	    
 	    return res.send({ success : true, message : 'Logged in successfully !' });
 	});
-
-
-	/////////////////
-	// User
-	////////////////
-	app.get('/api/user');
 
 	app.post('/api/user', passport.authenticate('local-signup'), function (req, res) {
 		// Generate a JSON response reflecting authentication status
@@ -431,7 +433,7 @@ module.exports = function (app, passport, request, upload, imgurID) {
 	
 
 	/////////////////
-	// Subscribers
+	// Utilities
 	////////////////
 	app.post('/api/upload-image', upload.single('file'), function (req, res) {
 		var file = req.file;

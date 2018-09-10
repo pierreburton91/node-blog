@@ -39,7 +39,7 @@ function login() {
                 }
             }
         }
-        xhr.open("POST", "/api/check-credentials", true);
+        xhr.open("POST", "/api/user/login", true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(JSON.stringify(data));
     }
